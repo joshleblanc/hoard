@@ -153,7 +153,7 @@ module Hoard
 
         def render
             {
-                x: x,
+                x: x - (GRID / 2),
                 y: Game.s.grid.h - y + GRID,
                 w: w,
                 h: h,

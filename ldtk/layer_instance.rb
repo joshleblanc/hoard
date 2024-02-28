@@ -13,7 +13,7 @@ module Hoard
 
             
             def has_collision(x, y)
-                int(x, y).to_i == 1
+                int(x, y).to_i.odd?
             end
 
             def int(cx, cy)

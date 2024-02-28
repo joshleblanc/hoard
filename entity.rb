@@ -81,7 +81,6 @@ module Hoard
         end
 
         def center_x
-            puts "#{rect_center_point.x}, #{x}" 
             rect_center_point.x
         end
 

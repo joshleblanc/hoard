@@ -16,8 +16,8 @@ module Hoard
                 int(x, y).to_i == 1
             end
 
-            def int(cy, cy)
-                pos = x + (y * c_wid)
+            def int(cx, cy)
+                pos = cx + (cy * c_wid)
                 int_grid_csv[pos]
             end
 

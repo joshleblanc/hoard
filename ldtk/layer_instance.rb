@@ -13,12 +13,12 @@ module Hoard
 
             
             def has_collision(x, y)
-                pos = x + (y * c_wid)
-                
-                int = int_grid_csv[pos]
+                int(x, y).to_i == 1
+            end
 
-                return unless int.to_i == 1 || int.to_i == 3
-                return true
+            def int(cy, cy)
+                pos = x + (y * c_wid)
+                int_grid_csv[pos]
             end
 
             def tile_rects 

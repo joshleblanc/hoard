@@ -16,12 +16,11 @@ module Hoard
                     field_instances: [FieldInstance], layer_instances: [LayerInstance]
 
             def has_collision(x, y)
-                layer_instances.each do |layer|
-                    collision = layer.has_collision(x, y)
-                    return collision if collision
-                end
+                layer("Collisions")&.has_collision(x, y)
+            end
 
-                nil
+            def layer(id)
+                layer_instances.find { |i| i.identifier == id }
             end
 
             def render

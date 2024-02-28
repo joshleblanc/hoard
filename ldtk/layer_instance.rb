@@ -21,6 +21,10 @@ module Hoard
                 int_grid_csv[pos]
             end
 
+            def entity(id)
+                entity_instances.find { |i| i.identifier == id }
+            end
+
             def tile_rects 
                 @tile_rects ||= tiles.map.with_index do |tile, index|
                     [tile.px[0], tile.px[1], grid_size, grid_size, index]

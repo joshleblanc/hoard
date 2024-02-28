@@ -23,6 +23,10 @@ module Hoard
                 layer_instances.find { |i| i.identifier == id }
             end
 
+            def entity(id)
+                layer("Entities")&.entity(id)
+            end
+
             def render
                 layer_instances.reverse.map do |layer|
                     layer.auto_layer_tiles.map do |tile|

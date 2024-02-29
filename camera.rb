@@ -145,12 +145,11 @@ module Hoard
         end
 
         def apply
-            puts "applying camera"
             level = Game.s.current_level
             scroller = Game.s.scroller
 
             scroller.x = -clamped_focus.level_x + px_wid * 0.5
-            scroller.y = -clamped_focus.level_y + px_hei * 0.5
+            scroller.y = -clamped_focus.level_y.from_top + px_hei * 0.5
 
             self.bump_off_x = bump_off_x * (bump_frict ** tmod)
             self.bump_off_y = bump_off_y * (bump_frict ** tmod)
@@ -163,11 +162,9 @@ module Hoard
                 scroller.y += Math.sin(0.3 + ftime * 1.7) * 2.5 * shake_power * cd.get_ratio("shaking")
             end
 
-            # scaling
+            #scaling
             scroller.x *= Const.scale * zoom
-            
-            # 😶‍🌫️
-            scroller.y  = -(Game.s.grid.h - (scroller.y * Const.scale * zoom))
+            scroller.y *= Const.scale * zoom
 
             scroller.x = scroller.x.round
             scroller.y = scroller.y.round

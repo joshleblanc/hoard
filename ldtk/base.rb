@@ -29,8 +29,30 @@ module Hoard
                         c.imports.each do |ivar|
                             key = make_key(ivar)
                             value = json[key] || json["__#{key}"]
+
+                            fixed_value = if value.is_a? Array 
+                                value.map do |el|          
+                                    if el.is_a? Hash 
+                                        new_value = {}
+                                        el.each do |k, v|
+                                            new_value[k.to_sym] = v
+                                        end
+                                        new_value
+                                    else
+                                        el
+                                    end
+                                end
+                            elsif value.is_a? Hash
+                                new_value = {}
+                                value.each do |k, v|
+                                    new_value[k.to_sym] = v
+                                end
+                                new_value
+                            else 
+                                value
+                            end
         
-                            c.instance_variable_set("@#{ivar}".to_sym, value)
+                            c.instance_variable_set("@#{ivar}".to_sym, fixed_value)
                         end
         
                         c.mappings.each do |ivar, type|

@@ -29,6 +29,10 @@ module Hoard
                 entity_instances.find { |i| i.identifier == id }
             end
 
+            def entities(id)
+                entity_instances.select { |i| i.identifier == id }
+            end
+
             def tile_rects 
                 @tile_rects ||= tiles.map.with_index do |tile, index|
                     [tile.px[0], tile.px[1], grid_size, grid_size, index]

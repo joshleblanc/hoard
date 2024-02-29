@@ -32,7 +32,7 @@ module Hoard
                 y = cy * Const::GRID
 
                 neighbour = neighbours.each do |n|
-                    level = root.level(iid: n["levelIid"])
+                    level = root.level(iid: n.levelIid)
                     inside = Geometry.intersect_rect?(
                         [x, y, Const::GRID, Const::GRID],
                         [level.world_x, level.world_y, level.px_wid, level.px_hei]
@@ -51,6 +51,10 @@ module Hoard
 
             def entity(id)
                 layer("Entities")&.entity(id)
+            end
+
+            def entities(id)
+                layer("Entities")&.entities(id) || []
             end
 
             def draw_override(ffi_draw)

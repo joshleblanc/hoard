@@ -24,6 +24,8 @@ module Hoard
         attr :cd, :ucd, :fx
         attr :all_velocities, :v_base, :v_bump
 
+        attr :walk_speed
+
         def initialize(x, y)
             set_pos_case(x, y)
             @dir = 1
@@ -39,6 +41,8 @@ module Hoard
             @squash_y = 1
             @scale_x = 1
             @scale_y = 1
+        
+            @walk_speed = 0
 
             @cd = Cooldown.new
             @ucd = Cooldown.new
@@ -48,6 +52,10 @@ module Hoard
             @v_bump = register_new_velocity(0.93)
 
             @fx = Fx.new
+        end
+
+        def on_ground?
+            !destroyed? && @v_base.dy == 0 && yr == 1 && has_collision(cx, cy + 1)
         end
 
         def register_new_velocity(frict)
@@ -122,11 +130,38 @@ module Hoard
         end
 
         def on_pre_step_x 
-
+    
+            if xr > 0.8
+                if has_collision(cx + 1, cy)
+                    self.xr = 0.8
+                end
+            end
+    
+            if xr < 0.2
+                if has_collision(cx-1,cy)
+                    self.xr = 0.2
+                end
+            end
         end
-
-        def on_pre_step_y 
-            
+    
+        def on_pre_step_y     
+            if yr > 1
+                if has_collision(cx, cy + 1)
+                    self.squash_y = 0.5
+                    v_base.dy = 0
+                    v_bump.dy = 0 
+                    self.yr = 1
+                    fx.dots_explosion(center_x, center_y, 0xffcc00)
+                    # ca.rumble(0.2, 0.06)
+                    # onPosManuallyChangedY()
+                end
+            end
+    
+            if yr < 0.2
+                if has_collision(cx, cy - 1)
+                    self.yr = 0.2
+                end
+            end
         end
 
         # beginning of frame loop - called before any other entity update loop
@@ -218,6 +253,10 @@ module Hoard
             ucd.update
             fx.update
             update_world_pos
+
+            v_base.dy += 0.05 unless on_ground?
+        
+            v_base.dx = (v_base.dx + walk_speed) * 0.085 if walk_speed != 0 
         end
 
         def draw_override(ffi_draw)

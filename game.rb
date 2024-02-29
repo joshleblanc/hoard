@@ -112,10 +112,10 @@ module Hoard
         end
 
         def render
-            outputs["scene"].transient!
+            outputs[:scene].transient!
 
             if @current_level 
-                outputs["scene"].sprites.push @current_level
+                outputs[:scene].sprites.push @current_level
             end
 
             outputs[:scene].sprites.push active_entities

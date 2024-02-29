@@ -117,8 +117,8 @@ module Hoard
             if @current_level 
                 outputs["scene"].sprites.push @current_level
             end
-            outputs[:scene].sprites.push active_entities
 
+            outputs[:scene].sprites.push active_entities
             outputs.sprites << @scroller
             
         end

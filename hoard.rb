@@ -1,3 +1,4 @@
+require_relative 'fx'
 require_relative 'const'
 require_relative 'recyclable_pool'
 require_relative 'phys/velocity'

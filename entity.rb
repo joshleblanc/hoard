@@ -21,7 +21,7 @@ module Hoard
         
         attr :dx_total, :dy_total, :destroyed, :dir, :visible, :dir
 
-        attr :cd, :ucd
+        attr :cd, :ucd, :fx
         attr :all_velocities, :v_base, :v_bump
 
         def initialize(x, y)
@@ -46,6 +46,8 @@ module Hoard
             @all_velocities = Phys::VelocityArray.new
             @v_base = register_new_velocity(0.82)
             @v_bump = register_new_velocity(0.93)
+
+            @fx = Fx.new
         end
 
         def register_new_velocity(frict)
@@ -133,11 +135,11 @@ module Hoard
         end
 
         def center_x
-            rect_center_point.x
+            rect_center_point.x - (GRID / 2)
         end
 
         def center_y 
-            rect_center_point.y
+            rect_center_point.y - GRID - GRID / 2
         end
 
         def visible? 
@@ -214,6 +216,7 @@ module Hoard
             all_velocities.each(&:update)
             cd.update
             ucd.update
+            fx.update
             update_world_pos
         end
 
@@ -240,6 +243,8 @@ module Hoard
                 tile_y: tile_y,
                 path: path
             })
+
+            @fx.draw_override(ffi_draw)
         end
     end
 end

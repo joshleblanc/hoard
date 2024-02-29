@@ -143,7 +143,7 @@ module Hoard
                 if cd.frames <= 0 
                     cb = cd.on_complete_once 
                     unset_index(idx)
-                    cb&.call
+                    cb.call if cb.respond_to? :call 
                 end
             end
         end

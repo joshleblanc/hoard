@@ -58,10 +58,10 @@ module Hoard
                 layer("Entities")&.entity(id)
             end
 
-            def render
+            def draw_override(ffi_draw)
                 layer_instances.reverse.map do |layer|
                     layer.auto_layer_tiles.map do |tile|
-                        {
+                        ffi_draw.draw_sprite_hash({
                             x: tile.px[0] ,
                             y: tile.px[1].from_top,
                             w: layer.grid_size,
@@ -75,9 +75,11 @@ module Hoard
                             flip_vertically: tile.f == 2 || tile.f == 3,
                             anchor_x: 0,
                             anchor_y: 0
-                        }
+                        })
                     end
                 end.flatten
+            rescue Exception => e 
+                puts e
             end
         end
     end

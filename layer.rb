@@ -22,14 +22,14 @@ module Hoard
             @scale_y = new_scale
         end
 
-        def render 
-            {
+        def draw_override(ffi_draw) 
+            ffi_draw.draw_sprite_hash({
                 x: @x,
                 y: @y,
                 w: @w * @scale_x,
                 h: @h * @scale_y,
                 path: @path
-            }
+            })
         end
     end
 end

@@ -181,8 +181,9 @@ module Hoard
             update_world_pos
         end
 
-        def render
-            {
+        def draw_override(ffi_draw)
+            post_update
+            ffi_draw.draw_sprite_hash({
                 x: x - (GRID / 2),
                 y: y.from_top + GRID,
                 w: w,
@@ -192,7 +193,7 @@ module Hoard
                 tile_x: tile_x,
                 tile_y: tile_y,
                 path: path
-            }
+            })
         end
     end
 end

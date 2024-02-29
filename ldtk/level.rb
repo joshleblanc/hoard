@@ -73,7 +73,8 @@ module Hoard
                             flip_horizontally: tile.f == 1 || tile.f == 3,
                             flip_vertically: tile.f == 2 || tile.f == 3,
                             anchor_x: 0,
-                            anchor_y: 0
+                            anchor_y: 0,
+                            a: 255 * layer.opacity
                         })
                     end
                 end.flatten

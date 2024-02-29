@@ -4,8 +4,7 @@ module Hoard
         
         # why isn't this on Scaler
         def self.scale 
-            puts "Scale: #{Scaler.best_fit_i(200, 200)}"
-            Scaler.best_fit_i(200, 200)
+            Scaler.best_fit_i(300, 300)
         end
     end
 end

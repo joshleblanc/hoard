@@ -14,6 +14,14 @@ module Hoard
                 world_layout == "Free"
             end
 
+            def level(**query)
+                levels.find do |i|
+                    query.any? do |k, v|
+                        i.send(k.to_s) == v  
+                    end
+                end
+            end
+
             def grid_vania?
                 world_layout == "GridVania"
             end

@@ -23,10 +23,9 @@ module Hoard
         end
 
         def render 
-            puts [@x, @y]
             {
                 x: @x,
-                y: -(Game.s.grid.h - Game.s.current_level.px_hei - @y),
+                y: @y,
                 w: @w * @scale_x,
                 h: @h * @scale_y,
                 path: @path

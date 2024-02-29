@@ -12,7 +12,10 @@ module Hoard
         # xr, yr are ratios 
         # xx, yy are cx,cy + xr,xy
         # dx, dy are change in x, y
-        attr :cx, :cy, :xr, :yr, :xx, :yy
+        attr :cx, :cy, :xr, :yr
+
+        # world coords
+        attr :wx, :wy 
         
         attr :dx_total, :dy_total, :destroyed, :dir, :visible, :dir
 
@@ -51,16 +54,42 @@ module Hoard
             self.yr = 1
         end
 
+        def update_world_pos
+            level = Game.s.current_level
+            self.wx = self.x + level.world_x
+            self.wy = self.y + level.world_y
+        end
+        
         def x
-            (cx + xr) * GRID
+            xx * GRID
+        end
+
+        def wcx 
+            (wx / Const::GRID).to_i
+        end
+
+        def wcy 
+            (wy / Const::GRID).to_i - 1
         end
 
         def y 
-            (cy + yr) * GRID
+            yy * GRID
+        end
+
+        def xx 
+            cx + xr
+        end 
+
+        def yy 
+            cy + yr
         end
 
         def has_collision(x, y)
             Game.s.current_level&.has_collision(x, y)
+        end
+
+        def has_exit?(x, y)
+            Game.s.current_level&.outside?(x, y)
         end
 
         def destroyed?
@@ -149,12 +178,13 @@ module Hoard
             end
 
             all_velocities.each(&:update)
+            update_world_pos
         end
 
         def render
             {
                 x: x - (GRID / 2),
-                y: Game.s.grid.h - y + GRID,
+                y: y.from_top + GRID,
                 w: w,
                 h: h,
                 tile_w: tile_w,

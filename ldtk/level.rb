@@ -23,6 +23,37 @@ module Hoard
                 layer_instances.find { |i| i.identifier == id }
             end
 
+            def world_pos_to_level_pos(x, y)
+                [x - world_x, y - world_y]
+            end
+
+            def find_neighbour(cx, cy)
+                x = cx * Const::GRID
+                y = cy * Const::GRID
+
+                neighbour = neighbours.each do |n|
+                    level = root.level(iid: n["levelIid"])
+                    inside = Geometry.intersect_rect?(
+                        [x, y, Const::GRID, Const::GRID],
+                        [level.world_x, level.world_y, level.px_wid, level.px_hei]
+                    )
+
+                    # $gtk.notify! [
+                    #     [x, y, 16, 16],
+                    #     [level.world_x, level.world_y, level.px_wid, level.px_hei]
+                    # ]
+
+                    return level if inside
+                end
+
+                nil
+            end
+
+            def outside?(cx, cy)
+                layer("Collisions")&.int(cx, cy) == nil
+                # entity.x <= 0 || entity.x >= px_wid || entity.y <= 0 || entity.y >= px_hei
+            end
+
             def entity(id)
                 layer("Entities")&.entity(id)
             end
@@ -32,7 +63,7 @@ module Hoard
                     layer.auto_layer_tiles.map do |tile|
                         {
                             x: tile.px[0] ,
-                            y: ($args.grid.h - tile.px[1]),
+                            y: tile.px[1].from_top,
                             w: layer.grid_size,
                             h: layer.grid_size,
                             tile_x: tile.src[0],

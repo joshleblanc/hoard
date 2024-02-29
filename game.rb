@@ -41,7 +41,6 @@ module Hoard
         end
 
         def update_slow_mos
-            puts "slow_mos #{slow_mos}"
             slow_mos.each do |k, v|
                 v[:t] -= utmod * 1 / 60
                 if v[:t] <= 0 
@@ -50,11 +49,10 @@ module Hoard
             end
 
             target_game_speed = 1 
-            # slow_mos.each do |k, v|
-            #     target_game_speed *= v[:f]
-            # end
+            slow_mos.each do |k, v|
+                target_game_speed *= v[:f]
+            end
 
-            puts "test", self.cur_game_speed, target_game_speed
             self.cur_game_speed = (target_game_speed - cur_game_speed) * (target_game_speed > cur_game_speed ? 0.2 : 0.6)
 
             if (cur_game_speed - target_game_speed).abs <= 0.001
@@ -68,7 +66,6 @@ module Hoard
 
         def pre_update 
             state.entities.each do |entity|
-                puts entity
                 entity.pre_update unless entity.destroyed?
             end
             @camera&.pre_update
@@ -107,7 +104,6 @@ module Hoard
         end
 
         def tick 
-            puts 'ticked'
             defaults
             pre_update
             active_entities.each(&:update) 

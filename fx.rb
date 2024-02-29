@@ -67,6 +67,18 @@ module Hoard
             end
         end
 
+        def ease_part(p, from, to)
+            $args.easing.ease(
+                p.spawn_time,
+                $args.tick_count,
+                p.time - p.spawn_time,
+                p.fade_ease
+            ).remap(
+                0, 1,
+                from, to
+            )
+        end
+
 
         def update 
             process_emitters(@emitters, @particles, $args)
@@ -76,35 +88,9 @@ module Hoard
                 p.yvel *= p.frict if p.frict
 
                 if p.color_start
-                    p.r = $args.easing.ease(
-                        p.spawn_time,
-                        $args.tick_count,
-                        p.time - p.spawn_time,
-                        p.fade_ease
-                    ).remap(
-                        0, 1,
-                        p.color_start >> 16, p.color_end >> 16
-                    )
-
-                    p.g = $args.easing.ease(
-                        p.spawn_time,
-                        $args.tick_count,
-                        p.time - p.spawn_time,
-                        p.fade_ease
-                    ).remap(
-                        0, 1,
-                        (p.color_start >> 8) & 255, (p.color_end >> 8) & 255
-                    )
-
-                    p.b = $args.easing.ease(
-                        p.spawn_time,
-                        $args.tick_count,
-                        p.time - p.spawn_time,
-                        p.fade_ease
-                    ).remap(
-                        0, 1,
-                        p.color_start & 255, p.color_end & 255
-                    )
+                    p.r = ease_part(p, p.color_start >> 16, p.color_end >> 16)
+                    p.g = ease_part(p, (p.color_start >> 8) & 255, (p.color_end >> 8) & 255)
+                    p.b = ease_part(p, p.color_start & 255, p.color_end & 255)
                 end
             end
 

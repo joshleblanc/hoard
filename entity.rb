@@ -16,6 +16,8 @@ module Hoard
 
         # world coords
         attr :wx, :wy 
+
+        attr :squash_x, :squash_y, :scale_x, :scale_y
         
         attr :dx_total, :dy_total, :destroyed, :dir, :visible, :dir
 
@@ -33,6 +35,11 @@ module Hoard
             @dx = 0
             @dy = 0
 
+            @squash_x = 1
+            @squash_y = 1
+            @scale_x = 1
+            @scale_y = 1
+
             @cd = Cooldown.new
             @ucd = Cooldown.new
 
@@ -45,6 +52,22 @@ module Hoard
             v = Phys::Velocity.create_frict(frict)
             @all_velocities.push(v)
             v
+        end
+
+        def squash_x=(scale)
+            @squash_x = scale
+            @squash_y = 2 - scale
+        end
+
+        def squash_y=(scale)
+            @squash_x = 2 - scale 
+            @squash_y = scale
+        end
+
+        def shake_s(x_pow, y_pow, t)
+            cd.set_s("shaking", t, true)
+            @shake_pow_x = x_pow
+            @shake_pow_y = y_pow
         end
 
         def set_pos_case(x, y)
@@ -121,10 +144,17 @@ module Hoard
             visible
         end
 
+        def tmod 
+            1
+        end
+
         # called after pre_update and update
         # usually used for rendering
         def post_update 
             self.flip_horizontally = dir < 1
+            
+            @squash_x += (1 - @squash_x) * [1, 0.2 * tmod].min
+            @squash_y += (1 - @squash_y) * [1, 0.2 * tmod].min
         end
 
         def final_update
@@ -137,6 +167,10 @@ module Hoard
 
         def dy_total 
             @all_velocities.sum_y
+        end
+
+        def ftime 
+            $args.state.tick_count 
         end
 
         # I'm not going to pretend to know what this does
@@ -183,11 +217,21 @@ module Hoard
 
         def draw_override(ffi_draw)
             post_update
+
+            tmpX = x 
+            tmpY = y 
+
+            if cd.has("shaking")
+                tmpX += Math.cos(ftime * 1.1) * shake_pow_x * cd.get_ratio("shaking")
+                tmpY += Math.sin(0.3 + ftime * 1.7) * shake_pow_y * cd.get_ratio("shaking")
+            end
+
+
             ffi_draw.draw_sprite_hash({
-                x: x - (GRID / 2),
-                y: y.from_top + GRID,
-                w: w,
-                h: h,
+                x: tmpX - (GRID / 2),
+                y: tmpY.from_top + GRID,
+                w: w * @scale_x * @squash_x,
+                h: h * @scale_y * @squash_y,
                 tile_w: tile_w,
                 tile_h: tile_h,
                 tile_x: tile_x,

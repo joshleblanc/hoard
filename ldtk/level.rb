@@ -38,11 +38,6 @@ module Hoard
                         [level.world_x, level.world_y, level.px_wid, level.px_hei]
                     )
 
-                    # $gtk.notify! [
-                    #     [x, y, 16, 16],
-                    #     [level.world_x, level.world_y, level.px_wid, level.px_hei]
-                    # ]
-
                     return level if inside
                 end
 

@@ -212,6 +212,8 @@ module Hoard
             end
 
             all_velocities.each(&:update)
+            cd.update
+            #ucd.update
             update_world_pos
         end
 

@@ -14,6 +14,10 @@ module Hoard
             end
         end
 
+        def allocated 
+            @nalloc
+        end
+
         def get(index)
             pool[index]
         end
@@ -42,7 +46,9 @@ module Hoard
                 end
             end
 
-            e = pool[@nalloc.next]
+            
+            e = pool[@nalloc]
+            @nalloc += 1
             e.recycle
 
             e
@@ -65,18 +71,24 @@ module Hoard
         end
 
         def find(&blk)
-            @pool.find(&blk)
+            @nalloc.times do |i|
+                if blk.call(@pool[i])
+                    return @pool[i]
+                end
+            end
+            nil
         end
 
         def free_index(i)
             return unless i >= 0 && i < @nalloc
 
-            if i == @nalloc.pred 
+            if i == @nalloc - 1 
                 @nalloc = @nalloc - 1
             else 
                 tmp = @pool[i]
-                @pool[i] = @pool[@nalloc.pred]
-                @pool[@nalloc.pred] = tmp
+                @pool[i] = @pool[@nalloc - 1]
+                @pool[@nalloc - 1] = tmp
+
                 @nalloc = @nalloc - 1
             end
         end

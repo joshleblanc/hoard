@@ -99,8 +99,8 @@ module Hoard
         end
 
         def unset(k)
-            cds.allocated.times do |idx|
-                if cds.get(i).k == k 
+            cds.allocated.times do |i|
+                if cds.get(i).key == k 
                     unset_index(i)
                     return
                 end
@@ -121,23 +121,25 @@ module Hoard
         end
 
         def get_cd_object(k)
-            cds.find { |cd| cd.k == k }
+            cds.find { |cd| cd.key == k }
         end
 
         def unset_cd_inst(cd)
-            fast_check.delete(cd.k)
+            fast_check.delete(cd.key)
             cds.free_element(cd)
         end
 
-        def unset_index(idk)
-            fast_check.delete cds.get(idk).k
-            cds.free_index idk
+        def unset_index(idx)
+            fast_check.delete cds.get(idx).key
+            cds.free_index idx
         end
 
         def update 
             cds.allocated.times do |idx|
                 cd = cds.get(idx)
+                b = cd.frames
                 cd.frames -= 1
+                
                 if cd.frames <= 0 
                     cb = cd.on_complete_once 
                     unset_index(idx)

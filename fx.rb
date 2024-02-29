@@ -34,7 +34,6 @@ module Hoard
 		# 	p.lifeS = rnd(2,3); // life time in seconds
 		# }
         def dots_explosion(x, y, color = 0xffffff)
-            $gtk.notify! "Running dots explosion"
             80.times do |i|
                 px = x + rnd(0, 3, true)
                 py = y.from_top + rnd(0, 3)

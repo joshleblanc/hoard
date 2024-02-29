@@ -24,7 +24,7 @@ module Hoard
         attr :cd, :ucd, :fx
         attr :all_velocities, :v_base, :v_bump
 
-        attr :walk_speed
+        attr :walk_speed, :animation
 
         def initialize(x, y)
             set_pos_case(x, y)
@@ -47,11 +47,27 @@ module Hoard
             @cd = Cooldown.new
             @ucd = Cooldown.new
 
+            @animation = :idle
+
             @all_velocities = Phys::VelocityArray.new
             @v_base = register_new_velocity(0.82)
             @v_bump = register_new_velocity(0.93)
 
             @fx = Fx.new
+        end
+
+        def animations
+            {
+                idle: { x: 0, y: 0, frames: 1 }
+            }
+        end
+
+        def current_animation
+            animations[@animation]
+        end
+
+        def play_animation(what)
+            @animation = what
         end
 
         def on_ground?
@@ -166,7 +182,8 @@ module Hoard
 
         # beginning of frame loop - called before any other entity update loop
         def pre_update 
-
+            @tile_x = current_animation.x + (Const::GRID * (($args.state.tick_count / 10).to_i % current_animation.frames) )
+            @tile_y = current_animation.y
         end
 
         def center_x
@@ -188,7 +205,8 @@ module Hoard
         # called after pre_update and update
         # usually used for rendering
         def post_update 
-            self.flip_horizontally = dir < 1
+            $gtk.notify! dir
+            self.flip_horizontally = dir < 0
             
             @squash_x += (1 - @squash_x) * [1, 0.2 * tmod].min
             @squash_y += (1 - @squash_y) * [1, 0.2 * tmod].min
@@ -280,7 +298,8 @@ module Hoard
                 tile_h: tile_h,
                 tile_x: tile_x,
                 tile_y: tile_y,
-                path: path
+                path: path,
+                flip_horizontally: flip_horizontally
             })
 
             @fx.draw_override(ffi_draw)

@@ -205,7 +205,6 @@ module Hoard
         # called after pre_update and update
         # usually used for rendering
         def post_update 
-            $gtk.notify! dir
             self.flip_horizontally = dir < 0
             
             @squash_x += (1 - @squash_x) * [1, 0.2 * tmod].min

@@ -277,8 +277,6 @@ module Hoard
         end
 
         def draw_override(ffi_draw)
-            post_update
-
             tmpX = x 
             tmpY = y 
 

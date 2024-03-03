@@ -58,6 +58,7 @@ module Hoard
             end
 
             def draw_override(ffi_draw)
+                
                 layer_instances.reverse.map do |layer|
                     layer.auto_layer_tiles.map do |tile|
                         ffi_draw.draw_sprite_hash({
@@ -69,7 +70,7 @@ module Hoard
                             tile_y: tile.src[1],
                             tile_w: layer.grid_size,
                             tile_h: layer.grid_size,
-                            path: "data/sample-platformer/#{layer.tileset_rel_path}",
+                            path: layer.tileset_rel_path.gsub("../../", ""),
                             flip_horizontally: tile.f == 1 || tile.f == 3,
                             flip_vertically: tile.f == 2 || tile.f == 3,
                             anchor_x: 0,

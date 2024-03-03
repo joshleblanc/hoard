@@ -120,7 +120,7 @@ module Hoard
 
             outputs[:scene].sprites.push active_entities
             outputs.sprites << @scroller
-            
+            outputs.sprites << { x: 0, y: 0, h: 720, w: 1280, path: :ui}
         end
     end
 end

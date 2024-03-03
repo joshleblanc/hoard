@@ -92,6 +92,14 @@ module Hoard
                 end
             end
 
+            def to_s
+                str = "" 
+                imports.each do |import|
+                    str << "#{import}: #{self.send(import)}, "
+                end
+
+                str
+            end
         end
     end 
 end

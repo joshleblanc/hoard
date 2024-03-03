@@ -22,6 +22,14 @@ module Hoard
                 end
             end
 
+            def enum(id)
+                defs.enums.find { |i| i.identifier == id }
+            end
+
+            def tileset(uid)
+                defs.tilesets.find { |i| i.uid == uid }
+            end
+
             def grid_vania?
                 world_layout == "GridVania"
             end

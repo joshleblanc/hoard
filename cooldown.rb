@@ -134,11 +134,11 @@ module Hoard
             cds.free_index idx
         end
 
-        def update 
+        def update(tmod = 1)
             cds.allocated.times do |idx|
                 cd = cds.get(idx)
                 b = cd.frames
-                cd.frames -= 1
+                cd.frames -= tmod
                 
                 if cd.frames <= 0 
                     cb = cd.on_complete_once 

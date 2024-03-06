@@ -1,3 +1,6 @@
+require_relative 'process'
+require_relative 'delayer'
+require_relative 'tweenie'
 require_relative 'fx'
 require_relative 'const'
 require_relative 'recyclable_pool'

@@ -1,18 +1,10 @@
 module Hoard 
-    class Fx 
+    class Fx < Process
         attr :emitters, :particles
 
         def initialize 
             @emitters = []
             @particles = []
-        end
-
-        def rnd(min, max, sign = false)
-            if sign 
-                (min + rand * (max-min)) * (rand(2) * 2 - 1)
-            else 
-                min + rand * (max-min)
-            end
         end
 
         # args.state.blendmodes ||= [
@@ -79,7 +71,7 @@ module Hoard
         end
 
 
-        def update 
+        def update(tmod) 
             process_emitters(@emitters, @particles, $args)
             process_particles(@particles, $args)
             @particles.each do |p|

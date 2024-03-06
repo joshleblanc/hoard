@@ -1,5 +1,5 @@
 module Hoard
-    class Game 
+    class Game < Process
         attr_gtk 
 
         attr :camera, :fx, :current_level, :hud, :slow_mos
@@ -7,6 +7,8 @@ module Hoard
 
 
         def initialize
+            super
+
             @slow_mos = {}
             @cur_game_speed = 1
 
@@ -15,6 +17,7 @@ module Hoard
         end
 
         def start_level(level)
+            destroy_all_children
             @current_level = level
             @camera.center_on_target
             # destroy level and all spawned entities
@@ -64,63 +67,31 @@ module Hoard
             # ucd.setS("stopFrame", 4/60)
         end
 
-        def pre_update 
-            state.entities.each do |entity|
-                entity.pre_update unless entity.destroyed?
-            end
-            @camera&.pre_update
-        end
-
-        def post_update 
+        def post_update(args)
             update_slow_mos
 
-            #self.base_time_mul = (0.2 + 0.8 * cur_game_speed) * (ucd.has("stopFrame") ? 0.1 : 1)
-
-            active_entities.each(&:post_update)
-            @camera&.post_update
-
-            render
-
-            active_entities.each(&:final_update)
-            @camera&.final_update
-
-            garbage_collect_entities
-        end
-
-        def active_entities 
-            state.entities.reject(&:destroyed?)
-        end
-
-        def garbage_collect_entities
-
+            self.base_time_mul = (0.2 + 0.8 * cur_game_speed) * (ucd.has("stopFrame") ? 0.1 : 1)
+            render(args)
         end
 
         def self.s 
             @@instance ||= new
         end
 
-        def defaults 
-
+        def tick
+            Process.update_all(args, utmod)
         end
 
-        def tick 
-            defaults
-            pre_update
-            active_entities.each(&:update) 
-            @camera&.update
-            post_update
-        end
-
-        def render
-            outputs[:scene].transient!
+        def render(args)
+            args.outputs[:ui].transient!
+            args.outputs[:scene].transient!
 
             if @current_level 
-                outputs[:scene].sprites.push @current_level
+                args.outputs[:scene].sprites.push @current_level
             end
 
-            outputs[:scene].sprites.push active_entities
-            outputs.sprites << @scroller
-            outputs.sprites << { x: 0, y: 0, h: 720, w: 1280, path: :ui}
+            args.outputs.sprites << @scroller
+            args.outputs.sprites << { x: 0, y: 0, h: 720, w: 1280, path: :ui}
         end
     end
 end

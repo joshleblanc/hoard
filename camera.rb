@@ -1,5 +1,5 @@
 module Hoard 
-    class Camera
+    class Camera < Process
         MIN_ZOOM = 1 
         MAX_ZOOM = 1
 
@@ -16,6 +16,8 @@ module Hoard
         attr :cd, :tmod
     
         def initialize 
+            super 
+
             @raw_focus = LPoint.from_case(0, 0)
             @clamped_focus = LPoint.from_case(0, 0)
             @dx = 0
@@ -172,14 +174,11 @@ module Hoard
             scroller.scale = Const.scale * zoom
         end
 
-        def post_update 
+        def post_update(args)
             apply 
         end
 
-        def final_update; end 
-        def pre_update; end
-
-        def update 
+        def update(args) 
             level = Game.s.current_level 
 
             tz = target_zoom

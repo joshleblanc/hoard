@@ -1,11 +1,10 @@
 # https://github.com/deepnight/gameBase/blob/master/src/game/Entity.hx
 
 module Hoard
-    class Entity 
+    class Entity < Process
         attr_sprite
 
         GRID = 16
-
 
         ##
         # cx, cy are grid coords
@@ -24,9 +23,11 @@ module Hoard
         attr :cd, :ucd, :fx
         attr :all_velocities, :v_base, :v_bump
 
-        attr :walk_speed, :animation
+        attr :animation
 
-        def initialize(x, y)
+        def initialize(x, y, parent = nil)
+            super(parent)
+
             set_pos_case(x, y)
             @dir = 1
             @w = GRID 
@@ -42,8 +43,6 @@ module Hoard
             @scale_x = 1
             @scale_y = 1
         
-            @walk_speed = 0
-
             @cd = Cooldown.new
             @ucd = Cooldown.new
 
@@ -68,10 +67,6 @@ module Hoard
 
         def play_animation(what)
             @animation = what
-        end
-
-        def on_ground?
-            !destroyed? && @v_base.dy == 0 && yr == 1 && has_collision(cx, cy + 1)
         end
 
         def register_new_velocity(frict)
@@ -145,44 +140,14 @@ module Hoard
             destroyed
         end
 
-        def on_pre_step_x 
+        def on_pre_step_x; end
     
-            if xr > 0.8
-                if has_collision(cx + 1, cy)
-                    self.xr = 0.8
-                end
-            end
-    
-            if xr < 0.2
-                if has_collision(cx-1,cy)
-                    self.xr = 0.2
-                end
-            end
-        end
-    
-        def on_pre_step_y     
-            if yr > 1
-                if has_collision(cx, cy + 1)
-                    self.squash_y = 0.5
-                    v_base.dy = 0
-                    v_bump.dy = 0 
-                    self.yr = 1
-                    fx.dots_explosion(center_x, center_y, 0xffcc00)
-                    # ca.rumble(0.2, 0.06)
-                    # onPosManuallyChangedY()
-                end
-            end
-    
-            if yr < 0.2
-                if has_collision(cx, cy - 1)
-                    self.yr = 0.2
-                end
-            end
-        end
+        def on_pre_step_y; end
 
         # beginning of frame loop - called before any other entity update loop
-        def pre_update 
-            @tile_x = current_animation.x + (Const::GRID * (($args.state.tick_count / 10).to_i % current_animation.frames) )
+        def pre_update(args)
+            super(args)
+            @tile_x = current_animation.x + (Const::GRID * ((args.state.tick_count / 10).to_i % current_animation.frames) )
             @tile_y = current_animation.y
         end
 
@@ -204,15 +169,14 @@ module Hoard
 
         # called after pre_update and update
         # usually used for rendering
-        def post_update 
+        def post_update(args)
+            super(args)
             self.flip_horizontally = dir < 0
             
             @squash_x += (1 - @squash_x) * [1, 0.2 * tmod].min
             @squash_y += (1 - @squash_y) * [1, 0.2 * tmod].min
-        end
 
-        def final_update
-
+            args.outputs[:scene].sprites.push self
         end
 
         def dx_total
@@ -228,7 +192,7 @@ module Hoard
         end
 
         # I'm not going to pretend to know what this does
-        def update 
+        def update(args)
             steps = ((dx_total.abs + dy_total.abs) / 0.33).ceil
 
             if steps > 0 
@@ -266,14 +230,10 @@ module Hoard
             end
 
             all_velocities.each(&:update)
-            cd.update
-            ucd.update
-            fx.update
+            cd.update(tmod)
+            ucd.update(tmod)
+            fx.update(tmod)
             update_world_pos
-
-            v_base.dy += 0.05 unless on_ground?
-        
-            v_base.dx = (v_base.dx + walk_speed) * 0.085 if walk_speed != 0 
         end
 
         def draw_override(ffi_draw)

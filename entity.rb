@@ -140,15 +140,21 @@ module Hoard
             destroyed
         end
 
-        def on_pre_step_x; end
+        def on_pre_step_x
+            run_behaviors(:on_pre_step_x)
+        end
     
-        def on_pre_step_y; end
+        def on_pre_step_y
+            run_behaviors(:on_pre_step_y)
+        end
 
         # beginning of frame loop - called before any other entity update loop
         def pre_update(args)
             super(args)
             @tile_x = current_animation.x + (Const::GRID * ((args.state.tick_count / 10).to_i % current_animation.frames) )
             @tile_y = current_animation.y
+
+            run_behaviors(:pre_update, args)
         end
 
         def center_x
@@ -171,10 +177,13 @@ module Hoard
         # usually used for rendering
         def post_update(args)
             super(args)
+
             self.flip_horizontally = dir < 0
             
             @squash_x += (1 - @squash_x) * [1, 0.2 * tmod].min
             @squash_y += (1 - @squash_y) * [1, 0.2 * tmod].min
+
+            run_behaviors(:post_update, args)
 
             args.outputs[:scene].sprites.push self
         end
@@ -193,6 +202,8 @@ module Hoard
 
         # I'm not going to pretend to know what this does
         def update(args)
+
+            puts "Update inside"
             steps = ((dx_total.abs + dy_total.abs) / 0.33).ceil
 
             if steps > 0 
@@ -234,6 +245,8 @@ module Hoard
             ucd.update(tmod)
             fx.update(tmod)
             update_world_pos
+
+            run_behaviors(:update, args)
         end
 
         def draw_override(ffi_draw)
@@ -260,6 +273,16 @@ module Hoard
             })
 
             @fx.draw_override(ffi_draw)
+        end
+
+        private 
+
+        def run_behaviors(method, args = nil)
+            self.class.included_modules.each do |mod|
+                next unless mod.respond_to?(method)
+                
+                mod.method(method).bind(self).call(args) 
+            end
         end
     end
 end

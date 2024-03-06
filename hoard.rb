@@ -1,3 +1,5 @@
+require_relative 'behaviors/gravity_behavior'
+require_relative 'behaviors/horizontal_movement_behavior'
 require_relative 'process'
 require_relative 'delayer'
 require_relative 'tweenie'

@@ -16,6 +16,16 @@ module Hoard
                 int(x, y).to_i.odd?
             end
 
+            def tiles 
+                if grid_tiles.length > 0 
+                    grid_tiles
+                elsif auto_layer_tiles.length > 0
+                    auto_layer_tiles
+                else 
+                    []
+                end
+            end
+
             def int(cx, cy)
                 return if cy < 0
                 return if cx < 0

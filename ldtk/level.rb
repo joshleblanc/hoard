@@ -60,7 +60,7 @@ module Hoard
             def draw_override(ffi_draw)
                 
                 layer_instances.reverse.map do |layer|
-                    layer.auto_layer_tiles.map do |tile|
+                    layer.tiles.map do |tile|
                         ffi_draw.draw_sprite_hash({
                             x: tile.px[0] ,
                             y: tile.px[1].from_top,

@@ -268,7 +268,7 @@ module Hoard
                 tile_h: tile_h,
                 tile_x: tile_x,
                 tile_y: tile_y,
-                path: path,
+                path: current_animation.path || @path,
                 flip_horizontally: flip_horizontally
             })
 

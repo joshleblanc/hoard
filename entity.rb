@@ -27,6 +27,19 @@ module Hoard
 
         attr :animation
 
+        def self.resolve(id)
+            resolution = nil
+            
+            ObjectSpace.each_object(Class) do |c| 
+                if c.name == id 
+                    resolution = c  # can't return from here for some reason
+                    break
+                end
+            end
+
+            return resolution
+        end
+
         def initialize(x, y, parent = nil)
             super(parent)
 

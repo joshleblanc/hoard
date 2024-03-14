@@ -34,7 +34,7 @@ module Hoard
 
                 if can_run?(p)
                     unless p.init_once_done
-                        p.init_once_before_update
+                        p.init
                         p.init_once_done = true
                     end
 
@@ -286,7 +286,7 @@ module Hoard
         def update; end 
         def post_update; end 
         def final_update; end
-        def init_once_before_update; end 
+        def init; end 
 
     end
 end

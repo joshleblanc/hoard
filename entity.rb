@@ -174,6 +174,7 @@ module Hoard
             return unless Geometry.intersect_rect?(Game.s.player, self)
             
             Game.s.player.send_to_scripts(:on_collision, self)
+            send_to_scripts(:on_collision, Game.s.player)
 
             if Game.s.inputs.keyboard.key_down.e
                 send_to_scripts(:on_interact, Game.s.player)

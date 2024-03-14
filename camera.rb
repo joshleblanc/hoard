@@ -174,11 +174,11 @@ module Hoard
             scroller.scale = Const.scale * zoom
         end
 
-        def post_update(args)
+        def post_update
             apply 
         end
 
-        def update(args) 
+        def update 
             level = Game.s.current_level 
 
             tz = target_zoom

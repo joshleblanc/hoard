@@ -67,11 +67,11 @@ module Hoard
             # ucd.setS("stopFrame", 4/60)
         end
 
-        def post_update(args)
+        def post_update
             update_slow_mos
 
             self.base_time_mul = (0.2 + 0.8 * cur_game_speed) * (ucd.has("stopFrame") ? 0.1 : 1)
-            render(args)
+            render
         end
 
         def self.s 
@@ -79,10 +79,10 @@ module Hoard
         end
 
         def tick
-            Process.update_all(args, utmod)
+            Process.update_all(utmod)
         end
 
-        def render(args)
+        def render
             args.outputs[:ui].transient!
             args.outputs[:scene].transient!
 

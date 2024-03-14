@@ -2,6 +2,8 @@
 
 module Hoard
     class Entity < Process
+        include Scriptable
+
         attr_sprite
 
         GRID = 16
@@ -141,20 +143,20 @@ module Hoard
         end
 
         def on_pre_step_x
-            run_behaviors(:on_pre_step_x)
+            run_scripts(:on_pre_step_x)
         end
     
         def on_pre_step_y
-            run_behaviors(:on_pre_step_y)
+            run_scripts(:on_pre_step_y)
         end
 
         # beginning of frame loop - called before any other entity update loop
-        def pre_update(args)
-            super(args)
+        def pre_update
+            super
             @tile_x = current_animation.x + (Const::GRID * ((args.state.tick_count / 10).to_i % current_animation.frames) )
             @tile_y = current_animation.y
 
-            run_behaviors(:pre_update, args)
+            run_scripts(:pre_update)
         end
 
         def center_x
@@ -175,18 +177,22 @@ module Hoard
 
         # called after pre_update and update
         # usually used for rendering
-        def post_update(args)
-            super(args)
+        def post_update
+            super
 
             self.flip_horizontally = dir < 0
             
             @squash_x += (1 - @squash_x) * [1, 0.2 * tmod].min
             @squash_y += (1 - @squash_y) * [1, 0.2 * tmod].min
 
-            run_behaviors(:post_update, args)
+            run_scripts(:post_update)
 
             args.outputs[:scene].sprites.push self
         end
+
+        def on_ground?
+            !destroyed? && v_base.dy == 0 && yr == 1 && has_collision(cx, cy + 1)
+        end  
 
         def dx_total
             @all_velocities.sum_x
@@ -201,11 +207,8 @@ module Hoard
         end
 
         # I'm not going to pretend to know what this does
-        def update(args)
-
-            puts "Update inside"
+        def update
             steps = ((dx_total.abs + dy_total.abs) / 0.33).ceil
-
             if steps > 0 
                 n = 0
                 while(n < steps) 
@@ -246,7 +249,7 @@ module Hoard
             fx.update(tmod)
             update_world_pos
 
-            run_behaviors(:update, args)
+            run_scripts(:update)
         end
 
         def draw_override(ffi_draw)
@@ -273,16 +276,6 @@ module Hoard
             })
 
             @fx.draw_override(ffi_draw)
-        end
-
-        private 
-
-        def run_behaviors(method, args = nil)
-            self.class.included_modules.each do |mod|
-                next unless mod.respond_to?(method)
-                
-                mod.method(method).bind(self).call(args) 
-            end
         end
     end
 end

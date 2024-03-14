@@ -1,5 +1,7 @@
 module Hoard
     class Process 
+        attr_gtk 
+
         FPS = 60 
         ROOTS = []
         @@uniq_id = 0
@@ -15,9 +17,10 @@ module Hoard
                 p.can_run?
             end
 
-            def pre_update(args, p, utmod)
+            def pre_update(p, utmod)
                 return unless can_run?(p)
 
+                p.args = $args
                 p.utmod = utmod
                 p.ftime += p.tmod
                 p.uftime += p.utmod
@@ -31,55 +34,55 @@ module Hoard
 
                 if can_run?(p)
                     unless p.init_once_done
-                        p.init_once_before_update(args)
+                        p.init_once_before_update
                         p.init_once_done = true
                     end
 
-                    p.pre_update(args)
+                    p.pre_update
                 end
 
                 if can_run?(p)
                     p.children.each do |c|
-                        pre_update(args, c, utmod)
+                        pre_update(c, utmod)
                     end
                 end
             end
 
-            def main_update(args, p)
+            def main_update(p)
                 return unless can_run?(p)
 
-                p.update(args)
+                p.update
 
                 if can_run?(p)
                     p.children.each do |c|
-                        main_update(args, c)
+                        main_update(c)
                     end
                 end
             end
 
-            def post_update(args, p)
+            def post_update(p)
                 return unless can_run?(p)
 
-                p.post_update(args) 
+                p.post_update 
 
                 unless p.destroyed?
                     p.children.each do |c|
-                        post_update(args, c)
+                        post_update(c)
                     end
                 end
             end
 
-            def update_all(args, utmod)
+            def update_all(utmod)
                 ROOTS.each do |root|
-                    pre_update(args, root, utmod)
+                    pre_update(root, utmod)
                 end
 
                 ROOTS.each do |root|
-                    main_update(args, root)
+                    main_update(root)
                 end
 
                 ROOTS.each do |root|
-                    post_update(args, root)
+                    post_update(root)
                 end
             end
         end
@@ -112,6 +115,14 @@ module Hoard
                 ROOTS << self
             end
 
+        end
+
+        def apply_args(args)
+            puts "applying args #{args}"
+            self.args = args 
+            @children.each do |child|
+                child.apply_args(args)
+            end
         end
 
         def can_run?
@@ -271,11 +282,11 @@ module Hoard
             @children.each(&:destroy!)
         end
 
-        def pre_update(args); end
-        def update(args); end 
-        def post_update(args); end 
-        def final_update(args); end
-        def init_once_before_update(args); end 
+        def pre_update; end
+        def update; end 
+        def post_update; end 
+        def final_update; end
+        def init_once_before_update; end 
 
     end
 end

@@ -9,5 +9,6 @@ module Hoard
         def pre_update; end 
         def on_pre_step_x; end 
         def on_pre_step_y; end
+        def init; end
     end
 end

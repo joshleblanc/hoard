@@ -29,7 +29,7 @@ module Hoard
 
         def self.resolve(id)
             resolution = nil
-            
+
             ObjectSpace.each_object(Class) do |c| 
                 if c.name == id 
                     resolution = c  # can't return from here for some reason
@@ -217,6 +217,10 @@ module Hoard
 
         def ftime 
             $args.state.tick_count 
+        end
+
+        def init 
+            run_scripts(:init)
         end
 
         # I'm not going to pretend to know what this does

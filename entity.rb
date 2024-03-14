@@ -25,7 +25,7 @@ module Hoard
         attr :cd, :ucd, :fx
         attr :all_velocities, :v_base, :v_bump
 
-        attr :animation
+        attr :animation, :animations
 
         def self.resolve(id)
             resolution = nil
@@ -68,10 +68,8 @@ module Hoard
             @v_bump = register_new_velocity(0.93)
 
             @fx = Fx.new
-        end
 
-        def animations
-            {
+            @animations = {
                 idle: { x: 0, y: 0, frames: 1 }
             }
         end
@@ -156,11 +154,11 @@ module Hoard
         end
 
         def on_pre_step_x
-            run_scripts(:on_pre_step_x)
+            send_to_scripts(:on_pre_step_x)
         end
     
         def on_pre_step_y
-            run_scripts(:on_pre_step_y)
+            send_to_scripts(:on_pre_step_y)
         end
 
         # beginning of frame loop - called before any other entity update loop
@@ -169,7 +167,17 @@ module Hoard
             @tile_x = current_animation.x + (Const::GRID * ((args.state.tick_count / 10).to_i % current_animation.frames) )
             @tile_y = current_animation.y
 
-            run_scripts(:pre_update)
+            send_to_scripts(:pre_update)
+            
+            # call on_collision on the player
+            return if Game.s.player == self
+            return unless Geometry.intersect_rect?(Game.s.player, self)
+            
+            Game.s.player.send_to_scripts(:on_collision, self)
+
+            if Game.s.inputs.keyboard.key_down.e
+                send_to_scripts(:on_interact, Game.s.player)
+            end
         end
 
         def center_x
@@ -198,7 +206,7 @@ module Hoard
             @squash_x += (1 - @squash_x) * [1, 0.2 * tmod].min
             @squash_y += (1 - @squash_y) * [1, 0.2 * tmod].min
 
-            run_scripts(:post_update)
+            send_to_scripts(:post_update)
 
             args.outputs[:scene].sprites.push self
         end
@@ -220,7 +228,7 @@ module Hoard
         end
 
         def init 
-            run_scripts(:init)
+            send_to_scripts(:init)
         end
 
         # I'm not going to pretend to know what this does
@@ -266,7 +274,7 @@ module Hoard
             fx.update(tmod)
             update_world_pos
 
-            run_scripts(:update)
+            send_to_scripts(:update)
         end
 
         def draw_override(ffi_draw)

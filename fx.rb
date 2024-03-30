@@ -74,17 +74,6 @@ module Hoard
         def update(tmod) 
             process_emitters(@emitters, @particles, $args)
             process_particles(@particles, $args)
-            @particles.each do |p|
-                p.xvel *= p.frict if p.frict
-                p.yvel *= p.frict if p.frict
-
-                if p.color_start
-                    p.r = ease_part(p, p.color_start >> 16, p.color_end >> 16)
-                    p.g = ease_part(p, (p.color_start >> 8) & 255, (p.color_end >> 8) & 255)
-                    p.b = ease_part(p, p.color_start & 255, p.color_end & 255)
-                end
-            end
-
         end
     end
 end

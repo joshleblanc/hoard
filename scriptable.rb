@@ -15,6 +15,5 @@ module Hoard
                 script.send(met, *args) if script.respond_to?(met)
             end
         end
-
     end
 end

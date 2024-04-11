@@ -51,6 +51,7 @@ module Hoard
             def main_update(p)
                 return unless can_run?(p)
 
+                p.args = $args
                 p.update
 
                 if can_run?(p)
@@ -63,6 +64,7 @@ module Hoard
             def post_update(p)
                 return unless can_run?(p)
 
+                p.args = $args
                 p.post_update 
 
                 unless p.destroyed?

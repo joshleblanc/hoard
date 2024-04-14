@@ -3,8 +3,22 @@ module Hoard
         attr :emitters, :particles
 
         def initialize 
+            super
+            
             @emitters = []
             @particles = []
+            @anims = []
+        end
+
+        def process_anims
+            @anims.each do |anim|
+                duration = $args.state.tick_count - anim.start_tick
+                anim.current_frame = (duration / 4).to_i % anim.frames
+                $gtk.notify!(anim.current_frame)
+                anim.tile_x = (anim.tile_w * anim.current_frame)
+            end
+
+            @anims.delete_if { _1.current_frame >= (_1.frames - 1) }
         end
 
         # args.state.blendmodes ||= [
@@ -43,7 +57,7 @@ module Hoard
                     grav: true, grav_x: 0.0, grav_y: rnd(0, -0.02),
                     anchor_x: 0.5, anchor_y: 0.5,
                     time: $args.tick_count + 15,
-                    blendmode_enum: 2,
+                    blendmode_enum: 0,
                     spawn_time: $args.tick_count,
                     fade: true, fade_start: rnd(0.4, 1) * 255, fade_end: 0, fade_ease: :quint,
                     color_start: color,
@@ -52,9 +66,23 @@ module Hoard
             end
         end
 
+        def anim(data) 
+            data.anchor_x = 0.5
+            data.anchor_y = 0.5
+            data.w = Const::GRID
+            data.h = Const::GRID
+            data.start_tick = $args.state.tick_count
+            @anims.push(data)
+        end
+
         def draw_override(ffi_draw) 
             @particles.each do |p|
                 ffi_draw.draw_sprite_hash(p)
+            end
+
+            @anims.each do |a|
+                puts a
+                ffi_draw.draw_sprite_hash(a)
             end
         end
 
@@ -70,10 +98,14 @@ module Hoard
             )
         end
 
-
-        def update(tmod) 
+        def update 
             process_emitters(@emitters, @particles, $args)
             process_particles(@particles, $args)
+            process_anims
+        end
+
+        def post_update 
+            args.outputs[:scene].sprites.push(self)
         end
     end
 end

@@ -3,7 +3,7 @@ module Hoard
         attr_gtk 
 
         attr :camera, :fx, :current_level, :hud, :slow_mos
-        attr :cur_game_speed, :scroller
+        attr :cur_game_speed, :scroller, :fx
 
 
         def initialize
@@ -14,6 +14,8 @@ module Hoard
 
             @scroller = Layer.new(:scene)
             @camera = Camera.new
+
+            @fx = Fx.new
         end
 
         def start_level(level)
@@ -71,6 +73,7 @@ module Hoard
             update_slow_mos
 
             self.base_time_mul = (0.2 + 0.8 * cur_game_speed) * (ucd.has("stopFrame") ? 0.1 : 1)
+
             render
         end
 

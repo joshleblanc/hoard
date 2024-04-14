@@ -25,8 +25,9 @@ module Hoard
                     return unless json
 
                     new.tap do |c|
+                        puts "Importing #{c.class.name}"
                         c.parent = parent
-                        c.imports.each do |ivar|
+                        Array(c.imports).each do |ivar|
                             key = make_key(ivar)
                             value = json[key] || json["__#{key}"]
 
@@ -55,7 +56,7 @@ module Hoard
                             c.instance_variable_set("@#{ivar}".to_sym, fixed_value)
                         end
         
-                        c.mappings.each do |ivar, type|
+                        Array(c.mappings).each do |ivar, type|
                             key = make_key(ivar)
                             data = json[key] || json["__#{key}"]
         

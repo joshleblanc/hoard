@@ -1,7 +1,6 @@
 module Hoard 
     class Scheduler
         def initialize(tick_count = 0, blk)
-            puts "Scheduling #{$args.state.tick_count}"
             @blk = blk
             @tick_count = $args.state.tick_count + tick_count
 
@@ -12,7 +11,7 @@ module Hoard
 
         def wait(frames = 1, &blk)
             @waits += frames
-            Scheduler.schedule(@waits, &blk)
+            Scheduler.schedule(@waits, &blk) if blk
         end
 
         def tick 

@@ -120,7 +120,6 @@ module Hoard
         end
 
         def apply_args(args)
-            puts "applying args #{args}"
             self.args = args 
             @children.each do |child|
                 child.apply_args(args)

@@ -14,7 +14,6 @@ module Hoard
             @anims.each do |anim|
                 duration = $args.state.tick_count - anim.start_tick
                 anim.current_frame = (duration / 4).to_i % anim.frames
-                $gtk.notify!(anim.current_frame)
                 anim.tile_x = (anim.tile_w * anim.current_frame)
             end
 
@@ -81,7 +80,6 @@ module Hoard
             end
 
             @anims.each do |a|
-                puts a
                 ffi_draw.draw_sprite_hash(a)
             end
         end

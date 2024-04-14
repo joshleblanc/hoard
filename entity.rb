@@ -50,6 +50,8 @@ module Hoard
             @tile_w = GRID 
             @tile_h = GRID
 
+            @visible = true
+
             @dx = 0
             @dy = 0
 
@@ -66,8 +68,6 @@ module Hoard
             @all_velocities = Phys::VelocityArray.new
             @v_base = register_new_velocity(0.82)
             @v_bump = register_new_velocity(0.93)
-
-            @fx = Fx.new
 
             @animations = {
                 idle: { x: 0, y: 0, frames: 1 }
@@ -161,6 +161,10 @@ module Hoard
             send_to_scripts(:on_pre_step_y)
         end
 
+        def apply_damage(amt, from = nil)
+            send_to_scripts(:on_damage, amt, from)
+        end
+
         # beginning of frame loop - called before any other entity update loop
         def pre_update
             super
@@ -209,7 +213,7 @@ module Hoard
 
             send_to_scripts(:post_update)
 
-            args.outputs[:scene].sprites.push self
+            args.outputs[:scene].sprites.push(self) if visible?
         end
 
         def on_ground?
@@ -272,7 +276,6 @@ module Hoard
             all_velocities.each(&:update)
             cd.update(tmod)
             ucd.update(tmod)
-            fx.update(tmod)
             update_world_pos
 
             send_to_scripts(:update)
@@ -300,8 +303,6 @@ module Hoard
                 path: current_animation.path || @path,
                 flip_horizontally: flip_horizontally
             })
-
-            @fx.draw_override(ffi_draw)
         end
     end
 end

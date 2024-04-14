@@ -83,6 +83,7 @@ module Hoard
 
         def tick
             Process.update_all(utmod)
+            Scheduler.tick
         end
 
         def render

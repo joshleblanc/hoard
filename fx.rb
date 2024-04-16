@@ -68,8 +68,8 @@ module Hoard
         def anim(data) 
             data.anchor_x = 0.5
             data.anchor_y = 0.5
-            data.w = Const::GRID
-            data.h = Const::GRID
+            data.w = data.w || Const::GRID
+            data.h = data.h || Const::GRID
             data.start_tick = $args.state.tick_count
             @anims.push(data)
         end

@@ -14,9 +14,6 @@ module Hoard
 
             def flash! 
                 delay = 0.25 * 60
-                flip = Proc.new do |s|
-                    
-                end
 
                 Scheduler.schedule do |s, blk|
                     if entity.cd.has("invulnerability")

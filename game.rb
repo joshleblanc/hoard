@@ -86,9 +86,12 @@ module Hoard
             Scheduler.tick
         end
 
-        def render
+        def pre_update 
             args.outputs[:ui].transient!
             args.outputs[:scene].transient!
+        end
+
+        def render
 
             if @current_level 
                 args.outputs[:scene].sprites.push @current_level

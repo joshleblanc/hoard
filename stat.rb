@@ -17,6 +17,10 @@ module Hoard
             end
         end
 
+        def reset!
+            self.v = self.max
+        end
+
         def init_max_on_max(max)
             init(max, 0, max)
         end

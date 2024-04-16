@@ -8,9 +8,43 @@ module Hoard
                 @life.init_max_on_max(health)
             end
 
+            def reset!
+                @life.reset!
+            end
+
+            def flash! 
+                delay = 0.25 * 60
+                flip = Proc.new do |s|
+                    
+                end
+
+                Scheduler.schedule do |s, blk|
+                    if entity.cd.has("invulnerability")
+                        entity.visible = !entity.visible
+                        s.wait(delay, &blk) 
+                    else 
+                        entity.visible = true
+                    end
+                end
+            end
+
+            def ricochet!(target)
+                powaaa = 0.5
+                normal = Geometry.vec2_normalize({ x: entity.x - target.x, y: entity.y - target.y})
+                entity.v_base.y = powaaa * normal.y
+                entity.v_base.x = powaaa * normal.x
+            end
+
             def on_damage(amt, from = nil)
                 return if amt <= 0
                 return if dead?
+
+                return if entity.cd.has("invulnerability")
+
+                entity.cd.set_s("invulnerability", 3)
+
+                flash!
+                ricochet!(from)
 
                 @life.v -= amt
                 @last_dmg_source = from

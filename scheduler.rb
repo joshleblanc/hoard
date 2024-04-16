@@ -17,7 +17,7 @@ module Hoard
         def tick 
             return if done?
             
-            @blk.call(self)
+            @blk.call(self, @blk)
 
             @run = true
         end

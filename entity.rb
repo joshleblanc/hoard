@@ -31,7 +31,7 @@ module Hoard
             resolution = nil
 
             ObjectSpace.each_object(Class) do |c| 
-                if c.name == id 
+                if c.name&.split("::")&.last == id 
                     resolution = c  # can't return from here for some reason
                     break
                 end

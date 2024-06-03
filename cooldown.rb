@@ -45,6 +45,10 @@ module Hoard
             (ms * BASE_FPS) / 1000.0
         end
 
+        def set(...)
+            set_s(...)
+        end
+
         def set_s(key, seconds, allow_lower: true, on_complete: nil)
             set_f(key, sec_to_frames(seconds), allow_lower: allow_lower, on_complete: on_complete)
         end

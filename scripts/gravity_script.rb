@@ -1,9 +1,8 @@
 module Hoard 
     module Scripts
         class GravityScript < Script 
-            def initialize(gravity = 0.05, landing_animation: nil) 
+            def initialize(gravity = 0.05) 
                 @gravity = gravity
-                @landing_animation = landing_animation
             end
 
             def update 
@@ -18,9 +17,13 @@ module Hoard
                 entity.v_bump.dy = 0
                 entity.yr = 1
 
-                if @landing_animation
-                    Game.s.fx.anim(@landing_animation.merge({ x: entity.center_x, y: entity.center_y.from_top }))
-                end
+                landing_animation = entity.scripts.find { _1.id == :landing }
+
+                return unless landing_animation
+
+                entity.cd.set("landing", landing_animation.frame_length / 60)
+                landing_animation.play!
+               
             end
         end
     end

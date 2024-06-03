@@ -8,6 +8,10 @@ module Hoard
             def field(id)
                 field_instances.select { |i| i.identifier == id }.map { |i| i.value }.flatten
             end
+
+            def definition
+                root.entity(self.def_uid)
+            end
         end
     end
 end

@@ -13,7 +13,7 @@ module Hoard
 
             
             def has_collision(x, y)
-                int(x, y).to_i.odd?
+                int(x, y).to_i == 1
             end
 
             def tiles 

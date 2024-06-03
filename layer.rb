@@ -2,6 +2,8 @@ module Hoard
     class Layer 
         attr_sprite
 
+        attr :scale_x, :scale_y
+
         def initialize(path)
             @x = 0
             @y = 0

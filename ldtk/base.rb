@@ -25,7 +25,6 @@ module Hoard
                     return unless json
 
                     new.tap do |c|
-                        puts "Importing #{c.class.name}"
                         c.parent = parent
                         Array(c.imports).each do |ivar|
                             key = make_key(ivar)

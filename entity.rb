@@ -68,18 +68,6 @@ module Hoard
             @all_velocities = Phys::VelocityArray.new
             @v_base = register_new_velocity(0.82)
             @v_bump = register_new_velocity(0.93)
-
-            @animations = {
-                idle: { x: 0, y: 0, frames: 1 }
-            }
-        end
-
-        def current_animation
-            animations[@animation]
-        end
-
-        def play_animation(what)
-            @animation = what
         end
 
         def register_new_velocity(frict)
@@ -168,9 +156,8 @@ module Hoard
         # beginning of frame loop - called before any other entity update loop
         def pre_update
             super
-            @tile_x = current_animation.x + (Const::GRID * ((args.state.tick_count / 10).to_i % current_animation.frames) )
-            @tile_y = current_animation.y
 
+            send_to_scripts(:args=, args)
             send_to_scripts(:pre_update)
             
             # call on_collision on the player
@@ -212,8 +199,6 @@ module Hoard
             @squash_y += (1 - @squash_y) * [1, 0.2 * tmod].min
 
             send_to_scripts(:post_update)
-
-            args.outputs[:scene].sprites.push(self) if visible?
         end
 
         def on_ground?
@@ -279,30 +264,6 @@ module Hoard
             update_world_pos
 
             send_to_scripts(:update)
-        end
-
-        def draw_override(ffi_draw)
-            tmpX = x 
-            tmpY = y 
-
-            if cd.has("shaking")
-                tmpX += Math.cos(ftime * 1.1) * shake_pow_x * cd.get_ratio("shaking")
-                tmpY += Math.sin(0.3 + ftime * 1.7) * shake_pow_y * cd.get_ratio("shaking")
-            end
-
-
-            ffi_draw.draw_sprite_hash({
-                x: tmpX - (GRID / 2),
-                y: tmpY.from_top + GRID,
-                w: w * @scale_x * @squash_x,
-                h: h * @scale_y * @squash_y,
-                tile_w: tile_w,
-                tile_h: tile_h,
-                tile_x: tile_x,
-                tile_y: tile_y,
-                path: current_animation.path || @path,
-                flip_horizontally: flip_horizontally
-            })
         end
     end
 end

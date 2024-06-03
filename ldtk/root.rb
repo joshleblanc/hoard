@@ -30,6 +30,10 @@ module Hoard
                 defs.tilesets.find { |i| i.uid == uid }
             end
 
+            def entity(uid)
+                defs.entities.find { _1.uid == uid }
+            end
+
             def grid_vania?
                 world_layout == "GridVania"
             end

@@ -3,6 +3,7 @@ module Hoard
         def add_script(script)
             scripts << script
             script.entity = self
+            self.define_singleton_method(Utils.underscore(script.class.name).to_sym) { script }
             script.init
         end
 
@@ -10,9 +11,13 @@ module Hoard
             @scripts ||= []
         end
 
-        def send_to_scripts(met, *args)
+        def find_scripts(what)
+            @scripts.select { _1.is_a? what }
+        end
+
+        def send_to_scripts(met, *args, &blk)
             scripts.each do |script|
-                script.send(met, *args) if script.respond_to?(met)
+                script.send(met, *args, &blk) if script.respond_to?(met)
             end
         end
 

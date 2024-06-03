@@ -5,6 +5,11 @@ module Hoard
         attr :camera, :fx, :current_level, :hud, :slow_mos
         attr :cur_game_speed, :scroller, :fx
 
+        class << self 
+            @grid = 16
+
+            attr :grid
+        end
 
         def initialize
             super
@@ -92,7 +97,6 @@ module Hoard
         end
 
         def render
-
             if @current_level 
                 args.outputs[:scene].sprites.push @current_level
             end

@@ -70,7 +70,7 @@ module Hoard
                             tile_y: tile.src[1],
                             tile_w: layer.grid_size,
                             tile_h: layer.grid_size,
-                            path: layer.tileset_rel_path.gsub("../../", ""),
+                            path: layer.tileset_rel_path.gsub("../", ""),
                             flip_horizontally: tile.f == 1 || tile.f == 3,
                             flip_vertically: tile.f == 2 || tile.f == 3,
                             anchor_x: 0,

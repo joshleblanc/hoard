@@ -21,6 +21,7 @@ module Hoard
                 return unless can_run?(p)
 
                 p.args = $args
+
                 p.utmod = utmod
                 p.ftime += p.tmod
                 p.uftime += p.utmod

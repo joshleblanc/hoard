@@ -1,5 +1,35 @@
 module Hoard 
     module Scriptable 
+        def self.included(base)
+            base.extend(ClassMethods)
+        end
+
+        module ClassMethods
+            def script(what)
+                @scripts ||= []
+                @scripts << what
+            end
+
+            def find_script_property(name, scripts = nil)
+                scripts = scripts || @scripts 
+
+                ivar = :"@#{name}"
+                scripts.each do |script|
+                    next unless script.instance_variables.include?(ivar)
+                    
+                    return script.instance_variable_get(ivar)
+                end
+            end
+        end
+
+        def add_default_scripts!
+            scripts = self.class.instance_variable_get(:@scripts) || []
+            scripts.each do |script|
+                add_script(script)
+            end
+        end
+
+        
         def add_script(script)
             scripts << script
             script.entity = self
@@ -22,12 +52,7 @@ module Hoard
         end
 
         def find_script_property(name)
-            ivar = :"@#{name}"
-            scripts.each do |script|
-                next unless script.instance_variables.include?(ivar)
-                
-                return script.instance_variable_get(ivar)
-            end
+            self.class.find_script_property(name, scripts)
         end
     end
 end

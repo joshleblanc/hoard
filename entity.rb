@@ -68,6 +68,8 @@ module Hoard
             @all_velocities = Phys::VelocityArray.new
             @v_base = register_new_velocity(0.82)
             @v_bump = register_new_velocity(0.93)
+
+            add_default_scripts!
         end
 
         def register_new_velocity(frict)

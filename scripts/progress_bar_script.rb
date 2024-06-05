@@ -24,11 +24,12 @@ module Hoard
             end
 
             def post_update 
-                outputs[:scene].sprites << {
-                    x: entity.x - (max_w / 4),
+                outputs[:scene].primitives << {
+                    x: entity.x - (max_w / 2),
                     y: entity.y.from_top + entity.h + 20,
                     w: max_w * progress,
                     h: 4,
+                    r: 255, g: 255, b: 255,
                     primitive_marker: :solid
                 }
             end

@@ -59,17 +59,17 @@ module Hoard
             @squash_y = 1
             @scale_x = 1
             @scale_y = 1
-        
+
             @cd = Cooldown.new
             @ucd = Cooldown.new
-
-            @animation = :idle
 
             @all_velocities = Phys::VelocityArray.new
             @v_base = register_new_velocity(0.82)
             @v_bump = register_new_velocity(0.93)
 
             add_default_scripts!
+
+            add_script Scripts::DebugRenderScript.new
         end
 
         def register_new_velocity(frict)
@@ -161,6 +161,8 @@ module Hoard
 
             send_to_scripts(:args=, args)
             send_to_scripts(:pre_update)
+            
+            return if destroyed?
             
             # call on_collision on the player
             return if Game.s.player == self

@@ -104,7 +104,7 @@ module Hoard
                 offset_scale_y = (entity.h * entity.scale_y) / entity.tile_h
 
                 sprite = {
-                    x: tmpX + (@offset_x * offset_scale_x),
+                    x: tmpX + - (entity.w / 2) + (@offset_x * offset_scale_x),
                     y: tmpY.from_top + entity.h + (@offset_y * offset_scale_y),
                     w: entity.w * entity.scale_x * entity.squash_x,
                     h: entity.h * entity.scale_y * entity.squash_y,

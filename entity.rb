@@ -40,7 +40,7 @@ module Hoard
             return resolution
         end
 
-        def initialize(x, y, parent = nil)
+        def initialize(x = 0, y = 0, parent = nil)
             super(parent)
 
             set_pos_case(x, y)

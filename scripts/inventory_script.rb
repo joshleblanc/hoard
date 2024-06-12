@@ -33,6 +33,16 @@ module Hoard
                 end
             end
 
+            def has_enough?(what, quantity = 1)
+                args.gtk.notify! "has enough #{what} #{quantity} #{find(what).quantity}"
+                
+                (find(what)&.quantity || 0) >= quantity
+            end
+
+            def find(what)
+                @slots.find { _1.name == what }
+            end
+
             def add_to_inventory(loot, quantity = 1)
                 return unless loot.inventory_spec_script 
 
@@ -40,7 +50,7 @@ module Hoard
 
                 if @slots.length < @size 
                     @slots << {
-                        icon: spec.icon,
+                        **spec.to_h,
                         quantity: quantity 
                     }
 
@@ -51,6 +61,19 @@ module Hoard
                         "Received #{quantity} #{spec.name}"
                     )
                 end
+            end
+
+            def remove_from_inventory(what, quantity = 1)
+                item = find(what)
+                return unless item 
+
+                if quantity >= item.quantity
+                    item.quantity -= quantity
+                else
+                    @slots.delete item
+                end
+
+                entity.send_to_scripts(:save, { inventory: @slots })
             end
 
             def update 

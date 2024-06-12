@@ -6,32 +6,63 @@ module Hoard
             def initialize(limit: 100) 
                 @limit = limit
                 @curr = 0
+                @active = false
+                @done = false
             end
 
             def progress 
                 @curr / @limit   
             end
+
+            def activate!
+                @done = false
+                @active = true
+            end
+
+            def done?
+                progress >= 1 && @active
+            end
+            
+            def active?
+                @active
+            end
+
+            def idle?
+                !@active 
+            end
             
             def update 
-                @curr += 1
-                if progress >= 1
-                    @curr = 0
-                end
+                return unless @active 
+
+                @curr += 1 unless done?
             end
 
             def max_w 
                 entity.w * 2
             end
 
-            def post_update 
-                outputs[:scene].primitives << {
-                    x: entity.x - (max_w / 2),
-                    y: entity.y.from_top + entity.h + 20,
-                    w: max_w * progress,
-                    h: 4,
-                    r: 255, g: 255, b: 255,
-                    primitive_marker: :solid
-                }
+            def post_update
+                return unless @active 
+
+                if done?
+                    outputs[:scene].labels << { 
+                        x: entity.x,
+                        y: entity.y.from_top + entity.h + 32,
+                        text: "Done!",
+                        size_px: 8,
+                        alignment_enum: 1,
+                        r: 255, g: 255, b: 255, a: 255
+                    }
+                else
+                    outputs[:scene].primitives << {
+                        x: entity.x - (max_w / 2),
+                        y: entity.y.from_top + entity.h + 20,
+                        w: max_w * progress,
+                        h: 4,
+                        r: 255, g: 255, b: 255,
+                        primitive_marker: :solid
+                    }
+                end
             end
         end
     end

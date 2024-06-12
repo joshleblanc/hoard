@@ -1,26 +1,12 @@
 module Hoard 
     module Scripts
         class InventorySpecScript < Script 
-            attr :icon, :name
+            attr :icon, :name, :sell_price
 
-            def initialize(icon:, name:)
+            def initialize(icon:, name:, sell_price: 0)
                 @icon = icon
                 @name = name
-            end
-
-            def to_h 
-                {
-                    icon: @icon,
-                    name: @name
-                }
-            end
-
-            def serialize 
-                to_h
-            end
-
-            def to_s 
-                serialize.to_s
+                @sell_price = sell_price
             end
         end
     end

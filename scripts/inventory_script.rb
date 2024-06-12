@@ -8,6 +8,11 @@ module Hoard
                 @open = false
             end
 
+            def init 
+                save_data = entity.save_data_script.init
+                @slots = save_data.inventory || []
+            end
+
             def open! 
                 @open = true
             end
@@ -39,12 +44,13 @@ module Hoard
                         quantity: quantity 
                     }
 
+                    entity.send_to_scripts(:save, { inventory: @slots })
+
                     entity.send_to_scripts(:add_notification, 
                         spec.icon,
                         "Received #{quantity} #{spec.name}"
                     )
                 end
-        
             end
 
             def update 

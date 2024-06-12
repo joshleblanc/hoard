@@ -1,7 +1,7 @@
 module Hoard
     module Scripts 
         class LdtkEntityScript < Hoard::Script
-            attr :ldtk_entity
+            attr :ldtk_entity, :ldtk_id
 
             def init
                 
@@ -20,6 +20,10 @@ module Hoard
                 )
 
                 entity.send_to_scripts :play_animation, :ldtk_default_visual, true
+            end
+
+            def id 
+                ldtk_entity.iid
             end
 
             def update 

@@ -104,5 +104,12 @@ module Hoard
             args.outputs.sprites << @scroller
             args.outputs.sprites << { x: 0, y: 0, h: 720, w: 1280, path: :ui}
         end
+
+        def shutdown 
+            Process.shutdown
+        end
+
+        def reset; end 
+        def boot; end
     end
 end

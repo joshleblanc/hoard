@@ -88,6 +88,15 @@ module Hoard
                     post_update(root)
                 end
             end
+
+            def shutdown 
+                ROOTS.each do |root|
+                    root.args = $args 
+                    root.shutdown 
+
+                    root.children.each(&:shutdown)
+                end
+            end
         end
 
         def initialize(parent = nil)
@@ -289,6 +298,7 @@ module Hoard
         def post_update; end 
         def final_update; end
         def init; end 
+        def shutdown; end 
 
     end
 end

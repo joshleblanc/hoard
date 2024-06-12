@@ -9,10 +9,11 @@ module Hoard
                 return unless definition
 
                 rect = definition.tile_rect
+
+                return unless rect
                 
-                puts "tileset", definition.tile_rect
                 entity.add_script Hoard::Scripts::AnimationScript.new(
-                    :ldtk_default_visual,
+                :ldtk_default_visual,
                     path: definition.tileset.rel_path.gsub("../", ""),
                     x: rect.x,
                     y: rect.y,

@@ -9,6 +9,7 @@ module Hoard
                     :uid, :width, :tile_id, tile_rect: TilesetRect, ui_tile_rect: TilesetRect
 
             def tileset 
+                return unless tile_rect
                 root.tileset(tile_rect.tileset_uid)
             end
         end

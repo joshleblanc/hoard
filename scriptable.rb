@@ -34,7 +34,6 @@ module Hoard
             scripts << script
             script.entity = self
             self.define_singleton_method(Utils.underscore(script.class.name).to_sym) { script }
-            script.init
         end
 
         def scripts 

@@ -222,6 +222,7 @@ module Hoard
         end
 
         def init 
+            send_to_scripts(:args=, args)
             send_to_scripts(:init)
         end
 
@@ -268,6 +269,10 @@ module Hoard
             update_world_pos
 
             send_to_scripts(:update)
+        end
+
+        def shutdown 
+            sent_to_scripts(:on_shutdown)
         end
     end
 end

@@ -3,7 +3,8 @@ module Hoard
         class PromptScript < Script 
             attr :prompt
 
-            def initialize 
+            def initialize(prompt: "")
+                @prompt = prompt 
                 @active = true
             end
 

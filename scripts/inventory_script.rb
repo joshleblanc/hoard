@@ -67,7 +67,7 @@ module Hoard
                 item = find(what)
                 return unless item 
 
-                if quantity >= item.quantity
+                if quantity > item.quantity
                     item.quantity -= quantity
                 else
                     @slots.delete item

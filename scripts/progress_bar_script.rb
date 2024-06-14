@@ -14,6 +14,11 @@ module Hoard
                 @curr / @limit   
             end
 
+            def reset! 
+                @done = false 
+                @active = false
+            end
+
             def activate!
                 @done = false
                 @active = true

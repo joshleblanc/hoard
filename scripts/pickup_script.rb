@@ -3,14 +3,15 @@ module Hoard
         class PickupScript < Script
             attr :quantity 
 
-            def initialize(quantity: 1) 
+            def initialize(quantity: 1, persistant: true) 
                 @quantity = quantity
+                @persistant = persistant
             end
 
             def init 
                 save_data = entity.save_data_script.init
 
-                hide! if save_data.picked_up
+                hide! if save_data.picked_up && @persistant
             end
 
             def show!
@@ -28,7 +29,7 @@ module Hoard
 
                 hide! 
 
-                entity.send_to_scripts(:save, { picked_up: true })
+                entity.send_to_scripts(:save, { picked_up: true }) if @persistant
             end
         end
     end

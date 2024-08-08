@@ -6,6 +6,8 @@ module Hoard
 
     attr :rows, :cols, :row, :col, :offset_x, :offset_y
 
+    PADDING = 18
+
     def initialize(rows: 12, cols: 24, row: 0, col: 0)
       @visible = false
       @rows = rows
@@ -17,11 +19,94 @@ module Hoard
       @offset_y = 0
     end
 
+    def bordered_container!
+      bordered_rect!(container)
+    end
+
+    def button!(h, label, cb = nil)
+      t = text(h, label)
+      sprite, border = bordered_rect(**h)
+
+      if inputs.mouse.inside_rect?(h)
+        # puts h
+        sprite.r = 255
+        sprite.g = 255
+        sprite.b = 255
+
+        t.r = 0
+        t.g = 0
+        t.b = 0
+
+        if inputs.mouse.click
+          cb&.call
+        end
+      end
+
+      outputs[:ui].sprites << sprite
+      outputs[:ui].primitives << border
+      outputs[:ui].labels << t
+    end
+
+    def button(h, label)
+      t = text(h, label)
+      if inputs.mouse.inside_rect?(h)
+        puts t
+        t.r = t.r % 255
+        t.g = t.g % 255
+        t.b = t.b % 255
+        puts "woeoinfwef"
+      end
+      t
+    end
+
+    def bordered_rect(**h)
+      bg = {
+        r: 0, b: 0, g: 0, a: 125,
+        **h,
+      }
+      border = {
+        primitive_marker: :border,
+        r: 0, b: 0, g: 0, a: 255,
+        **h.except(:path),
+      }
+      [bg, border]
+    end
+
+    def bordered_rect!(**h)
+      sprite, border = bordered_rect(**h)
+      outputs[:ui].sprites << sprite
+      outputs[:ui].primitives << border
+    end
+
+    def render
+    end
+
+    def text!(...)
+      outputs[:ui].labels << text(...)
+    end
+
+    def text(h, t, size_enum: 0)
+      copy = { **h }
+      label_w, label_h = gtk.calcstringbox(t)
+      copy.x = copy.x + (h.w / 2) - (label_w / 2)
+      copy.y = copy.y - (h.h / 2) + (label_h / 2) + h.h
+      copy.merge(r: 255, g: 255, b: 255, a: 255, text: t, size_enum: size_enum)
+    end
+
+    def rect(...)
+      tmp = layout.rect(...)
+      tmp.x += @offset_x
+      tmp.y += @offset_y
+      tmp
+    end
+
     def wrap_layout(parent, child)
-      puts (parent.y - child.y)
+      child_y_pos = (child.y + child.h)
+      parent_y_pos = (parent.y.from_top - parent.h)
+
       child.merge({
-        x: child.x + (parent.x - child.x),
-        y: child.y + (parent.y - child.y),
+        x: child.x + parent.x - @offset_x - PADDING,
+        y: child_y_pos - parent_y_pos - @offset_y + 2, # gunna be honest, I don't know why we're off by 2px
       })
     end
 
@@ -45,13 +130,7 @@ module Hoard
     end
 
     def post_update
-    end
-
-    def rect(...)
-      tmp = layout.rect(...)
-      tmp.x += @offset_x
-      tmp.y += @offset_y
-      tmp
+      render if visible?
     end
 
     def container

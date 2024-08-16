@@ -1,4 +1,5 @@
 require_relative "utils"
+require_relative "serializable"
 require_relative "widgetable"
 require_relative "widget"
 require_relative "scriptable"

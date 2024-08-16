@@ -15,9 +15,9 @@ module Hoard
 
       def update
         return unless entity.shop_widget.visible?
-        items = Game.s.player.playfab_script.search_items(store_id: @catalog_id)
+        # items = Game.s.player.playfab_script.search_items(store_id: @catalog_id)
         puts items
-        entity.shop_widget.items = items
+        entity.shop_widget.items = [] #items
       end
     end
   end

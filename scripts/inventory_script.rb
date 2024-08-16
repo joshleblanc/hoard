@@ -18,6 +18,10 @@ module Hoard
         (find(what)&.quantity || 0) >= quantity
       end
 
+      def can_afford?(what, quantity = 1)
+        has_enough?(what, quantity)
+      end
+
       def find(what)
         @slots.find { _1.name == what }
       end

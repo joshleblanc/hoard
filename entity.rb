@@ -69,6 +69,7 @@ module Hoard
       @v_bump = register_new_velocity(0.93)
 
       add_default_scripts!
+      add_default_widgets!
 
       add_script Scripts::DebugRenderScript.new
     end

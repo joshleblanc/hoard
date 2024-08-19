@@ -234,6 +234,8 @@ module Hoard
     def init
       send_to_scripts(:args=, args)
       send_to_scripts(:init)
+      send_to_widgets(:args=, args)
+      send_to_widgets(:init)
     end
 
     # I'm not going to pretend to know what this does

@@ -26,7 +26,7 @@ module Hoard
         puts entity.y
         outputs[:ui].labels << {
           x: Game.s.camera.level_to_global_x(entity.x),
-          y: (entity.y),
+          y: entity.y,
           text: prompt,
           font_size: 1,
           alignment_enum: 1,

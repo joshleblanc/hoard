@@ -32,10 +32,15 @@ module Hoard
         spec = loot.inventory_spec_script
 
         if @slots.length < @size
-          @slots << {
-            **spec.to_h,
-            quantity: quantity,
-          }
+          existing_item = @slots.find { _1.name == spec.name }
+          if existing_item
+            existing_item.quantity += quantity
+          else
+            @slots << {
+              **spec.to_h,
+              quantity: quantity,
+            }
+          end
 
           entity.send_to_scripts(:save, { inventory: @slots })
 

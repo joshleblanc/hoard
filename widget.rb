@@ -50,11 +50,9 @@ module Hoard
     def button(h, label)
       t = text(h, label)
       if inputs.mouse.inside_rect?(h)
-        puts t
         t.r = t.r % 255
         t.g = t.g % 255
         t.b = t.b % 255
-        puts "woeoinfwef"
       end
       t
     end
@@ -167,6 +165,31 @@ module Hoard
 
     def toggle!
       @visible = !@visible
+    end
+
+    # def label()
+    #   outputs[:ui] << {}
+    # end
+
+    def screen_x(from)
+      Game.s.camera.level_to_global_x(from)
+    end
+
+    def screen_y(from)
+      Game.s.camera.level_to_global_y(from)
+      #Game.s.camera.level_to_global_y(from)
+    end
+
+    def screen_w(from)
+      from / Hoard::Const.scale
+    end
+
+    def grid_x(from)
+      screen_x(from) / (1280 / 24)
+    end
+
+    def grid_y(from)
+      (screen_y(from) / (720 / 12)).from_top
     end
 
     def on_pre_step_x; end

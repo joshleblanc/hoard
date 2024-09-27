@@ -76,6 +76,22 @@ module Hoard
       outputs[:ui].primitives << border
     end
 
+    def window(**attrs, &blk)
+      root = Ui::Window.new(**attrs, widget: self, &blk)
+      
+      outputs[:ui].borders << {
+          x: root.x, y: root.y, w: root.w, h: root.h,
+          r: 255, g: 0, b: 0
+      }
+
+      outputs[:ui].sprites << {
+          x: root.x, y: root.y, w: root.w, h: root.h,
+          r: 0, g: 0, b: 0, a: 125
+      }
+
+      root.each(&:render)
+    end
+
     def render
     end
 

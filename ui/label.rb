@@ -12,7 +12,6 @@ module Hoard
             end
             
             def text 
-                puts "Block #{@blk} #{@blk&.call}"
                 @blk.call if @blk
             end
 

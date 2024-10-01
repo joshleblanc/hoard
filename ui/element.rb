@@ -1,16 +1,15 @@
 module Hoard
     module Ui
         class Element 
-            attr_reader :parent, :children, :options
+            attr_reader :parent, :children, :options, :key
 
             def self.inherited(subclass)
                 super
-                puts "New subclass: #{subclass} #{subclass.name.split('::').last.downcase}"
         
                 define_method(subclass.name.split('::').last.downcase) do |**options, &blk|
-                  subclass.new(parent: self, **options, &blk)
+                    subclass.new(parent: self, **options, &blk)
                 end
-              end
+            end
 
             def initialize(parent: nil, **options, &blk)
                 @parent = parent
@@ -21,7 +20,14 @@ module Hoard
 
                 @parent.children << self if @parent
 
+                @key = options[:key] || caller.select { _1.include?("initialize") }.second.split(":").first
+
                 instance_eval(&blk) if blk
+            end
+            
+            def state 
+                $args.state.ui_state ||= {}
+                $args.state.ui_state[key] ||= {}
             end
 
             def method_missing(method, *args, &blk)
@@ -41,7 +47,6 @@ module Hoard
             end
 
             def each(&blk) 
-                puts "Calling each #{@children.count}"
                 @children.each do |child|
                     child.each(&blk) if child.respond_to?(:each)
                     blk.call(child) if blk

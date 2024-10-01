@@ -5,6 +5,7 @@ module Hoard
     attr_accessor :entity, :visible
 
     attr :rows, :cols, :row, :col, :offset_x, :offset_y
+    attr_reader :uuid
 
     PADDING = 18
 
@@ -17,6 +18,10 @@ module Hoard
 
       @offset_x = 0
       @offset_y = 0
+
+      @windows = {}
+
+      @uuid = $gtk.create_uuid
     end
 
     def bordered_container!
@@ -77,19 +82,9 @@ module Hoard
     end
 
     def window(**attrs, &blk)
-      root = Ui::Window.new(**attrs, widget: self, &blk)
-      
-      outputs[:ui].borders << {
-          x: root.x, y: root.y, w: root.w, h: root.h,
-          r: 255, g: 0, b: 0
-      }
-
-      outputs[:ui].sprites << {
-          x: root.x, y: root.y, w: root.w, h: root.h,
-          r: 0, g: 0, b: 0, a: 125
-      }
-
-      root.each(&:render)
+      @windows[attrs[:key]] ||= Ui::Window.new(**attrs, widget: self, key: uuid, &blk)
+      @windows[attrs[:key]].render
+      @windows[attrs[:key]].each(&:render)
     end
 
     def render

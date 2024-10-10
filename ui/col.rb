@@ -29,7 +29,7 @@ module Hoard
             end
 
             def span 
-                if @options[:span] > 0 
+                if @options[:span] && @options[:span] > 0 
                     @options[:span]
                 else 
                     num_rows = (parent.children.length / COLS).floor

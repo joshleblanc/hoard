@@ -13,8 +13,6 @@ module Hoard
       end
 
       def has_enough?(what, quantity = 1)
-        args.gtk.notify! "has enough #{what} #{quantity} #{find(what)&.quantity}"
-
         (find(what)&.quantity || 0) >= quantity
       end
 

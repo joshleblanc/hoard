@@ -16,7 +16,6 @@ module Hoard
 
             def drag
                 if $args.inputs.mouse.button_left
-                    $gtk.notify! [state[:dragging]]
                     if $args.inputs.mouse.inside_rect?([rx, ry, rw, rh]) && !state[:dragging]
                         state[:dragging] = true
                         
@@ -24,7 +23,6 @@ module Hoard
                         state[:drag_y] = $args.inputs.mouse.y - state[:offset_y]
                     end
                 else
-                    puts "Disabling drag"
                     state[:dragging] = false 
                 end
 

@@ -3,18 +3,6 @@ module Hoard
         class Col < Element
             COLS = 12 
 
-            def render
-                $args.outputs[:ui].borders << {
-                    x: rx, y: ry, w: rw, h: rh,
-                    r: 0, g: 0, b: 255, a: 255
-                }
-    
-                $args.outputs[:ui].sprites << {
-                    x: rx, y: ry, w: rw, h: rh,
-                    r: 0, g: 0, b: 0, a: 125
-                }
-            end
-
             def x
                 range = (0...child_index)
                 span_sum = range.to_a.sum { @parent.children[_1].span }

@@ -24,6 +24,10 @@ module Hoard
 
                 instance_eval(&blk) if blk
             end
+
+            def widget 
+                @options[:widget] || parent&.widget
+            end
             
             def state 
                 $args.state.ui_state ||= {}
@@ -54,15 +58,26 @@ module Hoard
             end
 
             def render
-                $args.outputs[:ui].borders << {
-                    x: rx, y: ry, w: rw, h: rh,
-                    r: 0, g: 0, b: 0
-                }
+                if @options[:border]
+                    $args.outputs[:ui].borders << {
+                        x: rx, y: ry, w: rw, h: rh,
+                        r: @options[:border][:r] || 255,
+                        g: @options[:border][:g] || 255,
+                        b: @options[:border][:b] || 255,
+                        a: @options[:border][:a] || 255
+                    }
+                end
 
-                $args.outputs[:ui].sprites << {
-                    x: rx, y: ry, w: rw, h: rh,
-                    r: 0, g: 0, b: 0, a: 125
-                }
+                if @options[:background]
+                    $args.outputs[:ui].sprites << {
+                        x: rx, y: ry, w: rw, h: rh,
+                        r: @options[:background][:r] || 0,
+                        g: @options[:background][:g] || 0,
+                        b: @options[:background][:b] || 0,
+                        a: @options[:background][:a] || 255 
+                    }
+                end
+
             end
 
             def child_index 

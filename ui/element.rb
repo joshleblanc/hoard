@@ -42,8 +42,12 @@ module Hoard
             def method_missing(method, *args, &blk)
                 if @options.include?(method) && args.empty? && blk.nil?
                     @options[method]
-                else
+                elsif @parent&.respond_to?(method)
                     @parent&.send(method, *args, &blk)
+                elsif widget&.respond_to?(method)
+                    widget&.send(method, *args, &blk)
+                else
+                    raise NoMethodError
                 end
             end
 

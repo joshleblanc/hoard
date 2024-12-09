@@ -1,11 +1,24 @@
 module Hoard 
     module Ui 
         class Label < Element 
+            def string_box(text, size_enum = 1) 
+               if Label.string_box_cache[text]
+                   Label.string_box_cache[text]
+               else 
+                   Label.string_box_cache[text] = $gtk.calcstringbox(text, size_enum)
+               end 
+               Label.string_box_cache[text]
+            end
+
+            def self.string_box_cache
+                @string_box_cache ||= {}
+            end
+
             def render 
                 line_y = ry
-                wrapped_text.each do |line|
-                    line_height = $gtk.calcstringbox(line, size_enum)[1]
-                    $args.outputs[:ui].labels << {
+                $args.outputs[:ui].labels << wrapped_text.map do |line|
+                    line_height = string_box(line, size_enum)[1]
+                    result = {
                         x: rx, y: line_y, w: rw, h: rh, 
                         text: line,
                         size_enum: size_enum,
@@ -14,8 +27,8 @@ module Hoard
                         r: 255, g: 255, b: 255, a: 255
                     }
                     line_y -= line_height
+                    result
                 end
-                
             end
 
             def size_enum 
@@ -35,9 +48,9 @@ module Hoard
                 
                 words.each_with_index do |word, i|
                     word_width, _ = if i == words.length - 1
-                        $gtk.calcstringbox(word, size_enum)
+                        string_box(word, size_enum)
                     else 
-                        $gtk.calcstringbox(word + " ", size_enum)
+                        string_box(word + " ", size_enum)
                     end
                     
                     if w - (current_width + word_width) < -0.00001 
@@ -55,12 +68,12 @@ module Hoard
             end
 
             def w 
-                max_w = $gtk.calcstringbox(text, size_enum)[0]
+                max_w = string_box(text, size_enum)[0]
                 request_w(max_w)
             end
 
             def h
-                wrapped_text.sum { |line| $gtk.calcstringbox(line, size_enum)[1] }
+                wrapped_text.sum { |line| string_box(line, size_enum)[1] }
             end
 
             def rx 
@@ -81,7 +94,7 @@ module Hoard
                 elsif align == :bottom
                     super
                 else
-                    parent.y + (parent.h / 2) + (h / 2) - ($gtk.calcstringbox(wrapped_text.first, size_enum)[1] / 2)
+                    parent.y + (parent.h / 2) + (h / 2) - (string_box(wrapped_text.first, size_enum)[1] / 2)
                 end
             end
         end

@@ -30,7 +30,6 @@ module Hoard
     end
 
     def add_script(script)
-      puts "Adding script #{script.inspect} to #{self.inspect}"
       scripts << script
       script.entity = self
       self.define_singleton_method(Utils.underscore(script.class.name).to_sym) { script }

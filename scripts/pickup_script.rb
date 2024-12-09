@@ -25,7 +25,7 @@ module Hoard
             end
 
             def on_collision(player)
-                player.send_to_scripts(:add_to_inventory, entity, @quantity)
+                player.send_to_scripts(:add_to_inventory, entity.inventory_spec_script, @quantity)
 
                 hide! 
 

@@ -11,8 +11,22 @@ module Hoard
                 state[:drag_y] = 0
             end
 
-            def x()= super + state[:offset_x] 
-            def y()= super + state[:offset_y]
+            def x
+                if @options[:x]
+                    @options[:x] + state[:offset_x]
+                else
+                    super + state[:offset_x] 
+                end
+            end 
+
+
+            def y
+                if @options[:y]
+                    @options[:y] + state[:offset_y]
+                else 
+                    super + state[:offset_y]
+                end
+            end
 
             def drag
                 if $args.inputs.mouse.button_left
@@ -38,22 +52,6 @@ module Hoard
                     super 
                 else 
                     super
-                end
-            end
-
-            %i(w h).each do |method|
-                define_method(method) do 
-                    if @options[method]
-                        @options[method]
-                    elsif parent
-                        parent.send(method)
-                    else
-                        0
-                    end
-                end
-
-                define_method("#{method}=") do |val|
-                    @options[method] = val
                 end
             end
         end

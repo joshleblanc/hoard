@@ -61,7 +61,6 @@ module Hoard
           r: 255, g: 0, b: 0, a: 255,
 
         }
-        puts [screen_y(entity.y.from_top), grid_y(entity.y.from_top)]
         bordered_container!
 
         if done?

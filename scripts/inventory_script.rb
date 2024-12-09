@@ -7,9 +7,17 @@ module Hoard
       end
 
       def init
-        save_data = entity.save_data_script.init
-        @slots = save_data.inventory || []
         @widget = entity.inventory_widget
+        load!
+      end
+
+      def load!
+        save_data = entity.save_data_script.init
+        items = save_data.inventory || []
+        items.each do |item|
+          spec = InventorySpecScript[item[:name]]
+          add_to_inventory(spec, item[:quantity], true)
+        end
       end
 
       def has_enough?(what, quantity = 1)
@@ -24,11 +32,7 @@ module Hoard
         @slots.find { _1.name == what }
       end
 
-      def add_to_inventory(loot, quantity = 1)
-        return unless loot.inventory_spec_script
-
-        spec = loot.inventory_spec_script
-
+      def add_to_inventory(spec, quantity = 1, quiet = false)
         if @slots.length < @size
           existing_item = @slots.find { _1.name == spec.name }
           if existing_item
@@ -40,11 +44,11 @@ module Hoard
             }
           end
 
-          entity.send_to_scripts(:save, { inventory: @slots })
+          entity.send_to_scripts(:save, { inventory: @slots.map {{ quantity: _1.quantity, name: _1.name }} })
 
           entity.send_to_scripts(:add_notification,
                                  spec.icon,
-                                 "Received #{quantity} #{spec.name}")
+                                 "Received #{quantity} #{spec.name}") unless quiet
         end
       end
 

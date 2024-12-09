@@ -2,7 +2,12 @@ module Hoard
     module Ui 
         class Row < Element 
             def y 
-                @parent.y - ((@parent.children.index(self) + 1) * h) + parent.h
+                offset = @parent.children[0..child_index].sum(&:h)
+                @parent.y - offset  + parent.h
+            end
+
+            def w(requester = nil)
+                parent.w
             end
 
             def h 

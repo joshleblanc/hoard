@@ -1,10 +1,6 @@
 module Hoard 
     module Ui 
         class Button < Element 
-            def hovered? 
-                $args.inputs.mouse.position.inside_rect?([rx, ry, rw, rh])
-            end
-
             def render 
                 if hovered?
                     if $args.inputs.mouse.click

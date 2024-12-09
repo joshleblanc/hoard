@@ -33,7 +33,6 @@ module Hoard
       sprite, border = bordered_rect(**h)
 
       if inputs.mouse.inside_rect?(h)
-        # puts h
         sprite.r = 255
         sprite.g = 255
         sprite.b = 255
@@ -82,7 +81,16 @@ module Hoard
     end
 
     def window(**attrs, &blk)
-      @windows[attrs[:key]] ||= Ui::Window.new(**attrs, widget: self, key: uuid, &blk)
+      window = @windows[attrs[:key]]
+
+      props_changes = !window || attrs.any? do |k, v|
+        window.options[k] != v
+      end
+
+      if props_changes
+        @windows[attrs[:key]] = Ui::Window.new(**attrs, widget: self, key: uuid, &blk)
+      end
+
       @windows[attrs[:key]].render
       @windows[attrs[:key]].each(&:render)
     end
@@ -120,6 +128,7 @@ module Hoard
     end
 
     def pre_update
+      element_lifecycle(:pre_update)
       if args.inputs.mouse.button_left
         if args.inputs.mouse.inside_rect?(container) && !@dragging
           @dragging = true
@@ -130,8 +139,18 @@ module Hoard
         @dragging = false
       end
     end
+  
+    def element_lifecycle(method)
+      @windows.each do |k, v|
+        v.send(method)
+        v.each { _1.send(method) }
+      end
+    end
+
 
     def update
+      element_lifecycle(:update)
+
       return unless @dragging
 
       @offset_x = args.inputs.mouse.x - @drag_x
@@ -139,6 +158,7 @@ module Hoard
     end
 
     def post_update
+      element_lifecycle(:post_update)
       render if visible?
     end
 

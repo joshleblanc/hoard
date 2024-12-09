@@ -36,7 +36,7 @@ module Hoard
                 end
             end
 
-            def w 
+            def w(requester = nil)
                 @parent.w / COLS * span
             end
 

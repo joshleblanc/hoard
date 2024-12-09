@@ -34,6 +34,11 @@ module Hoard
                 $args.state.ui_state[key] ||= {}
             end
 
+            def hovered? 
+                $args.inputs.mouse.position.inside_rect?([rx, ry, rw, rh])
+            end
+
+
             def method_missing(method, *args, &blk)
                 if @options.include?(method) && args.empty? && blk.nil?
                     @options[method]
@@ -54,6 +59,30 @@ module Hoard
                 @children.each do |child|
                     child.each(&blk) if child.respond_to?(:each)
                     blk.call(child) if blk
+                end
+            end
+
+            def update; end 
+            def post_update; end
+
+            def pre_update
+                if hovered? 
+                    if @options[:on_mouse_enter] && !state[:hovered]
+                        @options[:on_mouse_enter].call
+                    end
+
+                    state[:hovered] = true
+                    if $args.inputs.mouse.click
+                        if @options[:on_click]
+                            @options[:on_click].call
+                        end
+                    end
+                elsif state[:hovered]
+                    if @options[:on_mouse_exit]
+                        @options[:on_mouse_exit].call
+                    end
+
+                    state[:hovered] = false
                 end
             end
 
@@ -86,8 +115,38 @@ module Hoard
 
             def x()= parent&.x || 0
             def y()= parent&.y || 0
-            def w()= parent&.w || 0
-            def h()= parent&.h || 0
+
+            def w(max_w = nil)
+                if @options[:w]
+                    if @options[:w].is_a?(String)
+                        (@options[:w].to_i / 100.0) * parent.w
+                    else 
+                        @options[:w]
+                    end
+                else
+                    if max_w
+                        request_w(max_w)
+                    else 
+                        (@children.map(&:w).sum || 0) 
+                    end
+                end
+            end
+
+            def request_w(max_w = Float::INFINITY)
+                [max_w, parent.w(max_w)].min
+            end
+
+            def h 
+                if @options[:h]
+                    if @options[:h].is_a?(String)
+                        (@options[:h].to_i / 100.0) * parent.h
+                    else
+                        @options[:h]
+                    end
+                else
+                    (@children.max_by(&:h)&.h || 0) 
+                end
+            end 
 
             def rx()= x + (parent&.padding || 0)
             def ry()= y + (parent&.padding || 0)

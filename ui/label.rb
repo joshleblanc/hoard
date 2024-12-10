@@ -67,7 +67,7 @@ module Hoard
                 lines
             end
 
-            def w 
+            def w(max_w = nil)
                 max_w = string_box(text, size_enum)[0]
                 request_w(max_w)
             end

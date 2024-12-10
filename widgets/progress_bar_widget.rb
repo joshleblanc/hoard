@@ -55,39 +55,39 @@ module Hoard
       end
 
       def render
-        outputs[:scene].borders << {
-          w: 1280,
-          h: 720,
-          r: 255, g: 0, b: 0, a: 255,
+        # outputs[:scene].borders << {
+        #   w: 1280,
+        #   h: 720,
+        #   r: 255, g: 0, b: 0, a: 255,
 
-        }
-        bordered_container!
+        # }
+        # bordered_container!
 
-        if done?
-          text! wrap_layout(container, rect(row: 0, col: 0, w: 4, h: 1)), "Done!"
-          # outputs[:ui].labels << {
-          #   x: Game.s.camera.level_to_global_x(entity.x),
-          #   y: entity.y - 64,
-          #   font_size: 1,
-          #   text: "Done!",
-          #   alignment_enum: 1,
-          #   r: 255, g: 255, b: 255, a: 255,
-          # }
-        else
-          bordered_rect!(
-            wrap_layout(container, rect({
-              row: 0, col: 0, w: screen_w(max_w) * progress, h: 1,
-            }))
-          )
-          # outputs[:scene].primitives << {
-          #   x: entity.x - (max_w / 2),
-          #   y: entity.y.from_top + entity.h + 20,
-          #   w: max_w,
-          #   h: 4,
-          #   r: 255, g: 255, b: 255,
-          #   primitive_marker: :solid,
-          # }
-        end
+        # if done?
+        #   text! wrap_layout(container, rect(row: 0, col: 0, w: 4, h: 1)), "Done!"
+        #   # outputs[:ui].labels << {
+        #   #   x: Game.s.camera.level_to_global_x(entity.x),
+        #   #   y: entity.y - 64,
+        #   #   font_size: 1,
+        #   #   text: "Done!",
+        #   #   alignment_enum: 1,
+        #   #   r: 255, g: 255, b: 255, a: 255,
+        #   # }
+        # else
+        #   bordered_rect!(
+        #     wrap_layout(container, rect({
+        #       row: 0, col: 0, w: screen_w(max_w) * progress, h: 1,
+        #     }))
+        #   )
+        #   # outputs[:scene].primitives << {
+        #   #   x: entity.x - (max_w / 2),
+        #   #   y: entity.y.from_top + entity.h + 20,
+        #   #   w: max_w,
+        #   #   h: 4,
+        #   #   r: 255, g: 255, b: 255,
+        #   #   primitive_marker: :solid,
+        #   # }
+        # end
       end
     end
   end

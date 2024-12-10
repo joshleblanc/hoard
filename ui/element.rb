@@ -5,9 +5,26 @@ module Hoard
 
             def self.inherited(subclass)
                 super
-        
+
                 define_method(subclass.name.split('::').last.downcase) do |**options, &blk|
-                    subclass.new(parent: self, **options, &blk)
+                    @elements ||= {}
+                    element_key = options[:key] || caller.select { _1.include?("initialize") }.first.split(":in").first
+                    element_key = key.to_s + "::" + element_key.to_s
+                    element = @elements[element_key]
+
+                    prop_changes = !element || options.any? do |k, v|
+                        element.options[k] != v
+                    end
+
+                    if prop_changes && element 
+                        element.options.merge!(**options)
+                    end
+
+                    if element 
+                        element.instance_eval(&blk) if blk
+                    else 
+                        @elements[element_key] = subclass.new(parent: self, **options, &blk)
+                    end
                 end
             end
 
@@ -20,7 +37,14 @@ module Hoard
 
                 @parent.children << self if @parent
 
-                @key = options[:key] || caller.select { _1.include?("initialize") }.second.split(":").first
+                @key = options[:key] || caller.select { _1.include?("initialize") }.first.split(":in").first
+                @key = @key.to_s
+
+                if parent 
+                    @key = parent.key + "::" + @key
+                end
+
+                #p "initialize key: #{key}"
 
                 instance_eval(&blk) if blk
             end

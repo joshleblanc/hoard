@@ -54,14 +54,13 @@ module Hoard
       #   @dragging = false
       # end
     end
-  
+
     def element_lifecycle(method)
       @windows.each do |k, v|
         v.send(method)
         v.each { _1.send(method) }
       end
     end
-
 
     def update
       element_lifecycle(:update)

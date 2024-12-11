@@ -186,11 +186,11 @@ module Hoard
     end
 
     def center_x
-      rect_center_point.x - (GRID / 2)
+      rect_center_point.x - (w / 2)
     end
 
     def center_y
-      rect_center_point.y - GRID - GRID / 2
+      rect_center_point.y - (h * 2)
     end
 
     def visible?
@@ -199,6 +199,14 @@ module Hoard
 
     def tmod
       1
+    end
+
+    def gx 
+      Game.s.camera.level_to_global_x(x)
+    end
+
+    def gy 
+      Game.s.camera.level_to_global_y((y - h).from_top)
     end
 
     # called after pre_update and update

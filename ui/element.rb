@@ -37,6 +37,8 @@ module Hoard
       end
 
       def update_options(**options, &blk)
+        @parent.children << self if @parent
+        @children = [] # blk should populate this 
         @options = options
         @blk = blk
         instance_eval(&blk) if blk

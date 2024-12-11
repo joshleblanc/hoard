@@ -174,10 +174,6 @@ module Hoard
       scroller.scale = Const.scale * zoom
     end
 
-    def post_update
-      apply
-    end
-
     def update
       level = Game.s.current_level
 
@@ -252,6 +248,8 @@ module Hoard
 
       raw_focus.level_x += dx * tmod
       self.dx *= frict_x ** tmod
+
+      raw_focus.level_y += dy * tmod
       self.dy *= frict_x ** tmod
 
       if clamp_to_level_bounds
@@ -270,6 +268,8 @@ module Hoard
         clamped_focus.level_x = raw_focus.level_x
         clamped_focus.level_y = raw_focus.level_y
       end
+
+      apply
     end
 
     def c_wid

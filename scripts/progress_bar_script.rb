@@ -10,8 +10,8 @@ module Hoard
         @done = false
       end
 
-      def progress
-        @curr / @limit
+      def init 
+        @widget = entity.progress_bar_widget
       end
 
       def reset!
@@ -46,28 +46,8 @@ module Hoard
         entity.w * 2
       end
 
-      def post_update
-        return unless @active
+      def post_update 
 
-        if done?
-          outputs[:ui].labels << {
-            x: Game.s.camera.level_to_global_x(entity.x),
-            y: entity.y - 64,
-            font_size: 1,
-            text: "Done!",
-            alignment_enum: 1,
-            r: 255, g: 255, b: 255, a: 255,
-          }
-        else
-          outputs[:scene].primitives << {
-            x: entity.x - (max_w / 2),
-            y: entity.y.from_top + entity.h + 20,
-            w: max_w * progress,
-            h: 4,
-            r: 255, g: 255, b: 255,
-            primitive_marker: :solid,
-          }
-        end
       end
     end
   end

@@ -4,18 +4,12 @@ module Hoard
       attr_reader :limit, :curr
 
       def initialize(limit: 100)
-        super(rows: 2, cols: 4, row: 0, col: 0)
-
+        super()
         @limit = limit
         @curr = 0
         @active = true
         @done = false
         show!
-      end
-
-      def init
-        @row = grid_y(entity.y.from_top) #- grid_y(entity.h)
-        @col = grid_x(entity.x)
       end
 
       def progress
@@ -55,6 +49,11 @@ module Hoard
       end
 
       def render
+        window(w: max_w, h: 25, x: entity.x - (max_w / 2), y: entity.y.from_top) do 
+          if done? 
+            text { "Done!" }
+          end
+        end
         # outputs[:scene].borders << {
         #   w: 1280,
         #   h: 720,

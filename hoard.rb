@@ -1,6 +1,8 @@
 require_relative "utils"
 require_relative "serializable"
 require_relative "widgetable"
+require_relative "ui/colors"
+require_relative "ui/element_pool"
 require_relative "ui/element"
 require_relative "ui/window"
 require_relative "ui/text"

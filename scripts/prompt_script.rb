@@ -23,7 +23,6 @@ module Hoard
       def on_collision(player)
         return unless active?
 
-        puts entity.y
         outputs[:ui].labels << {
           x: Game.s.camera.level_to_global_x(entity.x),
           y: entity.y,

@@ -9,12 +9,8 @@ module Hoard
 
     PADDING = 18
 
-    def initialize(rows: 12, cols: 24, row: 0, col: 0)
+    def initialize
       @visible = false
-      @rows = rows
-      @cols = cols
-      @row = row
-      @col = col
 
       @offset_x = 0
       @offset_y = 0
@@ -27,11 +23,10 @@ module Hoard
     def window(**attrs, &blk)
       window = @windows[attrs[:key]]
 
-      props_changes = !window || attrs.any? do |k, v|
-        window.options[k] != v
-      end
-
-      if props_changes
+      if window
+        # Always update window properties and evaluate block
+        window.update_options(**attrs, widget: self, key: uuid, &blk)
+      else
         @windows[attrs[:key]] = Ui::Window.new(**attrs, widget: self, key: uuid, &blk)
       end
 

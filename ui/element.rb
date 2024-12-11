@@ -1,5 +1,7 @@
 module Hoard
   module Ui
+    require_relative 'element_pool'
+
     class Element
       attr_reader :parent, :children, :options, :key
 
@@ -7,37 +9,22 @@ module Hoard
         super
 
         define_method(subclass.name.split("::").last.downcase) do |**options, &blk|
-          @elements ||= {}
-          element_key = options[:key] || caller.select { _1.include?("initialize") }.first.split(":in").first
+          element_key = options[:key] || caller.first.split(":in").first
           element_key = key.to_s + "::" + element_key.to_s
-          element = @elements[element_key]
-
-          prop_changes = !element || options.any? do |k, v|
-            element.options[k] != v
-          end
-
-          if prop_changes && element
-            element.options.merge!(**options)
-          end
-
-          if element
-            element.instance_eval(&blk) if blk
-          else
-            @elements[element_key] = subclass.new(parent: self, **options, &blk)
-          end
+          
+          ElementPool.instance.acquire(subclass, element_key, parent: self, **options, &blk)
         end
       end
 
       def initialize(parent: nil, **options, &blk)
         @parent = parent
         @children = []
-        @options = options
-
+        
         @blk = blk
 
         @parent.children << self if @parent
 
-        @key = options[:key] || caller.select { _1.include?("initialize") }.first.split(":in").first
+        @key = options[:key] || caller[2].split(":in").first
         @key = @key.to_s
 
         if parent
@@ -46,6 +33,12 @@ module Hoard
 
         #p "initialize key: #{key}"
 
+        update_options(**options)
+      end
+
+      def update_options(**options, &blk)
+        @options = options
+        @blk = blk
         instance_eval(&blk) if blk
       end
 

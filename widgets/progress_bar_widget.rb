@@ -7,7 +7,7 @@ module Hoard
         super()
         @limit = limit
         @curr = 0
-        @active = true
+        @active = false
         @done = false
         show!
       end
@@ -19,11 +19,13 @@ module Hoard
       def reset!
         @done = false
         @active = false
+        @curr = 0
       end
 
       def activate!
         @done = false
         @active = true
+        @curr = 0
       end
 
       def done?
@@ -45,48 +47,15 @@ module Hoard
       end
 
       def max_w
-        entity.w * 2
+        100
       end
 
       def render
-        window(w: max_w, h: 25, x: entity.x - (max_w / 2), y: entity.y.from_top) do 
+        window(w: max_w * progress, h: 25, x: entity.gx - (max_w / 2), y: entity.gy, background: Ui::Colors::BLUE) do 
           if done? 
-            text { "Done!" }
+            text(key: "result") { "Done!" }
           end
         end
-        # outputs[:scene].borders << {
-        #   w: 1280,
-        #   h: 720,
-        #   r: 255, g: 0, b: 0, a: 255,
-
-        # }
-        # bordered_container!
-
-        # if done?
-        #   text! wrap_layout(container, rect(row: 0, col: 0, w: 4, h: 1)), "Done!"
-        #   # outputs[:ui].labels << {
-        #   #   x: Game.s.camera.level_to_global_x(entity.x),
-        #   #   y: entity.y - 64,
-        #   #   font_size: 1,
-        #   #   text: "Done!",
-        #   #   alignment_enum: 1,
-        #   #   r: 255, g: 255, b: 255, a: 255,
-        #   # }
-        # else
-        #   bordered_rect!(
-        #     wrap_layout(container, rect({
-        #       row: 0, col: 0, w: screen_w(max_w) * progress, h: 1,
-        #     }))
-        #   )
-        #   # outputs[:scene].primitives << {
-        #   #   x: entity.x - (max_w / 2),
-        #   #   y: entity.y.from_top + entity.h + 20,
-        #   #   w: max_w,
-        #   #   h: 4,
-        #   #   r: 255, g: 255, b: 255,
-        #   #   primitive_marker: :solid,
-        #   # }
-        # end
       end
     end
   end

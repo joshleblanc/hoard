@@ -20,7 +20,16 @@ module Hoard
                     primitive_marker: :border
                 }
 
-                outputs[:scene].debug << [grid_pos, act_pos]
+                center_pos = {
+                    x: entity.center_x,
+                    y: entity.center_y.from_top,
+                    w: 1,
+                    h: 1,
+                    r: 0, g: 0, b: 255,
+                    primitive_marker: :solid
+                }
+
+                outputs[:scene].debug << [grid_pos, act_pos, center_pos]
 
             end
         end

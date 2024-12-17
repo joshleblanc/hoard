@@ -109,6 +109,10 @@ module Hoard
             Process.shutdown
         end
 
+        def broadcast_to_scripts(method_name, *args, &block)
+            Process.broadcast_to_scripts(method_name, *args, &block)
+        end 
+
         def reset; end 
         def boot; end
     end

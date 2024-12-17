@@ -17,6 +17,16 @@ module Hoard
                 p.can_run?
             end
 
+            def send_to_scripts(p, method_name, *args, &blk)
+                return unless can_run?(p)
+
+                p.send_to_scripts(method_name, *args, &blk)
+
+                p.children.each do |child|
+                    send_to_scripts(p, method_name, *args, &blk)
+                end
+            end
+
             def pre_update(p, utmod)
                 return unless can_run?(p)
 
@@ -72,6 +82,12 @@ module Hoard
                     p.children.each do |c|
                         post_update(c)
                     end
+                end
+            end
+
+            def broadcast_to_scripts(method_name, *args, &blk)
+                ROOTS.each do |root|
+                    send_to_scripts(root, method_name, *args, &blk)
                 end
             end
 

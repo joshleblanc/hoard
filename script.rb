@@ -27,5 +27,13 @@ module Hoard
         def on_pre_step_y; end
         def init; end
         def on_collision(entity); end
+
+        # future stuff
+        def client_init; end 
+        def send_to_local(method_name, *args); end
+        def send_to_server(method_name, *args); end
+        def server?()= true
+        def client?()= false
+        def wait; end
     end
 end

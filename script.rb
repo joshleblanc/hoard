@@ -20,6 +20,15 @@ module Hoard
             serialize.to_s
         end
 
+        def get_save_data 
+            json = args.gtk.read_file("saves/#{self.class.name}.dat") || "{}"
+            Argonaut::JSON.parse(json, symbolize_keys: true)
+        end
+
+        def set_save_data(data)
+            args.gtk.write_file "saves/#{self.class.name}.dat", data.to_json
+        end
+
         def update; end 
         def post_update; end 
         def pre_update; end 

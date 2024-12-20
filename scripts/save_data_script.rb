@@ -1,36 +1,50 @@
 module Hoard
   module Scripts
     class SaveDataScript < Script
-      attr_reader :save_data
+      attr_reader :data, :reset
+
+      def initialize(reset: false)
+        @reset = reset
+      end
+
+      def reset?
+        !!self.reset
+      end
 
       def init
-        return @save_data if @save_data
-        json = args.gtk.read_file(path) || "{}"
-        @save_data = Argonaut::JSON.parse(json, symbolize_keys: true)
-      end
-
-      def save(what)
-        what.each do |k, v|
-          save_data[k] = v
+        if reset? 
+          set_data {}
+        else 
+          set_data get_save_data
         end
-        commit!
       end
 
-      def id
-        entity.ldtk_entity_script.id
+      def local_set_data(data)
+        @data = data
       end
 
-      def path
-        "saves/#{id}.dat"
+      def server_set_data(data)
+        @data = data 
+        set_save_data(data)
       end
 
-      def on_shutdown
-        commit!
-        puts_immediately "shutdown"
+      def set_data(data)
+        if server? 
+          server_set_data(data)
+          send_to_local(:local_set_data, data)
+        else 
+          local_set_data(data)
+          send_to_server(:server_set_data, data)
+        end
       end
 
-      def commit!
-        args.gtk.write_file path, save_data.to_json
+      def save_data(key, value)
+        @data[key] = value
+        set_data(self.data)
+      end
+
+      def get_data(key)
+        @data[key]
       end
     end
   end

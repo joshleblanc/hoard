@@ -1,36 +1,36 @@
-module Hoard 
-    module Scripts 
-        class PickupScript < Script
-            attr :quantity 
+module Hoard
+  module Scripts
+    class PickupScript < Script
+      attr :quantity
 
-            def initialize(quantity: 1, persistant: true) 
-                @quantity = quantity
-                @persistant = persistant
-            end
+      def initialize(quantity: 1, persistant: true)
+        @quantity = quantity
+        @persistant = persistant
+      end
 
-            def init 
-                save_data = entity.save_data_script.init
+      def client_init
+        save_data = user.save_data_script.init
 
-                hide! if save_data.picked_up && @persistant
-            end
+        hide! if save_data.picked_up && @persistant
+      end
 
-            def show!
-                entity.visible = true
-                entity.destroyed = false
-            end
+      def show!
+        entity.visible = true
+        entity.destroyed = false
+      end
 
-            def hide!
-                entity.visible = false
-                entity.destroyed = true
-            end
+      def hide!
+        entity.visible = false
+        entity.destroyed = true
+      end
 
-            def on_collision(player)
-                player.send_to_scripts(:add_to_inventory, entity.inventory_spec_script, @quantity)
+      def on_collision(player)
+        player.send_to_scripts(:add_to_inventory, entity.inventory_spec_script, @quantity)
 
-                hide! 
+        hide!
 
-                entity.send_to_scripts(:save, { picked_up: true }) if @persistant
-            end
-        end
+        entity.send_to_scripts(:save, { picked_up: true }) if @persistant
+      end
     end
+  end
 end

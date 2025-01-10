@@ -201,11 +201,11 @@ module Hoard
       1
     end
 
-    def gx 
+    def gx
       Game.s.camera.level_to_global_x(x)
     end
 
-    def gy 
+    def gy
       Game.s.camera.level_to_global_y((y - h).from_top)
     end
 
@@ -219,7 +219,10 @@ module Hoard
       @squash_x += (1 - @squash_x) * [1, 0.2 * tmod].min
       @squash_y += (1 - @squash_y) * [1, 0.2 * tmod].min
 
-      send_to_scripts(:post_update)
+      send_to_scripts(:post_update) if server?
+      send_to_scripts(:client_post_update) if client?
+      send_to_scripts(:local_post_update) if local?
+
       send_to_widgets(:post_update)
     end
 
@@ -241,7 +244,9 @@ module Hoard
 
     def init
       send_to_scripts(:args=, args)
-      send_to_scripts(:init)
+      send_to_scripts(:init) if server?
+      send_to_scripts(:local_init) if local?
+      send_to_scripts(:client_init) if client?
       send_to_widgets(:args=, args)
       send_to_widgets(:init)
     end
@@ -288,7 +293,10 @@ module Hoard
       ucd.update(tmod)
       update_world_pos
 
-      send_to_scripts(:update)
+      send_to_scripts(:update) if server?
+      send_to_scripts(:client_update) if client?
+      send_to_scripts(:local_update) if local?
+
       send_to_widgets(:update)
     end
 

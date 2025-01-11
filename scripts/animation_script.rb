@@ -48,7 +48,7 @@ module Hoard
       end
 
       def tile_x
-        files ? 0 : @opts.x * (Const::GRID * (frame + 1))
+        files ? 0 : @opts.x
       end
 
       def path
@@ -56,7 +56,7 @@ module Hoard
       end
 
       def tile_y
-        files ? 0 : @opts.y * Const::GRID
+        files ? 0 : @opts.y
       end
 
       def play!(should_loop = false, &callback)
@@ -102,8 +102,6 @@ module Hoard
         offset_scale_x = (entity.w * entity.scale_x) / entity.tile_w
         offset_scale_y = (entity.h * entity.scale_y) / entity.tile_h
 
-        p Const::GRID
-
         sprite = {
           x: tmpX + -(entity.w / 2) + (@offset_x * offset_scale_x),
           y: tmpY.from_top + entity.h + (@offset_y * offset_scale_y),
@@ -116,8 +114,6 @@ module Hoard
           path: path,
           flip_horizontally: entity.flip_horizontally,
         }
-
-        p sprite
 
         outputs[:scene].sprites << sprite if entity.visible?
 

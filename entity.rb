@@ -41,15 +41,15 @@ module Hoard
       return resolution
     end
 
-    def initialize(x = 0, y = 0, parent = nil)
+    def initialize(parent: nil, cx: 0, cy: 0, tile_w: Const::GRID, tile_h: Const::GRID, w: Const::GRID, h: Const::GRID)
       super(parent)
 
-      set_pos_case(x, y)
+      set_pos_case(cx, cy)
       @dir = 1
-      @w = GRID
-      @h = GRID
-      @tile_w = GRID
-      @tile_h = GRID
+      @w = w
+      @h = h
+      @tile_w = tile_w
+      @tile_h = tile_h
 
       @visible = true
 

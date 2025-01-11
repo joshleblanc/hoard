@@ -9,7 +9,7 @@ module Hoard
       @player = nil
       @camera = nil
 
-      super(0, 0, nil)
+      super()
     end
 
     def spawn_player(player_template, position = nil, rotation = nil)

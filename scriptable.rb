@@ -25,7 +25,7 @@ module Hoard
     def add_default_scripts!
       scripts = self.class.instance_variable_get(:@scripts) || []
       scripts.each do |script|
-        add_script(script)
+        add_script(script.dup)
       end
     end
 

@@ -19,9 +19,8 @@ module Hoard
 
       def send_to_scripts(p, method_name, *args, &blk)
         return unless can_run?(p)
-        return unless p.respond_to?(:send_to_scripts)
 
-        p.send_to_scripts(method_name, *args, &blk)
+        p.send_to_scripts(method_name, *args, &blk) if p.respond_to?(:send_to_scripts)
 
         p.children.each do |child|
           send_to_scripts(child, method_name, *args, &blk)
@@ -173,7 +172,6 @@ module Hoard
     end
 
     def local?
-      p "Calling local #{client?} #{user}"
       client? && user
     end
 

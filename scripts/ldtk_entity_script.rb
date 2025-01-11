@@ -13,7 +13,7 @@ module Hoard
 
         entity.add_script Hoard::Scripts::AnimationScript.new(
           :ldtk_default_visual,
-          path: definition.tileset.rel_path.gsub("../", ""),
+          path: definition.tileset.rel_path&.gsub("../", "") || "",
           x: rect.x,
           y: rect.y,
           frames: 1,

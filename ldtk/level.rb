@@ -54,7 +54,7 @@ module Hoard
         layer("Entities")&.entity(id)
       end
 
-      def entities(id)
+      def entities(id = nil)
         layer("Entities")&.entities(id) || []
       end
 

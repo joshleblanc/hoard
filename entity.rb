@@ -21,24 +21,36 @@ module Hoard
 
     attr :squash_x, :squash_y, :scale_x, :scale_y
 
-    attr :dx_total, :dy_total, :destroyed, :dir, :visible, :dir
+    attr :dx_total, :dy_total, :destroyed, :dir, :visible, :dir, :collidable
 
     attr :cd, :ucd, :fx
     attr :all_velocities, :v_base, :v_bump
 
     attr :animation, :animations
 
-    def self.resolve(id)
-      resolution = nil
+    class << self
+      attr_accessor :hidden, :collidable
 
-      ObjectSpace.each_object(Class) do |c|
-        if c.name&.split("::")&.last == id
-          resolution = c  # can't return from here for some reason
-          break
+      def resolve(id)
+        resolution = nil
+
+        ObjectSpace.each_object(Class) do |c|
+          if c.name&.split("::")&.last == id
+            resolution = c  # can't return from here for some reason
+            break
+          end
         end
+
+        return resolution
       end
 
-      return resolution
+      def collidable
+        self.collidable = true
+      end
+
+      def hidden
+        self.hidden = true
+      end
     end
 
     def initialize(parent: nil, cx: 0, cy: 0, tile_w: Const::GRID, tile_h: Const::GRID, w: Const::GRID, h: Const::GRID)
@@ -51,8 +63,10 @@ module Hoard
       @tile_w = tile_w
       @tile_h = tile_h
 
-      @visible = true
+      @visible = !self.class.instance_variable_get(:@hidden)
+      @collidable = !!self.class.instance_variable_get(:@collidable)
 
+      p "#{@collidable}, #{self.class.instance_variable_get(:@collidable)}, #{self.class.name}"
       @dx = 0
       @dy = 0
 
@@ -133,8 +147,57 @@ module Hoard
       cy + yr
     end
 
+    def intersect?(cx, cy)
+      cx_span = w / GRID
+      cy_span = h / GRID
+
+      cx_half = (cx_span / 2).floor
+      cy_half = (cy_span / 2).floor
+
+      left = self.cx - cx_half
+      bottom = self.cy + cy_half
+
+      # p "#{left..(left + cx_half)}, #{bottom..(bottom + cy_half)}"
+      (left..(left + (cx_half * 2))).cover?(cx) && (bottom..(bottom + (cy_half * 2))).cover?(cy)
+    end
+
+    def check_collision(entity, cx, cy)
+      return if entity == self
+      if entity.collidable && entity.intersect?(cx, cy)
+        if self == Game.s.player
+          # If we're checking one unit below (for ground detection)
+          if cy > self.cy
+            return true # Always allow ground collision checks
+          else
+            moving_down = dy_total > 0
+            above_platform = cy < entity.cy
+            return moving_down || above_platform
+          end
+        end
+        return true
+      end
+
+      entity.children.each do |child|
+        return true if check_collision(child, cx, cy)
+      end
+
+      return false
+    end
+
+    def on_ground?
+      !destroyed? && v_base.dy == 0 && yr == 1 && has_collision(cx, cy + 1)
+    end
+
     def has_collision(x, y)
-      Game.s.current_level&.has_collision(x, y)
+      return true if Game.s.current_level&.has_collision(x, y)
+
+      if @collidable
+        Game.s.children.each do |entity|
+          return true if check_collision(entity, x, y)
+        end
+      end
+
+      false
     end
 
     def has_exit?(x, y)
@@ -224,10 +287,6 @@ module Hoard
       send_to_scripts(:local_post_update) if local?
 
       send_to_widgets(:post_update)
-    end
-
-    def on_ground?
-      !destroyed? && v_base.dy == 0 && yr == 1 && has_collision(cx, cy + 1)
     end
 
     def dx_total

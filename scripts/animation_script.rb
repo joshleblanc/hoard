@@ -119,8 +119,6 @@ module Hoard
 
         @frame = @frame + 1
 
-        p frame if entity.is_a?(Entities::Player)
-
         if done?
           @playing = false
           @callback.call if @callback

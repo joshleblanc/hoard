@@ -48,7 +48,7 @@ module Hoard
       end
 
       def tile_x
-        files ? 0 : @opts.x
+        files ? 0 : @opts.x + (Const::GRID * frame)
       end
 
       def path
@@ -118,6 +118,8 @@ module Hoard
         outputs[:scene].sprites << sprite if entity.visible?
 
         @frame = @frame + 1
+
+        p frame if entity.is_a?(Entities::Player)
 
         if done?
           @playing = false

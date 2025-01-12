@@ -178,7 +178,7 @@ module Hoard
 
     def check_collision(entity, cx, cy)
       return if entity == self
-      if entity.collidable && entity.intersect?(cx, cy)
+      if entity.collidable && entity.intersect?(cx - 1, cy)
         if self == Game.s.player
           # If we're checking one unit below (for ground detection)
           if cy > self.cy

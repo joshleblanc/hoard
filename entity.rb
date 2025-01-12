@@ -260,6 +260,14 @@ module Hoard
       visible
     end
 
+    def show!
+      self.visible = true
+    end
+
+    def hide!
+      self.visible = false
+    end
+
     def tmod
       1
     end

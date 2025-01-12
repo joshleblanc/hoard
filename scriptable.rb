@@ -45,7 +45,15 @@ module Hoard
 
     def send_to_scripts(met, *args, &blk)
       scripts.each do |script|
-        script.send(met, *args, &blk) if script.respond_to?(met)
+        if script.respond_to?(met)
+          unless script.init_once_done
+            script.args = $args unless script.args
+            script.init
+            script.init_once_done = true
+          end
+
+          script.send(met, *args, &blk) unless met == :init
+        end
       end
     end
 

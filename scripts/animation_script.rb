@@ -99,14 +99,11 @@ module Hoard
           tmpY += Math.sin(0.3 + entity.ftime * 1.7) * entity.shake_pow_y * entity.cd.get_ratio("shaking")
         end
 
-        offset_scale_x = (entity.w * entity.scale_x) / entity.tile_w
-        offset_scale_y = (entity.h * entity.scale_y) / entity.tile_h
-
         sprite = {
-          x: tmpX + -(entity.w / 2) + (@offset_x * offset_scale_x),
-          y: tmpY.from_top + entity.h + (@offset_y * offset_scale_y),
-          w: entity.w * entity.scale_x * entity.squash_x,
-          h: entity.h * entity.scale_y * entity.squash_y,
+          x: entity.rx,
+          y: entity.ry,
+          w: entity.rw,
+          h: entity.rh,
           tile_w: entity.tile_w,
           tile_h: entity.tile_h,
           tile_x: tile_x,

@@ -2,7 +2,7 @@ module Hoard
   class Script
     attr_gtk
 
-    attr_accessor :entity
+    attr_accessor :entity, :init_once_done
 
     def to_h
       {}.tap do |klass|

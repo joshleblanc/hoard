@@ -4,7 +4,7 @@ module Hoard
       def post_update
         grid_w = (entity.w / Const::GRID)
         grid_pos = {
-          x: ((entity.cx - (grid_w / 2).floor) * 16),
+          x: (((entity.cx + (grid_w / 2)) - (grid_w / 2).floor) * 16),
           y: (entity.cy * 16).from_top,
           w: entity.w,
           h: entity.h,
@@ -13,7 +13,7 @@ module Hoard
         }
 
         act_pos = {
-          x: entity.x - (entity.w / 2),
+          x: entity.x,
           y: entity.y.from_top + entity.h,
           w: entity.w,
           h: entity.h,

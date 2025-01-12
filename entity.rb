@@ -66,7 +66,6 @@ module Hoard
       @visible = !self.class.instance_variable_get(:@hidden)
       @collidable = !!self.class.instance_variable_get(:@collidable)
 
-      p "#{@collidable}, #{self.class.instance_variable_get(:@collidable)}, #{self.class.name}"
       @dx = 0
       @dy = 0
 
@@ -145,6 +144,22 @@ module Hoard
 
     def yy
       cy + yr
+    end
+
+    def rx
+      x
+    end
+
+    def ry
+      y.from_top + h
+    end
+
+    def rw
+      (w * scale_x) / squash_x
+    end
+
+    def rh
+      (h * scale_y) / squash_y
     end
 
     def intersect?(cx, cy)
@@ -244,12 +259,12 @@ module Hoard
 
       if Game.s.inputs.keyboard.key_down.e
         send_to_scripts(:on_interact, Game.s.player)
-        send_to_widgets(:on_collision, Game.s.player)
+        send_to_widgets(:on_interact, Game.s.player)
       end
     end
 
     def center_x
-      rect_center_point.x - (w / 2)
+      rect_center_point.x
     end
 
     def center_y
@@ -295,6 +310,14 @@ module Hoard
       send_to_scripts(:local_post_update) if local?
 
       send_to_widgets(:post_update)
+
+      args.outputs.sprites << {
+        x: x,
+        y: y,
+        w: w,
+        h: h,
+        r: 0, g: 255, b: 0,
+      }
     end
 
     def dx_total

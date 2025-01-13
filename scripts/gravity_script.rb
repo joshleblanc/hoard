@@ -1,7 +1,7 @@
 module Hoard
   module Scripts
     class GravityScript < Script
-      def initialize(gravity = 0.05)
+      def initialize(gravity = 0.03)
         @gravity = gravity
       end
 

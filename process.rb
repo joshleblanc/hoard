@@ -17,6 +17,17 @@ module Hoard
         p.can_run?
       end
 
+      def find(what, root = ROOTS)
+        root.find do |r|
+          p "#{r.class.name} is a #{what.name}"
+          if r.is_a?(what)
+            return r
+          end
+
+          find(what, r.children)
+        end
+      end
+
       def send_to_scripts(p, method_name, *args, &blk)
         return unless can_run?(p)
 
@@ -307,6 +318,14 @@ module Hoard
 
     def destroy!
       @destroyed = true
+      p "Destroy #{self.class.name}, parent: #{self.parent}"
+      if parent
+        p "Removing and destroying child"
+        parent.remove_and_destroy_child(self)
+      elsif ROOTS.include?(self)
+        p "Removing entirely #{self.class.name}"
+        ROOTS.delete(self)
+      end
     end
 
     def add_child(p)
@@ -340,13 +359,18 @@ module Hoard
       end
 
       p.parent = nil
-      @children.remove(p)
-      ROOTS.push(p)
+
+      @children.delete(p)
+      ROOTS << p
       p.destroy!
     end
 
-    def destroy_all_children
-      @children.each(&:destroy!)
+    def destroy_all_children!
+      p "Destroying all children (inner) #{@children.length}"
+      loop do
+        break if @children.empty?
+        @children.first.destroy!
+      end
     end
 
     def pre_update; end

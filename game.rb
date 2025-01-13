@@ -24,7 +24,7 @@ module Hoard
         end
 
         def start_level(level)
-            destroy_all_children
+            destroy_all_children!
             @current_level = level
             @camera.center_on_target
             # destroy level and all spawned entities

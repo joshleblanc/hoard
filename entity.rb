@@ -84,7 +84,7 @@ module Hoard
       add_default_scripts!
       add_default_widgets!
 
-      add_script Scripts::DebugRenderScript.new
+      # add_script Scripts::DebugRenderScript.new
     end
 
     def register_new_velocity(frict)
@@ -126,6 +126,16 @@ module Hoard
       xx * GRID
     end
 
+    def x=(new_x)
+      self.cx = (new_x / Const::GRID).to_i
+      self.xr = (new_x % Const::GRID) / Const::GRID
+    end
+
+    def y=(new_y)
+      self.cy = (new_y / Const::GRID).to_i
+      self.yr = (new_y % Const::GRID) / Const::GRID
+    end
+
     def wcx
       (wx / Const::GRID).to_i
     end
@@ -151,7 +161,7 @@ module Hoard
     end
 
     def ry
-      y.from_top + h
+      y.from_top + tile_h
     end
 
     def rw
@@ -178,6 +188,7 @@ module Hoard
 
     def check_collision(entity, cx, cy)
       return if entity == self
+
       if entity.collidable && entity.intersect?(cx - 1, cy)
         if self == Game.s.player
           # If we're checking one unit below (for ground detection)
@@ -295,6 +306,10 @@ module Hoard
       Game.s.camera.level_to_global_y((y - h).from_top)
     end
 
+    def dt
+      1
+    end
+
     # called after pre_update and update
     # usually used for rendering
     def post_update
@@ -311,13 +326,13 @@ module Hoard
 
       send_to_widgets(:post_update)
 
-      args.outputs.sprites << {
-        x: x,
-        y: y,
-        w: w,
-        h: h,
-        r: 0, g: 255, b: 0,
-      }
+      # args.outputs.sprites << {
+      #   x: x,
+      #   y: y,
+      #   w: w,
+      #   h: h,
+      #   r: 0, g: 255, b: 0,
+      # }
     end
 
     def dx_total
@@ -393,6 +408,36 @@ module Hoard
     def shutdown
       send_to_scripts(:on_shutdown)
       send_to_widgets(:on_shutdown)
+    end
+
+    def move_towards(target_x, target_y, duration = 1000, type = Hoard::Tween::Type::LINEAR)
+      # Calculate duration based on distance and speed
+
+      tween_type = type #smooth ? Hoard::Tween::Type::EASE : Hoard::Tween::Type::LINEAR
+
+      # Create x tween
+      tw.create(
+        -> { x },
+        ->(v) { self.x = v },
+        x,
+        target_x,
+        tween_type,
+        duration
+      )
+
+      # Create y tween
+      tw.create(
+        -> { y },
+        ->(v) { self.y = v },
+        y,
+        target_y,
+        tween_type,
+        duration
+      )
+    end
+
+    def move_to(target, duration = 1000, type = nil)
+      move_towards(target.x, target.y, duration, type)
     end
   end
 end

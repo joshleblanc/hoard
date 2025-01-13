@@ -3,9 +3,10 @@ module Hoard
     class HealthScript < Script
       attr :life, :last_dmg_source, :last_hit_dir_from_source, :last_hit_dir_to_source
 
-      def initialize(health: 1)
+      def initialize(health: 1, bounce: true)
         @life = Stat.new
         @life.init_max_on_max(health)
+        @bounce = bounce
       end
 
       def reset!
@@ -26,6 +27,7 @@ module Hoard
       end
 
       def ricochet!(target)
+        return unless @bounce
         powaaa = 0.5
         upward_force = 0.3
         normal = Geometry.vec2_normalize({ x: entity.x - target.x, y: entity.y.to_f - target.y.to_f })
@@ -49,6 +51,23 @@ module Hoard
 
         if @life.v <= 0
           entity.send_to_scripts(:on_die)
+        end
+      end
+
+      def apply_damage(amount, source)
+        return if @life.v <= 0
+        @last_dmg_source = source
+        @last_hit_dir_from_source = Geometry.vec2_normalize({ x: entity.x - source.x, y: entity.y - source.y })
+        @last_hit_dir_to_source = Geometry.vec2_normalize({ x: source.x - entity.x, y: source.y - entity.y })
+        @life.v -= amount
+        ricochet!(source)
+
+        if @life.v <= 0
+          if entity.is_a?(Entities::Player)
+            Game.s.player_died
+          elsif entity.is_a?(Entities::Boss)
+            Game.s.boss_died
+          end
         end
       end
 

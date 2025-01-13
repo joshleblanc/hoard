@@ -13,10 +13,10 @@ module Hoard
         }
 
         act_pos = {
-          x: entity.x,
-          y: entity.y.from_top + entity.h,
-          w: entity.w,
-          h: entity.h,
+          x: entity.rx,
+          y: entity.ry,
+          w: entity.rw,
+          h: entity.rh,
           r: 0, g: 255, b: 0,
           primitive_marker: :border,
         }

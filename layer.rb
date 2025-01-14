@@ -31,6 +31,7 @@ module Hoard
         w: @w * @scale_x,
         h: @h * @scale_y,
         path: @path,
+        flip_vertically: true,
       })
     end
 

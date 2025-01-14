@@ -7,19 +7,18 @@ module Hoard
 
     attr_sprite
 
-    GRID = 16
-
     ##
     # cx, cy are grid coords
     # xr, yr are ratios
     # xx, yy are cx,cy + xr,xy
     # dx, dy are change in x, y
     attr :cx, :cy, :xr, :yr
+    attr :anchor_x, :anchor_y
 
     # world coords
     attr :wx, :wy
 
-    attr :squash_x, :squash_y, :scale_x, :scale_y
+    attr :squash_x, :squash_y, :scale_x, :scale_y, :flip_horizontally, :flip_vertically
 
     attr :dx_total, :dy_total, :destroyed, :dir, :visible, :dir, :collidable
 
@@ -53,15 +52,19 @@ module Hoard
       end
     end
 
-    def initialize(parent: nil, cx: 0, cy: 0, tile_w: Const::GRID, tile_h: Const::GRID, w: Const::GRID, h: Const::GRID)
-      super(parent)
+    def initialize(**opts)
+      super(opts[:parent])
 
-      set_pos_case(cx, cy)
       @dir = 1
-      @w = w
-      @h = h
-      @tile_w = tile_w
-      @tile_h = tile_h
+      @w = opts[:w] || Const::GRID
+      @h = opts[:h] || Const::GRID
+      @tile_w = opts[:tile_w] || Const::GRID
+      @tile_h = opts[:tile_h] || Const::GRID
+
+      @anchor_x = opts[:anchor_x] || 0.5
+      @anchor_y = opts[:anchor_y] || 0.5
+
+      set_pos_case(opts[:cx] || 0, opts[:cy] || 0)
 
       @visible = !self.class.instance_variable_get(:@hidden)
       @collidable = !!self.class.instance_variable_get(:@collidable)
@@ -73,6 +76,9 @@ module Hoard
       @squash_y = 1
       @scale_x = 1
       @scale_y = 1
+
+      @flip_vertically = opts[:flip_vertically] || true
+      @flip_horizontally = opts[:flip_horizontally] || false
 
       @cd = Cooldown.new
       @ucd = Cooldown.new
@@ -112,8 +118,8 @@ module Hoard
     def set_pos_case(x, y)
       self.cx = x
       self.cy = y
-      self.xr = 0.5
-      self.yr = 1
+      self.xr = anchor_x.to_f
+      self.yr = anchor_y.to_f
     end
 
     def update_world_pos
@@ -123,7 +129,7 @@ module Hoard
     end
 
     def x
-      xx * GRID
+      (xx * Const::GRID)
     end
 
     def x=(new_x)
@@ -145,7 +151,7 @@ module Hoard
     end
 
     def y
-      yy * GRID
+      (yy * Const::GRID)
     end
 
     def xx
@@ -161,7 +167,7 @@ module Hoard
     end
 
     def ry
-      y.from_top + tile_h
+      y
     end
 
     def rw
@@ -173,23 +179,18 @@ module Hoard
     end
 
     def intersect?(cx, cy)
-      cx_span = w / GRID
-      cy_span = h / GRID
+      x = cx * Const::GRID
+      y = cy * Const::GRID
+      w = Const::GRID
+      h = Const::GRID
 
-      cx_half = (cx_span / 2).floor
-      cy_half = (cy_span / 2).floor
-
-      left = self.cx - cx_half
-      bottom = self.cy + cy_half
-
-      # p "#{left..(left + cx_half)}, #{bottom..(bottom + cy_half)}"
-      (left..(left + (cx_half * 2))).cover?(cx) && (bottom..(bottom + (cy_half * 2))).cover?(cy)
+      Geometry.intersect_rect?({ x: x, y: y, w: w, h: h }, { x: self.x, y: self.y, w: self.w, h: self.h })
     end
 
     def check_collision(entity, cx, cy)
       return if entity == self
 
-      if entity.collidable && entity.intersect?(cx - 1, cy)
+      if entity.collidable && entity.intersect?(cx, cy)
         if self == Game.s.player
           # If we're checking one unit below (for ground detection)
           if cy > self.cy
@@ -211,15 +212,15 @@ module Hoard
     end
 
     def on_ground?
-      !destroyed? && v_base.dy == 0 && yr == 1 && has_collision(cx, cy + 1)
+      !destroyed? && v_base.dy == 0 && has_collision(cx, cy + 1)
     end
 
-    def has_collision(x, y)
-      return true if Game.s.current_level&.has_collision(x, y)
+    def has_collision(cx, cy)
+      return true if Game.s.current_level&.has_collision(cx, cy)
 
       if @collidable
         Game.s.children.each do |entity|
-          return true if check_collision(entity, x, y)
+          return true if check_collision(entity, cx, cy)
         end
       end
 
@@ -279,7 +280,7 @@ module Hoard
     end
 
     def center_y
-      rect_center_point.y - (h * 2)
+      rect_center_point.y
     end
 
     def visible?
@@ -303,7 +304,7 @@ module Hoard
     end
 
     def gy
-      Game.s.camera.level_to_global_y((y - h).from_top)
+      Game.s.camera.level_to_global_y((y - h))
     end
 
     def dt
@@ -437,7 +438,10 @@ module Hoard
     end
 
     def move_to(target, duration = 1000, type = nil)
-      move_towards(target.x, target.y, duration, type)
+      return unless target
+      p "Moving to #{target}"
+      set_pos_case(target.cx, target.cy)
+      #move_towards(target.x, target.y, duration, type)
     end
   end
 end

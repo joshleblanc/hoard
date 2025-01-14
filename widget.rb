@@ -125,7 +125,7 @@ module Hoard
     end
 
     def grid_y(from)
-      (screen_y(from) / (720 / 12)).from_top
+      (screen_y(from) / (720 / 12))
     end
 
     def on_pre_step_x; end

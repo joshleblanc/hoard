@@ -15,7 +15,7 @@ module Hoard
 
         entity.v_base.dy = 0
         entity.v_bump.dy = 0
-        entity.yr = 1
+        entity.yr = entity.anchor_y
 
         landing_animation = entity.scripts.find { _1.id == :landing }
 

@@ -318,12 +318,9 @@ module Hoard
 
     def destroy!
       @destroyed = true
-      p "Destroy #{self.class.name}, parent: #{self.parent}"
       if parent
-        p "Removing and destroying child"
         parent.remove_and_destroy_child(self)
       elsif ROOTS.include?(self)
-        p "Removing entirely #{self.class.name}"
         ROOTS.delete(self)
       end
     end
@@ -366,7 +363,6 @@ module Hoard
     end
 
     def destroy_all_children!
-      p "Destroying all children (inner) #{@children.length}"
       loop do
         break if @children.empty?
         @children.first.destroy!

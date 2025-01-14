@@ -110,6 +110,9 @@ module Hoard
           tile_y: tile_y,
           path: path,
           flip_horizontally: entity.flip_horizontally,
+          flip_vertically: entity.flip_vertically,
+          anchor_x: entity.anchor_x,
+          anchor_y: entity.anchor_y,
         }
 
         outputs[:scene].sprites << sprite if entity.visible?

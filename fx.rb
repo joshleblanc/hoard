@@ -41,10 +41,10 @@ module Hoard
     def dots_explosion(x, y, color = 0xffffff)
       80.times do |i|
         px = x + rnd(0, 3, true)
-        py = y.from_top + rnd(0, 3)
+        py = y + rnd(0, 3)
         spd = rnd(1, 3)
 
-        a = Math.atan2(y.from_top - py, x - px)
+        a = Math.atan2(y - py, x - px)
         dx = -Math.cos(a) * spd
         dy = -Math.sin(a) * spd
         @particles.push({

@@ -63,7 +63,7 @@ module Hoard
           layer.tiles.map do |tile|
             ffi_draw.draw_sprite_hash({
               x: tile.px[0],
-              y: tile.px[1].from_top,
+              y: tile.px[1],
               w: layer.grid_size,
               h: layer.grid_size,
               tile_x: tile.src[0],
@@ -72,9 +72,9 @@ module Hoard
               tile_h: layer.grid_size,
               path: layer.tileset_rel_path&.gsub("../", "") || "",
               flip_horizontally: tile.f == 1 || tile.f == 3,
-              flip_vertically: tile.f == 2 || tile.f == 3,
-              anchor_x: 0,
-              anchor_y: 0,
+              flip_vertically: !(tile.f == 2 || tile.f == 3),
+              # anchor_x: 0.5,
+              # anchor_y: 0.5,
               a: 255 * layer.opacity,
             })
           end

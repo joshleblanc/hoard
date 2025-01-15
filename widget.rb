@@ -10,7 +10,7 @@ module Hoard
     PADDING = 18
 
     def initialize
-      @visible = false
+      @visible = true
 
       @offset_x = 0
       @offset_y = 0

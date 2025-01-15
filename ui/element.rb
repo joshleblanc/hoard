@@ -136,6 +136,8 @@ module Hoard
             g: @options[:border][:g] || 255,
             b: @options[:border][:b] || 255,
             a: @options[:border][:a] || 255,
+            anchor_x: 0,
+            anchor_y: 1
           )
         end
 
@@ -146,6 +148,8 @@ module Hoard
             g: @options[:background][:g] || 0,
             b: @options[:background][:b] || 0,
             a: @options[:background][:a] || 255,
+            anchor_x: 0,
+            anchor_y: 1
           )
         end
       end
@@ -190,7 +194,7 @@ module Hoard
       end
 
       def rx() = x + (parent&.padding || 0)
-      def ry() = y + (parent&.padding || 0)
+      def ry() = y.from_top + (parent&.padding || 0)
       def rw() = w - ((parent&.padding || 0) * 2)
       def rh() = h - ((parent&.padding || 0) * 2)
     end

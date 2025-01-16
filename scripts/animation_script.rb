@@ -51,6 +51,14 @@ module Hoard
         files ? 0 : @opts.x + (Const::GRID * frame)
       end
 
+      def tile_w
+        @opts[:tile_w] || entity.tile_w
+      end
+
+      def tile_h
+        @opts[:tile_h] || entity.tile_h
+      end
+
       def path
         files ? files[frame] : @opts.path
       end
@@ -99,13 +107,15 @@ module Hoard
           tmpY += Math.sin(0.3 + entity.ftime * 1.7) * entity.shake_pow_y * entity.cd.get_ratio("shaking")
         end
 
+        p "Rendering animation #{entity.rx}, #{entity.ry}, #{entity.rw}, #{entity.rh}, #{tile_x}, #{tile_y}, #{tile_w}, #{tile_h}" if files
+
         sprite = {
           x: entity.rx,
           y: entity.ry,
           w: entity.rw,
           h: entity.rh,
-          tile_w: entity.tile_w,
-          tile_h: entity.tile_h,
+          tile_w: tile_w,
+          tile_h: tile_h,
           tile_x: tile_x,
           tile_y: tile_y,
           path: path,

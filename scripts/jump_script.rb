@@ -24,16 +24,7 @@ module Hoard
 
           @jumps_remaining -= 1
 
-          Game.s.fx.anim({
-            path: "sprites/effects.png",
-            x: entity.center_x,
-            y: entity.center_y,
-            tile_w: 64,
-            tile_h: 64,
-            tile_x: 0,
-            tile_y: 11 * 64,
-            frames: 11,
-          })
+          entity.send_to_scripts(:play_effect, :jump_effect, entity.rx, entity.ry + (entity.rh * entity.anchor_y))
 
           if entity.v_base.dx == 0
             entity.send_to_scripts(:play_animation, :standing_jump, true)

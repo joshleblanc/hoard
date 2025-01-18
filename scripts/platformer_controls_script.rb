@@ -7,6 +7,7 @@ module Hoard
       end
 
       def pre_update
+        @previous_speed = @current_speed
         @current_speed = 0
 
         if Game.s.inputs.keyboard.key_held.left && !entity.cd.has("controls_disabled")
@@ -31,6 +32,14 @@ module Hoard
       end
 
       def update
+        if @current_speed == 0 && @previous_speed != 0
+          entity.send_to_scripts(:play_effect, :skid, {
+            x: entity.rx,
+            y: entity.ry + (entity.rh * entity.anchor_y),
+            flip_horizontally: entity.dir == -1,
+            speed: 8,
+          })
+        end
         entity.v_base.dx = (entity.v_base.dx + @current_speed) * 0.085 if @current_speed != 0
       end
     end

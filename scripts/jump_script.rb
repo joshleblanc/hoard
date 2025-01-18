@@ -24,7 +24,10 @@ module Hoard
 
           @jumps_remaining -= 1
 
-          entity.send_to_scripts(:play_effect, :jump_effect, entity.rx, entity.ry + (entity.rh * entity.anchor_y))
+          entity.send_to_scripts(:play_effect, :jump_effect, {
+            x: entity.rx,
+            y: entity.ry + (entity.rh * entity.anchor_y),
+          })
 
           if entity.v_base.dx == 0
             entity.send_to_scripts(:play_animation, :standing_jump, true)

@@ -13,7 +13,7 @@ module Hoard
     def process_anims
       @anims.each do |anim|
         duration = $args.state.tick_count - anim.start_tick
-        anim.current_frame = (duration / 4).to_i % anim.frames
+        anim.current_frame = (duration / (anim.speed || 4)).to_i % anim.frames
         anim.tile_x = (anim.tile_w * anim.current_frame)
       end
 
@@ -71,6 +71,7 @@ module Hoard
       data.w = data.w || Const::GRID
       data.h = data.h || Const::GRID
       data.start_tick = $args.state.tick_count
+      data.flip_vertically = true
       @anims.push(data)
     end
 

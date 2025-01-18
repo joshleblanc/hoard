@@ -13,6 +13,8 @@ module Hoard
 
         @offset_x = opts[:offset_x] || 0
         @offset_y = opts[:offset_y] || 0
+
+        @overlap = opts[:overlap] || false
       end
 
       def frames
@@ -48,7 +50,7 @@ module Hoard
       end
 
       def tile_x
-        files ? 0 : @opts.x + (Const::GRID * frame)
+        files ? 0 : @opts.x + (tile_w * frame)
       end
 
       def tile_w
@@ -74,7 +76,11 @@ module Hoard
       def play_animation(id, should_loop = false, &callback)
         @frame = 0 if id == @id && !playing?
 
-        @playing = id == @id
+        if @overlap && id == @id
+          @playing = true
+        end
+
+        @playing = id == @id unless @overlap
 
         return unless playing?
 

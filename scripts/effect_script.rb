@@ -6,11 +6,12 @@ module Hoard
         @data = data
       end
 
-      def play_effect(id, x, y)
+      def play_effect(id, opts = {})
         return unless @id == id
         Game.s.fx.anim({
-          x: x,
-          y: y,
+          **opts,
+          x: opts[:x] || entity.rx,
+          y: opts[:y] || entity.ry,
           **@data,
         })
       end

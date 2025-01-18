@@ -114,7 +114,7 @@ module Hoard
         return false if loop? # a loop never finishes
 
         p "Running done: #{frame}, #{starting_frame}, #{frame == starting_frame}, #{loops}" if @id == :player_projectile
-        loops > 0 && frame == frames - 1
+        loops > 0 && frame == (reverse ? frames - 1 : 0)
       end
 
       def post_update

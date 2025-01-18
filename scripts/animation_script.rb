@@ -17,6 +17,10 @@ module Hoard
         @overlap = opts[:overlap] || false
       end
 
+      def reverse
+        @opts.reverse || false
+      end
+
       def frames
         files ? files.length : @opts.frames
       end
@@ -38,7 +42,7 @@ module Hoard
       end
 
       def frame_length
-        (frames * speed_ratio) + speed_ratio
+        ((frames - 1) * speed_ratio) + speed_ratio
       end
 
       def frame
@@ -46,7 +50,7 @@ module Hoard
       end
 
       def loops
-        (frame_over_speed / frames).floor
+        (frame_over_speed / frames).floor.abs
       end
 
       def tile_x
@@ -69,12 +73,22 @@ module Hoard
         files ? 0 : @opts.y
       end
 
+      def starting_frame
+        if reverse
+          frame_length
+        else
+          0
+        end
+      end
+
       def play!(should_loop = false, &callback)
         entity.send_to_scripts(:play_animation, id, should_loop, &callback)
       end
 
       def play_animation(id, should_loop = false, &callback)
-        @frame = 0 if id == @id && !playing?
+        if id == @id && !playing?
+          @frame = starting_frame
+        end
 
         if @overlap && id == @id
           @playing = true
@@ -99,7 +113,8 @@ module Hoard
       def done?
         return false if loop? # a loop never finishes
 
-        loops > 0 && frame == 0
+        p "Running done: #{frame}, #{starting_frame}, #{frame == starting_frame}, #{loops}" if @id == :player_projectile
+        loops > 0 && frame == frames - 1
       end
 
       def post_update
@@ -131,7 +146,8 @@ module Hoard
 
         outputs[:scene].sprites << sprite if entity.visible?
 
-        @frame = @frame + 1
+        # p @frame if @id == :player_projectile
+        @frame = @frame + (reverse ? -1 : 1)
 
         if done?
           @playing = false

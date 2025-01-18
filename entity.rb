@@ -22,7 +22,7 @@ module Hoard
 
     attr :dx_total, :dy_total, :destroyed, :dir, :visible, :dir, :collidable
 
-    attr :cd, :ucd, :fx
+    attr :cd, :ucd, :fx, :spawned
     attr :all_velocities, :v_base, :v_bump
 
     attr :animation, :animations
@@ -72,6 +72,8 @@ module Hoard
       @dx = 0
       @dy = 0
 
+      @spawned = false
+
       @squash_x = 1
       @squash_y = 1
       @scale_x = 1
@@ -104,6 +106,10 @@ module Hoard
       @squash_y = 2 - scale
     end
 
+    def spawned?
+      @spawned
+    end
+
     def squash_y=(scale)
       @squash_x = 2 - scale
       @squash_y = scale
@@ -120,6 +126,7 @@ module Hoard
       self.cy = y
       self.xr = anchor_x.to_f
       self.yr = anchor_y.to_f
+      @spawned = true
     end
 
     def update_world_pos

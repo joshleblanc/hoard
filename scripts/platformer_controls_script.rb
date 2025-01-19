@@ -25,7 +25,7 @@ module Hoard
 
         if Game.s.inputs.keyboard.key_held.up && !entity.cd.has("controls_disabled")
           @current_speed = 0
-          if Game.s.current_level.layer("Collisions").int(cx, cy) == 2 # ladder
+          if Game.s.current_level.layer("Collisions").int(entity.cx, entity.cy) == 2 # ladder
             entity.v_base.dy = -0.2
           end
         end

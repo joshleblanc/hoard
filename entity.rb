@@ -366,7 +366,7 @@ module Hoard
 
     # I'm not going to pretend to know what this does
     def update
-      steps = ((dx_total.abs + dy_total.abs) / 0.33).ceil
+      steps = ((dx_total.abs + dy_total.abs) / 0.33).ceil rescue 0
       if steps > 0
         n = 0
         while (n < steps)

@@ -117,22 +117,30 @@ module Hoard
         loops > 0 && frame == (reverse ? frames - 1 : 0)
       end
 
+      def w
+        @opts[:w] || entity.rw
+      end
+
+      def h
+        @opts[:h] || entity.rh
+      end
+
       def post_update
         return unless playing?
 
-        tmpX = entity.x
-        tmpY = entity.y
+        tmp_x = entity.rx
+        tmp_y = entity.ry
 
         if entity.cd.has("shaking")
-          tmpX += Math.cos(entity.ftime * 1.1) * entity.shake_pow_x * entity.cd.get_ratio("shaking")
-          tmpY += Math.sin(0.3 + entity.ftime * 1.7) * entity.shake_pow_y * entity.cd.get_ratio("shaking")
+          tmp_x += Math.cos(entity.ftime * 1.1) * entity.shake_pow_x * entity.cd.get_ratio("shaking")
+          tmp_y += Math.sin(0.3 + entity.ftime * 1.7) * entity.shake_pow_y * entity.cd.get_ratio("shaking")
         end
 
         sprite = {
-          x: entity.rx + @offset_x,
-          y: entity.ry + @offset_y,
-          w: entity.rw,
-          h: entity.rh,
+          x: tmp_x + @offset_x,
+          y: tmp_y + @offset_y,
+          w: w,
+          h: h,
           tile_w: tile_w,
           tile_h: tile_h,
           tile_x: tile_x,

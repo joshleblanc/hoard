@@ -59,26 +59,32 @@ module Hoard
       end
 
       def draw_override(ffi_draw)
-        layer_instances.reverse.map do |layer|
-          layer.tiles.map do |tile|
-            ffi_draw.draw_sprite_hash({
-              x: tile.px[0],
-              y: tile.px[1],
-              w: layer.grid_size,
-              h: layer.grid_size,
-              tile_x: tile.src[0],
-              tile_y: tile.src[1],
-              tile_w: layer.grid_size,
-              tile_h: layer.grid_size,
-              path: layer.tileset_rel_path&.gsub("../", "") || "",
-              flip_horizontally: tile.f == 1 || tile.f == 3,
-              flip_vertically: !(tile.f == 2 || tile.f == 3),
-              # anchor_x: 0.5,
-              # anchor_y: 0.5,
-              a: 255 * layer.opacity,
-            })
+        Array.each(layer_instances.reverse) do |layer|
+          a = 255 * layer.opacity
+          path = layer.tileset_rel_path&.gsub("../", "") || ""
+          grid_size = layer.grid_size
+
+          Array.each(layer.tiles) do |tile|
+            # The argument order for ffi_draw.draw_sprite_3 is:
+            # x, y, w, h,
+            # path,
+            # angle,
+            # alpha, red_saturation, green_saturation, blue_saturation
+            # tile_x, tile_y, tile_w, tile_h,
+            # flip_horizontally, flip_vertically,
+            # angle_anchor_x, angle_anchor_y,
+            # source_x, source_y, source_w, source_h
+            ffi_draw.draw_sprite_3(
+              tile.px[0], tile.px[1], grid_size, grid_size,
+              path, 0, a, 255, 255, 255,
+              tile.src[0], tile.src[1], grid_size, grid_size,
+              tile.f == 1 || tile.f == 3,
+              !(tile.f == 2 || tile.f == 3),
+              0.5, 0.5,
+              nil, nil, nil, nil
+            )
           end
-        end.flatten
+        end
       rescue Exception => e
         puts e
       end

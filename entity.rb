@@ -185,19 +185,10 @@ module Hoard
       (h * scale_y) / squash_y
     end
 
-    def intersect?(cx, cy)
-      x = cx * Const::GRID
-      y = cy * Const::GRID
-      w = Const::GRID
-      h = Const::GRID
-
-      Geometry.intersect_rect?({ x: x, y: y, w: w, h: h }, { x: self.x, y: self.y, w: self.w, h: self.h })
-    end
-
     def check_collision(entity, cx, cy)
       return if entity == self
 
-      if entity.collidable && entity.intersect?(cx, cy)
+      if entity.collidable && entity.intersect_rect?({ x: cx * Const::GRID, y: cy * Const::GRID, w: Const::GRID, h: Const::GRID })
         if self == Game.s.player
           # If we're checking one unit below (for ground detection)
           if cy > self.cy
@@ -211,11 +202,7 @@ module Hoard
         return true
       end
 
-      entity.children.each do |child|
-        return true if check_collision(child, cx, cy)
-      end
-
-      return false
+      entity.children.any? { |child| check_collision(child, cx, cy) }
     end
 
     def on_ground?
@@ -226,9 +213,7 @@ module Hoard
       return true if Game.s.current_level&.has_collision(cx, cy)
 
       if @collidable
-        Game.s.children.each do |entity|
-          return true if check_collision(entity, cx, cy)
-        end
+        return Game.s.children.any? { |entity| check_collision(entity, cx, cy) }
       end
 
       false

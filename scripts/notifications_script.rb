@@ -96,7 +96,7 @@ module Hoard
           })
 
           x_offset = 24
-          if item.icon.path
+          if item&.icon&.respond_to?(:path)
             x_offset += l.w / 5
             outputs[:ui].sprites << l.merge({
               path: item.icon.path,

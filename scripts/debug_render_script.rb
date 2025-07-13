@@ -5,10 +5,10 @@ module Hoard
         # Draw entity debug info
         grid_w = (entity.w / Const::GRID)
         grid_pos = {
-          x: entity.cx * 16,
-          y: entity.cy * 16,
-          w: entity.tile_w,
-          h: entity.tile_h,
+          x: entity.cx * Const::GRID,
+          y: entity.cy * Const::GRID,
+          w: entity.w,
+          h: entity.h,
           r: 255, g: 0, b: 0,
           primitive_marker: :border,
         }

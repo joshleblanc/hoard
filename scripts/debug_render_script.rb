@@ -7,8 +7,8 @@ module Hoard
         grid_pos = {
           x: entity.cx * Const::GRID,
           y: entity.cy * Const::GRID,
-          w: entity.w,
-          h: entity.h,
+          w: Const::GRID,
+          h: Const::GRID,
           r: 255, g: 0, b: 0,
           primitive_marker: :border,
         }

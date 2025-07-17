@@ -60,10 +60,35 @@ module Hoard
       def render
         if @options[:x]
           drag
-          super
-        else
-          super
         end
+        
+        if @options[:border]
+          border(
+            x: rx, y: ry, w: rw, h: rh,
+            r: @options[:border][:r] || 255,
+            g: @options[:border][:g] || 255,
+            b: @options[:border][:b] || 255,
+            a: @options[:border][:a] || 255,
+            anchor_x: 0,
+            anchor_y: 1
+          )
+        end
+
+        if @options[:background]
+          sprite(
+            x: rx, y: ry, w: rw, h: rh,
+            r: @options[:background][:r] || 0,
+            g: @options[:background][:g] || 0,
+            b: @options[:background][:b] || 0,
+            a: @options[:background][:a] || 255,
+            anchor_x: 0,
+            anchor_y: 1
+          )
+        end
+      end
+
+      def hovered?
+        $args.inputs.mouse.position.inside_rect?([rx, ry, rw, rh])
       end
     end
   end

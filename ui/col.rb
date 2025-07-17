@@ -11,7 +11,10 @@ module Hoard
             end 
 
             def y 
-                parent.y
+                range = (0...child_index)
+                span_sum = range.to_a.sum { @parent.children[_1].span }
+                row_index = (span_sum / COLS).floor
+                parent.y - (h * row_index)
             end
 
             def span 

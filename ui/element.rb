@@ -131,7 +131,7 @@ module Hoard
       def render
         if @options[:border]
           border(
-            x: rx, y: y, w: rw, h: h,
+            x: rx, y: ry, w: rw, h: rh,
             r: @options[:border][:r] || 255,
             g: @options[:border][:g] || 255,
             b: @options[:border][:b] || 255,
@@ -143,7 +143,7 @@ module Hoard
 
         if @options[:background]
           sprite(
-            x: rx, y: y, w: rw, h: h,
+            x: rx, y: ry, w: rw, h: rh,
             r: @options[:background][:r] || 0,
             g: @options[:background][:g] || 0,
             b: @options[:background][:b] || 0,
@@ -195,7 +195,7 @@ module Hoard
       end
 
       def rx() = x + (parent&.padding || 0)
-      def ry() = y.from_top + (parent&.padding || 0)
+      def ry() = y + (parent&.padding || 0)
       def rw() = w - ((parent&.padding || 0) * 2)
       def rh() = h - ((@options[:padding] || 0) * 2)
     end

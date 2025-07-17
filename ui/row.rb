@@ -2,8 +2,8 @@ module Hoard
     module Ui 
         class Row < Element 
             def y 
-                offset = @parent.children[0..child_index].sum(&:h)
-                @parent.y - offset  + parent.h
+                offset = @parent.children[0...child_index].sum(&:h)
+                @parent.y - offset - h
             end
 
             def w(requester = nil)

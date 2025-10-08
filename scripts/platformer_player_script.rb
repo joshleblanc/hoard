@@ -24,7 +24,6 @@ module Hoard
 
         # Auto-track camera on player with vertical offset for better visibility
         ::Game.s.camera.track_entity(entity, true)
-        ::Game.s.camera.target_off_y = 64  # Focus above the player
         ::Game.s.camera.clamp_to_level_bounds = true
 
         # Set velocity friction for platformer feel

@@ -75,8 +75,12 @@ module Hoard
             # angle_anchor_x, angle_anchor_y,
             # source_x, source_y, source_w, source_h
             #p "drawing tile #{tile.px[0]}, #{tile.px[1]}, #{layer.tileset_rel_path}"
+            x = tile.px[0]
+            y = tile.px[1]
+            p "Drawing tile #{x}, #{y}, #{px_hei}"
+
             ffi_draw.draw_sprite_3(
-              tile.px[0], tile.px[1], grid_size, grid_size,
+              x, y, grid_size, grid_size,
               path, 0, a, 255, 255, 255,
               tile.src[0], tile.src[1], grid_size, grid_size,
               tile.f == 1 || tile.f == 3,

@@ -208,6 +208,7 @@ module Hoard
         spd_y = 0.023 * tracking_speed * zoom
         tx = target.center_x + target_off_x
         ty = target.center_y + target_off_y
+        p "Target: y=#{target.y}, h=#{target.h}, center_y=#{target.center_y}, ty=#{ty}" if $args.state.tick_count % 60 == 0
 
         a = raw_focus.ang_to(tx, ty)
         dist_x = (tx - raw_focus.level_x).abs
@@ -263,6 +264,12 @@ module Hoard
         if level.px_hei < px_hei
           clamped_focus.level_y = level.px_hei * 0.5
         else
+          # Y-axis: lower bound is px_hei * 0.5 (bottom of level), upper bound is level.px_hei - px_hei * 0.5 (top of level)
+          # But we want to show from 0 at bottom to level.px_hei at top
+          # Clamp should be: min = px_hei * 0.5, max = level.px_hei - px_hei * 0.5
+          # Wait, for non-flipped: 0 is bottom, higher Y is higher up
+          # Camera at px_hei/2 shows 0 to px_hei (bottom of level)
+          # Camera at level.px_hei - px_hei/2 shows level.px_hei - px_hei to level.px_hei (top of level)
           clamped_focus.level_y = raw_focus.level_y.clamp(px_hei * 0.5, level.px_hei - px_hei * 0.5)
         end
       else

@@ -1,10 +1,28 @@
-* EXCEPTION: uninitialized constant Hoard::Const::Scalar
+* EXCEPTION:
+* ERROR - :int method missing on ~NilClass~.
+
+#+begin_src ~NilClass#inspect~
+nil
+#+end_src ~NilClass#inspect~
+
+
+
+The method named
+  :int
+with args
+  [4, 5]
+doesn't exist on [NilClass, NilClassFalseClass].
+
+(suggestions above)
 ** Backtrace:
-*** /const.rb:5:in scale
-*** /camera.rb:76:in px_wid
-*** /camera.rb:214:in update
-*** /process.rb:76:in main_update
-*** /process.rb:114:in update_all
-*** /process.rb:113:in update_all
+*** /scripts/platformer_controls_script.rb:28:in pre_update
+*** /scriptable.rb:55:in send_to_scripts
+*** /scriptable.rb:47:in send_to_scripts
+*** /entity.rb:251:in pre_update
+*** /process.rb:62:in pre_update
+*** /process.rb:67:in pre_update
+*** /process.rb:66:in pre_update
+*** /process.rb:110:in update_all
+*** /process.rb:109:in update_all
 *** /game.rb:91:in tick
 *** samples/platformer/app/main.rb:7:in tick

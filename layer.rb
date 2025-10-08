@@ -7,8 +7,8 @@ module Hoard
     def initialize(path)
       @x = 0
       @y = 0
-      @w = 1280
-      @h = 720
+      @w = 0  # Will be set dynamically
+      @h = 0  # Will be set dynamically
 
       @scale_x = 1
       @scale_y = 1

@@ -94,10 +94,11 @@ module Hoard
 
     def pre_update
       args.outputs[:ui].transient!
-      args.outputs[:scene].w = 1280 
-      args.outputs[:scene].h = 720
+      if @current_level
+        args.outputs[:scene].w = @current_level.px_wid
+        args.outputs[:scene].h = @current_level.px_hei
+      end
       args.outputs[:scene].transient!
-      
     end
 
     def render

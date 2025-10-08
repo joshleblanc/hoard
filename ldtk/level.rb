@@ -77,7 +77,6 @@ module Hoard
             #p "drawing tile #{tile.px[0]}, #{tile.px[1]}, #{layer.tileset_rel_path}"
             x = tile.px[0]
             y = tile.px[1]
-            p "Drawing tile #{x}, #{y}, #{px_hei}"
 
             ffi_draw.draw_sprite_3(
               x, y, grid_size, grid_size,

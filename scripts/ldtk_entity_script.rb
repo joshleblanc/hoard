@@ -23,7 +23,7 @@ module Hoard
       end
 
       def id
-        ldtk_entity.iid
+        ldtk_entity&.iid
       end
 
       def update

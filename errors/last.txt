@@ -1,5 +1,5 @@
 * EXCEPTION:
-* ERROR - :int method missing on ~NilClass~.
+* ERROR - :iid method missing on ~NilClass~.
 
 #+begin_src ~NilClass#inspect~
 nil
@@ -8,21 +8,22 @@ nil
 
 
 The method named
-  :int
-with args
-  [4, 5]
+  :iid
 doesn't exist on [NilClass, NilClassFalseClass].
 
 (suggestions above)
 ** Backtrace:
-*** /scripts/platformer_controls_script.rb:28:in pre_update
+*** /scripts/ldtk_entity_script.rb:26:in id
+*** /scripts/gravity_script.rb:20:in on_pre_step_y
+*** /scripts/gravity_script.rb:20:in on_pre_step_y
 *** /scriptable.rb:55:in send_to_scripts
 *** /scriptable.rb:47:in send_to_scripts
-*** /entity.rb:251:in pre_update
-*** /process.rb:62:in pre_update
-*** /process.rb:67:in pre_update
-*** /process.rb:66:in pre_update
-*** /process.rb:110:in update_all
-*** /process.rb:109:in update_all
+*** /entity.rb:236:in on_pre_step_y
+*** /entity.rb:373:in update
+*** /process.rb:76:in main_update
+*** /process.rb:80:in main_update
+*** /process.rb:79:in main_update
+*** /process.rb:114:in update_all
+*** /process.rb:113:in update_all
 *** /game.rb:91:in tick
 *** samples/platformer/app/main.rb:7:in tick

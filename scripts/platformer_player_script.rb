@@ -16,7 +16,7 @@ module Hoard
         # Add all the common platformer scripts
         entity.add_script LdtkEntityScript.new
         entity.add_script SaveDataScript.new
-        #entity.add_script GravityScript.new(@gravity)
+        entity.add_script GravityScript.new(@gravity)
         entity.add_script PlatformerControlsScript.new
         entity.add_script JumpScript.new(jumps: @jumps, power: @jump_power)
         entity.add_script HealthScript.new(health: @health)

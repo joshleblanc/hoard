@@ -97,10 +97,14 @@ module Hoard
     end
 
     def track_entity(entity, immediate, speed = 1.0)
+      p "track_entity called: entity=#{entity.class}, immediate=#{immediate}, current_focus=#{raw_focus.level_x},#{raw_focus.level_y}"
       self.target = entity
       self.tracking_speed = speed
       if immediate || self.raw_focus.level_x.zero? && self.raw_focus.level_y.zero?
+        p "Calling center_on_target"
         self.center_on_target
+      else
+        p "NOT calling center_on_target (immediate=#{immediate}, focus=#{raw_focus.level_x},#{raw_focus.level_y})"
       end
     end
 
@@ -117,6 +121,7 @@ module Hoard
 
       self.raw_focus.level_x = target.center_x + target_off_x
       self.raw_focus.level_y = target.center_y + target_off_y
+      p "center_on_target: target.center=#{target.center_x},#{target.center_y}, raw_focus=#{raw_focus.level_x},#{raw_focus.level_y}"
     end
 
     def level_to_global_x(v)
@@ -150,9 +155,17 @@ module Hoard
       level = ::Game.s.current_level
       scroller = ::Game.s.scroller
 
+      # Update scroller dimensions to match level
+      if level
+        scroller.w = level.px_wid
+        scroller.h = level.px_hei
+      end
 
       scroller.x = -clamped_focus.level_x + px_wid * 0.5
-      scroller.y = -clamped_focus.level_y.from_top + px_hei * 0.5
+      # For flipped coordinate system: convert level Y to flipped Y based on actual level height
+      scroller.y = -(level.px_hei - clamped_focus.level_y) + px_hei * 0.5
+
+      p "Scroller: clamped_y=#{clamped_focus.level_y}, level.px_hei=#{level.px_hei}, scroller.y=#{scroller.y}"
 
       self.bump_off_x = bump_off_x * (bump_frict ** tmod)
       self.bump_off_y = bump_off_y * (bump_frict ** tmod)

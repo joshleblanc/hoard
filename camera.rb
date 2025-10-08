@@ -73,11 +73,11 @@ module Hoard
     end
 
     def px_wid
-      (Scaler.viewport_width / Const.scale / zoom).ceil
+      (Scaler.viewport_width / ::Game::SCALE / zoom).ceil
     end
 
     def px_hei
-      (Scaler.viewport_height / Const.scale / zoom).ceil
+      (Scaler.viewport_height / ::Game::SCALE / zoom).ceil
     end
 
     def on_screen?(level_x, level_y, padding = 0.0)
@@ -125,11 +125,11 @@ module Hoard
     end
 
     def level_to_global_x(v)
-      v * Const.scale + ::Game.s.scroller.x
+      v * ::Game::SCALE + ::Game.s.scroller.x
     end
 
     def level_to_global_y(v)
-      v * Const.scale + ::Game.s.scroller.y
+      v * ::Game::SCALE + ::Game.s.scroller.y
     end
 
     def shake_s(t, pow = 1.0)
@@ -164,8 +164,7 @@ module Hoard
       scroller.x = -clamped_focus.level_x + px_wid * 0.5
       # For flipped coordinate system: convert level Y to flipped Y based on actual level height
       scroller.y = -(level.px_hei - clamped_focus.level_y) + px_hei * 0.5
-
-      p "Scroller: clamped_y=#{clamped_focus.level_y}, level.px_hei=#{level.px_hei}, scroller.y=#{scroller.y}"
+      scroller.y -= target.h
 
       self.bump_off_x = bump_off_x * (bump_frict ** tmod)
       self.bump_off_y = bump_off_y * (bump_frict ** tmod)
@@ -179,13 +178,13 @@ module Hoard
       end
 
       #scaling
-      scroller.x *= Const.scale * zoom
-      scroller.y *= Const.scale * zoom
+      scroller.x *= ::Game::SCALE * zoom
+      scroller.y *= ::Game::SCALE * zoom
 
       scroller.x = scroller.x.round
       scroller.y = scroller.y.round
 
-      scroller.scale = Const.scale * zoom
+      scroller.scale = ::Game::SCALE * zoom
     end
 
     def update

@@ -1,29 +1,28 @@
-* EXCEPTION:
-* ERROR - :iid method missing on ~NilClass~.
+* RELOAD EXCEPTION: ~require~ order might not be valid (or require statement may be missing).
+An uninitialized constant exception was thrown while files were being loaded. Make sure that your ~require~
+and ~require_relative~ statements are ordered correctly. To debug require load order put the following at the TOP of =app/main.rb=
 
-#+begin_src ~NilClass#inspect~
-nil
-#+end_src ~NilClass#inspect~
+#+begin_src
+  # main.rb
+  # very first line
+  $gtk.debug_require!
 
-
-
-The method named
-  :iid
-doesn't exist on [NilClass, NilClassFalseClass].
-
-(suggestions above)
+  # rest of require statements/code
+  require ...
+#+end_src
+* EXCEPTION THROWN:
+* ERROR: Exception while requiring app/main.rb.
+* ERROR: Exception while requiring samples/platformer/app/main.rb.
+* ERROR: Exception while requiring samples/platformer/app/game.rb.
+uninitialized constant Game::Scaler
 ** Backtrace:
-*** /scripts/ldtk_entity_script.rb:26:in id
-*** /scripts/gravity_script.rb:20:in on_pre_step_y
-*** /scripts/gravity_script.rb:20:in on_pre_step_y
-*** /scriptable.rb:55:in send_to_scripts
-*** /scriptable.rb:47:in send_to_scripts
-*** /entity.rb:236:in on_pre_step_y
-*** /entity.rb:373:in update
-*** /process.rb:76:in main_update
-*** /process.rb:80:in main_update
-*** /process.rb:79:in main_update
-*** /process.rb:114:in update_all
-*** /process.rb:113:in update_all
-*** /game.rb:91:in tick
-*** samples/platformer/app/main.rb:7:in tick
+*** samples/platformer/app/game.rb:3
+*** samples/platformer/app/game.rb:1
+*** samples/platformer/app/main.rb:1
+*** app/main.rb:11
+** Backtrace:
+*** samples/platformer/app/main.rb:1
+*** app/main.rb:11
+** Backtrace:
+*** app/main.rb:11
+** Backtrace:

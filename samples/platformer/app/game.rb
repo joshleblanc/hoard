@@ -1,5 +1,6 @@
 class Game < Hoard::Game 
     GRID = 64
+    SCALE = Hoard::Scaler.best_fit_f(400, 400)
 
     ## work arounds for the game being nested in samples/
     def auto_load_map

@@ -1,13 +1,14 @@
 module Hoard
   class Game < Process
+    GRID = 16
+    SCALE = Scaler.best_fit_i(150, 150)
+
     attr_gtk
 
     attr :camera, :fx, :current_level, :hud, :slow_mos, :root
     attr :cur_game_speed, :scroller
 
     UI = { x: 0, y: 0, h: 720, w: 1280, path: :ui }
-
-    GRID = 16
 
     def initialize
       super

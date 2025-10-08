@@ -117,7 +117,7 @@ module Hoard
     end
 
     def screen_w(from)
-      from / Hoard::Const.scale
+      from / ::Game::SCALE
     end
 
     def grid_x(from)

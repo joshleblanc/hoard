@@ -43,11 +43,11 @@ module Hoard
         end
 
         def screen_x 
-            level_x * Const.SCALE + ::Game.s.scroller.x
+            level_x * ::Game::SCALE + ::Game.s.scroller.x
         end
 
         def screen_y
-            level_y * Const.SCALE + ::Game.s.scroller.y
+            level_y * ::Game::SCALE + ::Game.s.scroller.y
         end
 
         def self.from_case(cx, cy)
@@ -83,8 +83,8 @@ module Hoard
 
         def set_screen(sx, sy)
             set_level_pixel(
-                ( sx - ::Game.s.scroller.x ) / Const.scale,
-                ( sy - ::Game.s.scroller.y ) / Const.scale
+                ( sx - ::Game.s.scroller.x ) / ::Game::SCALE,
+                ( sy - ::Game.s.scroller.y ) / ::Game::SCALE
             )
             self
         end

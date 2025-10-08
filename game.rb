@@ -7,11 +7,7 @@ module Hoard
 
     UI = { x: 0, y: 0, h: 720, w: 1280, path: :ui }
 
-    class << self
-      @grid = 16
-
-      attr :grid
-    end
+    GRID = 16
 
     def initialize
       super
@@ -149,6 +145,7 @@ module Hoard
 
       level.layer("Entities").entity_instances.each do |ldtk_entity|
         entity_class = Hoard::Entity.resolve(ldtk_entity.identifier)
+        p "Resolved entity #{ldtk_entity.identifier} = #{entity_class}"
         next unless entity_class
 
         # Special case: position player if it exists
@@ -186,6 +183,10 @@ module Hoard
       end
     end
 
+    def user 
+      @user ||= User.new("Local")
+    end
+
     private
 
     ##
@@ -199,7 +200,7 @@ module Hoard
       return existing if existing
 
       # Create new player instance
-      player_class.new(parent: self)
+      user.spawn_player(player_class)
     end
 
     def reset; end

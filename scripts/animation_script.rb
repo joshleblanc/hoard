@@ -154,6 +154,8 @@ module Hoard
 
         outputs[:scene].sprites << sprite if entity.visible?
 
+        p sprite
+
         # p @frame if @id == :player_projectile
         @frame = @frame + (reverse ? -1 : 1)
 

@@ -3,6 +3,10 @@ module Hoard
     attr_reader :username, :player_card_icon, :player
     attr_accessor :camera
 
+    script Scripts::DocumentStoresScript.new
+    script Scripts::DocumentStoreScript.new(id: "default")
+    script Scripts::SaveDataScript.new
+
     def initialize(username, player_card_icon = nil)
       @username = username
       @player_card_icon = player_card_icon
@@ -15,7 +19,7 @@ module Hoard
     def spawn_player(player_template, position = nil, rotation = nil)
       despawn_player if @player
 
-      @player = player_template.new(user: self)
+      @player = player_template.new(parent: self)
       if position && rotation
         @player.position = position
         @player.rotation = rotation

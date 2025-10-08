@@ -19,7 +19,7 @@ module Hoard
         end
 
         def level_x
-            cxf * Const::GRID
+            cxf * ::Game::GRID
         end
 
         def level_x=(v)
@@ -27,7 +27,7 @@ module Hoard
         end
 
         def level_y
-            cyf * Const::GRID
+            cyf * ::Game::GRID
         end
 
         def level_y=(v)
@@ -43,11 +43,11 @@ module Hoard
         end
 
         def screen_x 
-            level_x * Const.SCALE + Game.s.scroller.x
+            level_x * Const.SCALE + ::Game.s.scroller.x
         end
 
         def screen_y
-            level_y * Const.SCALE + Game.s.scroller.y
+            level_y * Const.SCALE + ::Game.s.scroller.y
         end
 
         def self.from_case(cx, cy)
@@ -83,8 +83,8 @@ module Hoard
 
         def set_screen(sx, sy)
             set_level_pixel(
-                ( sx - Game.s.scroller.x ) / Const.scale,
-                ( sy - Game.s.scroller.y ) / Const.scale
+                ( sx - ::Game.s.scroller.x ) / Const.scale,
+                ( sy - ::Game.s.scroller.y ) / Const.scale
             )
             self
         end
@@ -96,14 +96,14 @@ module Hoard
         end
 
         def set_level_pixel_x(x)
-            self.cx = (x / Const::GRID).to_i
-            self.xr = (x % Const::GRID) / Const::GRID
+            self.cx = (x / ::Game::GRID).to_i
+            self.xr = (x % ::Game::GRID) / ::Game::GRID
             self
         end
 
         def set_level_pixel_y(y)
-            self.cy = (y / Const::GRID).to_i
-            self.yr = (y % Const::GRID) / Const::GRID
+            self.cy = (y / ::Game::GRID).to_i
+            self.yr = (y % ::Game::GRID) / ::Game::GRID
             self
         end
 

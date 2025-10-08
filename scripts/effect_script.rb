@@ -8,7 +8,7 @@ module Hoard
 
       def play_effect(id, opts = {})
         return unless @id == id
-        Game.s.fx.anim({
+        ::Game.s.fx.anim({
           **opts,
           x: opts[:x] || entity.rx,
           y: opts[:y] || entity.ry,

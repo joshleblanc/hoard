@@ -27,8 +27,8 @@ module Hoard
       end
 
       def update
-        animations = entity.find_scripts Hoard::Scripts::AnimationScript
-        #puts animations
+        # animations = entity.find_scripts Hoard::Scripts::AnimationScript
+        # #puts animations
       end
     end
   end

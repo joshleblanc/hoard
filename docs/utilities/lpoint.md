@@ -198,7 +198,7 @@ end
 
 4. **Camera Awareness**: Remember that `screen_x`/`screen_y` automatically account for camera position.
 
-5. **Grid Size**: Be aware of the `Const::GRID` value as it affects all grid-to-pixel conversions.
+5. **Grid Size**: Be aware of the `::Game::GRID` value as it affects all grid-to-pixel conversions.
 
 6. **Sub-cell Positioning**: Use `xr`/`yr` for smooth movement within grid cells.
 

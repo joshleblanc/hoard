@@ -108,11 +108,11 @@ module Hoard
     # end
 
     def screen_x(from)
-      Game.s.camera.level_to_global_x(from)
+      ::Game.s.camera.level_to_global_x(from)
     end
 
     def screen_y(from)
-      Game.s.camera.level_to_global_y(from)
+      ::Game.s.camera.level_to_global_y(from)
       #Game.s.camera.level_to_global_y(from)
     end
 

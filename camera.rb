@@ -92,14 +92,14 @@ module Hoard
     end
 
     def on_screen_case?(cx, cy, padding = 32)
-      cx * Const::GRID >= px_left - padding && (cx + 1) * Const::GRID <= px_right + padding &&
-      cy * Const::GRID >= px_top - padding && (cy + 1) * Const::GRID <= px_bottom + padding
+      cx * ::Game::GRID >= px_left - padding && (cx + 1) * ::Game::GRID <= px_right + padding &&
+      cy * ::Game::GRID >= px_top - padding && (cy + 1) * ::Game::GRID <= px_bottom + padding
     end
 
     def track_entity(entity, immediate, speed = 1.0)
       self.target = entity
       self.tracking_speed = speed
-      if !immediate || self.raw_focus.level_x.zero? && self.raw_focus.level_y.zero?
+      if immediate || self.raw_focus.level_x.zero? && self.raw_focus.level_y.zero?
         self.center_on_target
       end
     end
@@ -120,11 +120,11 @@ module Hoard
     end
 
     def level_to_global_x(v)
-      v * Const.scale + Game.s.scroller.x
+      v * Const.scale + ::Game.s.scroller.x
     end
 
     def level_to_global_y(v)
-      v * Const.scale + Game.s.scroller.y
+      v * Const.scale + ::Game.s.scroller.y
     end
 
     def shake_s(t, pow = 1.0)
@@ -147,8 +147,9 @@ module Hoard
     end
 
     def apply
-      level = Game.s.current_level
-      scroller = Game.s.scroller
+      level = ::Game.s.current_level
+      scroller = ::Game.s.scroller
+
 
       scroller.x = -clamped_focus.level_x + px_wid * 0.5
       scroller.y = -clamped_focus.level_y.from_top + px_hei * 0.5
@@ -175,7 +176,7 @@ module Hoard
     end
 
     def update
-      level = Game.s.current_level
+      level = ::Game.s.current_level
 
       tz = target_zoom
       if tz != base_zoom
@@ -250,7 +251,7 @@ module Hoard
       self.dx *= frict_x ** tmod
 
       raw_focus.level_y += dy * tmod
-      self.dy *= frict_x ** tmod
+      self.dy *= frict_y ** tmod
 
       if clamp_to_level_bounds
         if level.px_wid < px_wid
@@ -273,11 +274,11 @@ module Hoard
     end
 
     def c_wid
-      (px_wid / Const::GRID).ceil
+      (px_wid / ::Game::GRID).ceil
     end
 
     def c_hei
-      (px_hei / Const::GRID).ceil
+      (px_hei / ::Game::GRID).ceil
     end
 
     def px_left
@@ -305,19 +306,19 @@ module Hoard
     end
 
     def c_left
-      (px_left / Const::GRID).to_i
+      (px_left / ::Game::GRID).to_i
     end
 
     def c_right
-      (px_right / Const::GRID).to_i
+      (px_right / ::Game::GRID).to_i
     end
 
     def c_top
-      (px_top / Const::GRID).to_i
+      (px_top / ::Game::GRID).to_i
     end
 
     def c_bottom
-      (px_bottom / Const::GRID).to_i
+      (px_bottom / ::Game::GRID).to_i
     end
   end
 end

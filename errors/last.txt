@@ -1,0 +1,10 @@
+* EXCEPTION: uninitialized constant Hoard::Const::Scalar
+** Backtrace:
+*** /const.rb:5:in scale
+*** /camera.rb:76:in px_wid
+*** /camera.rb:214:in update
+*** /process.rb:76:in main_update
+*** /process.rb:114:in update_all
+*** /process.rb:113:in update_all
+*** /game.rb:91:in tick
+*** samples/platformer/app/main.rb:7:in tick

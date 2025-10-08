@@ -3,12 +3,12 @@ module Hoard
     class DebugRenderScript < Script
       def post_update
         # Draw entity debug info
-        grid_w = (entity.w / Const::GRID)
+        grid_w = (entity.w / ::Game::GRID)
         grid_pos = {
-          x: entity.cx * Const::GRID,
-          y: entity.cy * Const::GRID,
-          w: Const::GRID,
-          h: Const::GRID,
+          x: entity.cx * ::Game::GRID,
+          y: entity.cy * ::Game::GRID,
+          w: ::Game::GRID,
+          h: ::Game::GRID,
           r: 255, g: 0, b: 0,
           primitive_marker: :border,
         }

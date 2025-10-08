@@ -64,9 +64,9 @@ module Hoard
 
         if @life.v <= 0
           if entity.is_a?(Entities::Player)
-            Game.s.player_died
+            ::Game.s.player_died
           elsif entity.is_a?(Entities::Boss)
-            Game.s.boss_died
+            ::Game.s.boss_died
           end
         end
       end

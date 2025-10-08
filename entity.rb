@@ -56,10 +56,10 @@ module Hoard
       super(opts[:parent])
 
       @dir = 1
-      @w = opts[:w] || Const::GRID
-      @h = opts[:h] || Const::GRID
-      @tile_w = opts[:tile_w] || Const::GRID
-      @tile_h = opts[:tile_h] || Const::GRID
+      @w = opts[:w] || ::Game::GRID
+      @h = opts[:h] || ::Game::GRID
+      @tile_w = opts[:tile_w] || ::Game::GRID
+      @tile_h = opts[:tile_h] || ::Game::GRID
 
       @anchor_x = opts[:anchor_x] || 0.5
       @anchor_y = opts[:anchor_y] || 0.5
@@ -130,35 +130,35 @@ module Hoard
     end
 
     def update_world_pos
-      level = Game.s.current_level
+      level = ::Game.s.current_level
       self.wx = self.x + level.world_x
       self.wy = self.y + level.world_y
     end
 
     def x
-      (xx * Const::GRID)
+      (xx * ::Game::GRID)
     end
 
     def x=(new_x)
-      self.cx = (new_x / Const::GRID).to_i
-      self.xr = (new_x % Const::GRID) / Const::GRID
+      self.cx = (new_x / ::Game::GRID).to_i
+      self.xr = (new_x % ::Game::GRID) / ::Game::GRID
     end
 
     def y=(new_y)
-      self.cy = (new_y / Const::GRID).to_i
-      self.yr = (new_y % Const::GRID) / Const::GRID
+      self.cy = (new_y / ::Game::GRID).to_i
+      self.yr = (new_y % ::Game::GRID) / ::Game::GRID
     end
 
     def wcx
-      (wx / Const::GRID).to_i
+      (wx / ::Game::GRID).to_i
     end
 
     def wcy
-      (wy / Const::GRID).to_i - 1
+      (wy / ::Game::GRID).to_i - 1
     end
 
     def y
-      (yy * Const::GRID)
+      (yy * ::Game::GRID)
     end
 
     def xx
@@ -188,8 +188,8 @@ module Hoard
     def check_collision(entity, cx, cy)
       return if entity == self
 
-      if entity.collidable && entity.intersect_rect?({ x: cx * Const::GRID, y: cy * Const::GRID, w: Const::GRID, h: Const::GRID })
-        if self == Game.s.player
+      if entity.collidable && entity.intersect_rect?({ x: cx * ::Game::GRID, y: cy * ::Game::GRID, w: ::Game::GRID, h: ::Game::GRID })
+        if self == ::Game.s.player
           # If we're checking one unit below (for ground detection)
           if cy > self.cy
             return true # Always allow ground collision checks
@@ -210,17 +210,17 @@ module Hoard
     end
 
     def has_collision(cx, cy)
-      return true if Game.s.current_level&.has_collision(cx, cy)
+      return true if ::Game.s.current_level&.has_collision(cx, cy)
 
       if @collidable
-        return Game.s.children.any? { |entity| check_collision(entity, cx, cy) }
+        return ::Game.s.children.any? { |entity| check_collision(entity, cx, cy) }
       end
 
       false
     end
 
     def has_exit?(x, y)
-      Game.s.current_level&.outside?(x, y)
+      ::Game.s.current_level&.outside?(x, y)
     end
 
     def destroyed?
@@ -254,16 +254,16 @@ module Hoard
       return if destroyed?
 
       # call on_collision on the player
-      return if Game.s.player == self
-      return unless Geometry.intersect_rect?(Game.s.player, self)
+      return if ::Game.s.player == self
+      return unless Geometry.intersect_rect?(::Game.s.player, self)
 
-      Game.s.player.send_to_scripts(:on_collision, self)
-      send_to_scripts(:on_collision, Game.s.player)
-      send_to_widgets(:on_collision, Game.s.player)
+      ::Game.s.player.send_to_scripts(:on_collision, self)
+      send_to_scripts(:on_collision, ::Game.s.player)
+      send_to_widgets(:on_collision, ::Game.s.player)
 
-      if Game.s.inputs.keyboard.key_down.e
-        send_to_scripts(:on_interact, Game.s.player)
-        send_to_widgets(:on_interact, Game.s.player)
+      if ::Game.s.inputs.keyboard.key_down.e
+        send_to_scripts(:on_interact, ::Game.s.player)
+        send_to_widgets(:on_interact, ::Game.s.player)
       end
     end
 
@@ -292,11 +292,11 @@ module Hoard
     end
 
     def gx
-      Game.s.camera.level_to_global_x(x)
+      ::Game.s.camera.level_to_global_x(x)
     end
 
     def gy
-      Game.s.camera.level_to_global_y((y - h))
+      ::Game.s.camera.level_to_global_y((y - h))
     end
 
     def dt

@@ -26,6 +26,13 @@ class Player < Hoard::Entity
         ]
     })
 
+    script Hoard::Scripts::AnimationScript.new(:climb, {
+        files: [
+            "samples/platformer/sprites/character/character_beige_climb_a.png",
+            "samples/platformer/sprites/character/character_beige_climb_b.png"
+        ]
+    })
+
     script Hoard::Scripts::AudioScript.new(:footsteps, {
         files: [
             "samples/platformer/sounds/effects/footstep00.ogg",

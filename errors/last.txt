@@ -1,31 +1,5 @@
-* EXCEPTION:
-* ERROR - :new_value method missing on ~Hoard::Scripts::LdtkEntityScript~.
-
-#+begin_src ~Hoard::Scripts::LdtkEntityScript#inspect~
-#<Hoard::Scripts::LdtkEntityScript:0x2562458eef0>
-#+end_src ~Hoard::Scripts::LdtkEntityScript#inspect~
-
-** Did you mean?
-Here's a list of methods that kind of look like :new_value.
-*** :new_entity
-*** :new_entity_strict
-
-The method named
-  :new_value
-doesn't exist on [Hoard::Scripts::LdtkEntityScript, #<Class:#<Hoard::Scripts::LdtkEntityScript:0x2562458eef0>>, Hoard::Script, AttrGTK].
-
-(suggestions above)
+* EXCEPTION: 'level': wrong number of arguments (1 for 0)
 ** Backtrace:
-*** /scripts/ldtk_entity_script.rb:31:in ldtk_entity=
-*** /scriptable.rb:68:in send_to_scripts
-*** /scriptable.rb:60:in send_to_scripts
-*** /game.rb:179:in spawn_entity_from_ldtk
-*** samples/platformer/app/game.rb:25:in spawn_entity_from_ldtk
-*** /game.rb:160:in spawn_ldtk_entities
-*** /game.rb:151:in spawn_ldtk_entities
-*** /game.rb:32:in start_level
-*** /game.rb:143:in auto_start_first_level
-*** samples/platformer/app/game.rb:19:in auto_load_map
-*** /game.rb:25:in initialize
-*** /game.rb:88:in s
-*** samples/platformer/app/main.rb:13:in tick
+*** ldtk/root.rb:17:in level
+*** /game.rb:95:in tick
+*** samples/platformer/app/main.rb:14:in tick

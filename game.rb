@@ -23,6 +23,7 @@ module Hoard
 
       # Auto-load map if it exists
       auto_load_map
+      auto_start_first_level if @root
     end
 
     def start_level(level)
@@ -89,6 +90,10 @@ module Hoard
     end
 
     def tick
+      if GTK.reload_if_needed(map_path) 
+        auto_load_map
+        start_level @root.level(identifier: @current_level.identifier)
+      end
       Process.update_all(utmod)
       Scheduler.tick
     end
@@ -126,13 +131,15 @@ module Hoard
       @player ||= find_player_entity
     end
 
+    def map_path
+      "data/map.ldtk"
+    end
+
     ##
     # Auto-load map.ldtk from data/ directory if it exists
     def auto_load_map
-      map_path = "data/map.ldtk"
       if $gtk.stat_file(map_path)
         @root = Hoard::Ldtk::Root.import($gtk.parse_json_file(map_path))
-        auto_start_first_level if @root
       end
     end
 

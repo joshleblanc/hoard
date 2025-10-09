@@ -34,6 +34,7 @@ module Hoard
           @current_speed = 0
           if Hoard.config.game_class.s.current_level.layer("Collisions").int(entity.cx, entity.cy) == 2 # ladder
             entity.v_base.dy = -0.2
+            entity.send_to_scripts(:play_animation, :climb)
           end
         end
       end

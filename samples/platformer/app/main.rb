@@ -1,4 +1,7 @@
 require_relative "game"
+require_relative "widgets/coins_widget"
+require_relative "scripts/coins_script"
+require_relative "entities/user"
 require_relative "entities/coin"
 require_relative "entities/player"
 

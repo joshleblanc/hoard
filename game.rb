@@ -105,7 +105,6 @@ module Hoard
     def render
       if @current_level
         args.outputs[:scene].sprites.push @current_level
-        args.outputs[:scene].background_color = { r: 255, g: 0, b: 0 }
       end
 
       args.outputs.sprites << @scroller

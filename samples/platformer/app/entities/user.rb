@@ -1,4 +1,4 @@
 class User < Hoard::User 
-    script Scripts::CoinsScript.new
-    widget Widgets::CoinsWidget.new
+    script CoinsScript.new
+    widget CoinsWidget.new
 end

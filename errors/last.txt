@@ -1,28 +1,11 @@
-* RELOAD EXCEPTION: ~require~ order might not be valid (or require statement may be missing).
-An uninitialized constant exception was thrown while files were being loaded. Make sure that your ~require~
-and ~require_relative~ statements are ordered correctly. To debug require load order put the following at the TOP of =app/main.rb=
-
-#+begin_src
-  # main.rb
-  # very first line
-  $gtk.debug_require!
-
-  # rest of require statements/code
-  require ...
-#+end_src
-* EXCEPTION THROWN:
-* ERROR: Exception while requiring app/main.rb.
-* ERROR: Exception while requiring samples/platformer/app/main.rb.
-* ERROR: Exception while requiring samples/platformer/app/game.rb.
-uninitialized constant Game::Scaler
+* EXCEPTION: Initialized coin script
 ** Backtrace:
-*** samples/platformer/app/game.rb:3
-*** samples/platformer/app/game.rb:1
-*** samples/platformer/app/main.rb:1
-*** app/main.rb:11
-** Backtrace:
-*** samples/platformer/app/main.rb:1
-*** app/main.rb:11
-** Backtrace:
-*** app/main.rb:11
-** Backtrace:
+*** samples/platformer/app/scripts/coins_script.rb:3:in init
+*** /scriptable.rb:64:in send_to_scripts
+*** /scriptable.rb:60:in send_to_scripts
+*** /entity.rb:394:in update
+*** /process.rb:76:in main_update
+*** /process.rb:114:in update_all
+*** /process.rb:113:in update_all
+*** /game.rb:92:in tick
+*** samples/platformer/app/main.rb:10:in tick

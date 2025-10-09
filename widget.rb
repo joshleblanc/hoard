@@ -2,7 +2,7 @@ module Hoard
   class Widget
     attr_gtk
 
-    attr_accessor :entity, :visible
+    attr_accessor :entity, :visible, :init_once_done
 
     attr :rows, :cols, :row, :col, :offset_x, :offset_y
     attr_reader :uuid

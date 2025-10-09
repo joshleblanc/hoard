@@ -89,11 +89,12 @@ module Hoard
       def ry
         align = @options[:align]
         if align == :top
-          parent.y + parent.h - (parent.padding) - h
+          parent.ry - (h / 2)
         elsif align == :bottom
-          super
+          parent.ry - parent.rh + (h / 2)
         else
-          parent.y + (parent.h / 2) + (h / 2) - (string_box(wrapped_text.first, size_enum)[1] / 2)
+          # Center vertically
+          parent.ry - (parent.rh / 2) #- (h / 2)
         end
       end
     end

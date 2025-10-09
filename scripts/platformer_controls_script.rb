@@ -13,14 +13,19 @@ module Hoard
         if ::Game.s.inputs.keyboard.key_held.left && !entity.cd.has("controls_disabled")
           @current_speed = -@move_speed
           entity.dir = -1
-          entity.send_to_scripts(:play_animation, :walk) if entity.on_ground?
-          entity.send_to_scripts(:play_audio, :footsteps)
+          if entity.on_ground?
+            entity.send_to_scripts(:play_animation, :walk)
+            entity.send_to_scripts(:play_audio, :footsteps)
+          end 
         elsif ::Game.s.inputs.keyboard.key_held.right && !entity.cd.has("controls_disabled")
           @current_speed = @move_speed
           entity.dir = 1
 
-          entity.send_to_scripts(:play_animation, :walk) if entity.on_ground?
-          entity.send_to_scripts(:play_audio, :footsteps)
+          if entity.on_ground?
+            entity.send_to_scripts(:play_animation, :walk)
+            entity.send_to_scripts(:play_audio, :footsteps)
+          end
+
         else
           entity.send_to_scripts(:play_animation, :idle) if entity.on_ground? && !entity.cd.has("landing")
         end

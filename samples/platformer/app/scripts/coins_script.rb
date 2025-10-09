@@ -1,6 +1,5 @@
 class CoinsScript < Hoard::Script
     def init
-        raise "Initialized coin script"
         @coins = 0
         @widget = entity.coins_widget
     end

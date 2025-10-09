@@ -1,17 +1,14 @@
 module Hoard
   class Game < Process
+    GRID = 16
+    SCALE = Scaler.best_fit_i(150, 150)
+
     attr_gtk
 
     attr :camera, :fx, :current_level, :hud, :slow_mos, :root
     attr :cur_game_speed, :scroller
 
     UI = { x: 0, y: 0, h: 720, w: 1280, path: :ui }
-
-    class << self
-      @grid = 16
-
-      attr :grid
-    end
 
     def initialize
       super
@@ -98,6 +95,10 @@ module Hoard
 
     def pre_update
       args.outputs[:ui].transient!
+      if @current_level
+        args.outputs[:scene].w = @current_level.px_wid
+        args.outputs[:scene].h = @current_level.px_hei
+      end
       args.outputs[:scene].transient!
     end
 
@@ -149,6 +150,7 @@ module Hoard
 
       level.layer("Entities").entity_instances.each do |ldtk_entity|
         entity_class = Hoard::Entity.resolve(ldtk_entity.identifier)
+        p "Resolved entity #{ldtk_entity.identifier} = #{entity_class}"
         next unless entity_class
 
         # Special case: position player if it exists
@@ -163,6 +165,7 @@ module Hoard
     ##
     # Spawn the player entity from LDTK entity instance
     def spawn_player_from_ldtk(player, ldtk_entity)
+      return if player.spawned?
       player.set_pos_case(ldtk_entity.grid[0], ldtk_entity.grid[1])
       player.send_to_scripts(:ldtk_entity=, ldtk_entity)
       apply_ldtk_fields(player, ldtk_entity)
@@ -186,6 +189,10 @@ module Hoard
       end
     end
 
+    def user 
+      @user ||= User.new("Local")
+    end
+
     private
 
     ##
@@ -199,7 +206,7 @@ module Hoard
       return existing if existing
 
       # Create new player instance
-      player_class.new(parent: self)
+      user.spawn_player(player_class)
     end
 
     def reset; end

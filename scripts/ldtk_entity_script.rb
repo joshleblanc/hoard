@@ -23,12 +23,12 @@ module Hoard
       end
 
       def id
-        ldtk_entity.iid
+        ldtk_entity&.iid
       end
 
       def update
-        animations = entity.find_scripts Hoard::Scripts::AnimationScript
-        #puts animations
+        # animations = entity.find_scripts Hoard::Scripts::AnimationScript
+        # #puts animations
       end
     end
   end

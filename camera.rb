@@ -73,11 +73,11 @@ module Hoard
     end
 
     def px_wid
-      (Scaler.viewport_width / Const.scale / zoom).ceil
+      (Scaler.viewport_width / ::Game::SCALE / zoom).ceil
     end
 
     def px_hei
-      (Scaler.viewport_height / Const.scale / zoom).ceil
+      (Scaler.viewport_height / ::Game::SCALE / zoom).ceil
     end
 
     def on_screen?(level_x, level_y, padding = 0.0)
@@ -92,15 +92,19 @@ module Hoard
     end
 
     def on_screen_case?(cx, cy, padding = 32)
-      cx * Const::GRID >= px_left - padding && (cx + 1) * Const::GRID <= px_right + padding &&
-      cy * Const::GRID >= px_top - padding && (cy + 1) * Const::GRID <= px_bottom + padding
+      cx * ::Game::GRID >= px_left - padding && (cx + 1) * ::Game::GRID <= px_right + padding &&
+      cy * ::Game::GRID >= px_top - padding && (cy + 1) * ::Game::GRID <= px_bottom + padding
     end
 
     def track_entity(entity, immediate, speed = 1.0)
+      p "track_entity called: entity=#{entity.class}, immediate=#{immediate}, current_focus=#{raw_focus.level_x},#{raw_focus.level_y}"
       self.target = entity
       self.tracking_speed = speed
-      if !immediate || self.raw_focus.level_x.zero? && self.raw_focus.level_y.zero?
+      if immediate || self.raw_focus.level_x.zero? && self.raw_focus.level_y.zero?
+        p "Calling center_on_target"
         self.center_on_target
+      else
+        p "NOT calling center_on_target (immediate=#{immediate}, focus=#{raw_focus.level_x},#{raw_focus.level_y})"
       end
     end
 
@@ -117,14 +121,15 @@ module Hoard
 
       self.raw_focus.level_x = target.center_x + target_off_x
       self.raw_focus.level_y = target.center_y + target_off_y
+      p "center_on_target: target.center=#{target.center_x},#{target.center_y}, raw_focus=#{raw_focus.level_x},#{raw_focus.level_y}"
     end
 
     def level_to_global_x(v)
-      v * Const.scale + Game.s.scroller.x
+      v * ::Game::SCALE + ::Game.s.scroller.x
     end
 
     def level_to_global_y(v)
-      v * Const.scale + Game.s.scroller.y
+      v * ::Game::SCALE + ::Game.s.scroller.y
     end
 
     def shake_s(t, pow = 1.0)
@@ -147,11 +152,19 @@ module Hoard
     end
 
     def apply
-      level = Game.s.current_level
-      scroller = Game.s.scroller
+      level = ::Game.s.current_level
+      scroller = ::Game.s.scroller
+
+      # Update scroller dimensions to match level
+      if level
+        scroller.w = level.px_wid
+        scroller.h = level.px_hei
+      end
 
       scroller.x = -clamped_focus.level_x + px_wid * 0.5
-      scroller.y = -clamped_focus.level_y.from_top + px_hei * 0.5
+      # For flipped coordinate system: convert level Y to flipped Y based on actual level height
+      scroller.y = -(level.px_hei - clamped_focus.level_y) + px_hei * 0.5
+      scroller.y -= target.h
 
       self.bump_off_x = bump_off_x * (bump_frict ** tmod)
       self.bump_off_y = bump_off_y * (bump_frict ** tmod)
@@ -165,17 +178,17 @@ module Hoard
       end
 
       #scaling
-      scroller.x *= Const.scale * zoom
-      scroller.y *= Const.scale * zoom
+      scroller.x *= ::Game::SCALE * zoom
+      scroller.y *= ::Game::SCALE * zoom
 
       scroller.x = scroller.x.round
       scroller.y = scroller.y.round
 
-      scroller.scale = Const.scale * zoom
+      scroller.scale = ::Game::SCALE * zoom
     end
 
     def update
-      level = Game.s.current_level
+      level = ::Game.s.current_level
 
       tz = target_zoom
       if tz != base_zoom
@@ -207,6 +220,7 @@ module Hoard
         spd_y = 0.023 * tracking_speed * zoom
         tx = target.center_x + target_off_x
         ty = target.center_y + target_off_y
+        p "Target: y=#{target.y}, h=#{target.h}, center_y=#{target.center_y}, ty=#{ty}" if $args.state.tick_count % 60 == 0
 
         a = raw_focus.ang_to(tx, ty)
         dist_x = (tx - raw_focus.level_x).abs
@@ -250,7 +264,7 @@ module Hoard
       self.dx *= frict_x ** tmod
 
       raw_focus.level_y += dy * tmod
-      self.dy *= frict_x ** tmod
+      self.dy *= frict_y ** tmod
 
       if clamp_to_level_bounds
         if level.px_wid < px_wid
@@ -262,6 +276,12 @@ module Hoard
         if level.px_hei < px_hei
           clamped_focus.level_y = level.px_hei * 0.5
         else
+          # Y-axis: lower bound is px_hei * 0.5 (bottom of level), upper bound is level.px_hei - px_hei * 0.5 (top of level)
+          # But we want to show from 0 at bottom to level.px_hei at top
+          # Clamp should be: min = px_hei * 0.5, max = level.px_hei - px_hei * 0.5
+          # Wait, for non-flipped: 0 is bottom, higher Y is higher up
+          # Camera at px_hei/2 shows 0 to px_hei (bottom of level)
+          # Camera at level.px_hei - px_hei/2 shows level.px_hei - px_hei to level.px_hei (top of level)
           clamped_focus.level_y = raw_focus.level_y.clamp(px_hei * 0.5, level.px_hei - px_hei * 0.5)
         end
       else
@@ -273,11 +293,11 @@ module Hoard
     end
 
     def c_wid
-      (px_wid / Const::GRID).ceil
+      (px_wid / ::Game::GRID).ceil
     end
 
     def c_hei
-      (px_hei / Const::GRID).ceil
+      (px_hei / ::Game::GRID).ceil
     end
 
     def px_left
@@ -305,19 +325,19 @@ module Hoard
     end
 
     def c_left
-      (px_left / Const::GRID).to_i
+      (px_left / ::Game::GRID).to_i
     end
 
     def c_right
-      (px_right / Const::GRID).to_i
+      (px_right / ::Game::GRID).to_i
     end
 
     def c_top
-      (px_top / Const::GRID).to_i
+      (px_top / ::Game::GRID).to_i
     end
 
     def c_bottom
-      (px_bottom / Const::GRID).to_i
+      (px_bottom / ::Game::GRID).to_i
     end
   end
 end

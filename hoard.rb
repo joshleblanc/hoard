@@ -33,6 +33,9 @@ require_relative "scripts/move_to_neighbour_script"
 require_relative "scripts/platformer_controls_script"
 require_relative "scripts/platformer_player_script"
 require_relative "scripts/effect_script"
+require_relative "scripts/document_stores_script"
+require_relative "scripts/document_store_script"
+require_relative "scripts/audio_script"
 require_relative "widgets/progress_bar_widget"
 require_relative "process"
 require_relative "delayer"
@@ -52,11 +55,3 @@ require_relative "game"
 require_relative "stat"
 require_relative "scheduler"
 require_relative "user"
-
-# Auto-load LDTK integration
-Dir["#{__dir__}/ldtk/**/*.rb"].each { |f| require f }
-
-# Auto-load user entities if directory exists
-if Dir.exist?("#{__dir__}/../app/entities")
-  Dir["#{__dir__}/../app/entities/**/*.rb"].each { |f| require f }
-end

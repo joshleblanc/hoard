@@ -45,18 +45,18 @@ end
 
 ```ruby
 # Accessing the grid size
-grid_size = Hoard::Const::GRID  # 16
+grid_size = ::Game::GRID  # 16
 
 # Using in position calculations
 def draw_grid
-  (0..$args.grid.w / Hoard::Const::GRID).each do |x|
-    (0..$args.grid.h / Hoard::Const::GRID).each do |y|
+  (0..$args.grid.w / ::Game::GRID).each do |x|
+    (0..$args.grid.h / ::Game::GRID).each do |y|
       # Draw grid cell at (x, y)
       $args.outputs.borders << {
-        x: x * Hoard::Const::GRID,
-        y: y * Hoard::Const::GRID,
-        w: Hoard::Const::GRID,
-        h: Hoard::Const::GRID,
+        x: x * ::Game::GRID,
+        y: y * ::Game::GRID,
+        w: ::Game::GRID,
+        h: ::Game::GRID,
         r: 50, g: 50, b: 50
       }
     end

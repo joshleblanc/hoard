@@ -68,8 +68,8 @@ module Hoard
     def anim(data)
       data.anchor_x = 0.5
       data.anchor_y = 0.5
-      data.w = data.w || Const::GRID
-      data.h = data.h || Const::GRID
+      data.w = data.w || ::Game::GRID
+      data.h = data.h || ::Game::GRID
       data.start_tick = $args.state.tick_count
       data.flip_vertically = true
       @anims.push(data)
@@ -98,8 +98,8 @@ module Hoard
     end
 
     def update
-      process_emitters(@emitters, @particles, $args)
-      process_particles(@particles, $args)
+      process_emitters(@emitters, @particles, $args) if respond_to?(:process_emitters)
+      process_particles(@particles, $args) if respond_to?(:process_particles)
       process_anims
     end
 

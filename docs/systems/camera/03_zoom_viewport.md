@@ -77,8 +77,8 @@ Constrain the camera to stay within level boundaries:
 @camera.brake_dist_near_bounds = 0.2
 
 # In your level setup:
-@level_width = 100 * Const::GRID  # 100 tiles wide
-@level_height = 30 * Const::GRID  # 30 tiles tall
+@level_width = 100 * ::Game::GRID  # 100 tiles wide
+@level_height = 30 * ::Game::GRID  # 30 tiles tall
 
 def update
   # Update camera bounds based on level size

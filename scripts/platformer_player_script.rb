@@ -21,11 +21,11 @@ module Hoard
         entity.add_script JumpScript.new(jumps: @jumps, power: @jump_power)
         entity.add_script HealthScript.new(health: @health)
         entity.add_script NotificationsScript.new
-        entity.add_script InventoryScript.new
+        entity.add_script MoveToNeighbourScript.new
 
-        # Auto-track camera on player
-        Game.s.camera.track_entity(entity, true)
-        Game.s.camera.clamp_to_level_bounds = true
+        # Auto-track camera on player with vertical offset for better visibility
+        ::Game.s.camera.track_entity(entity, true)
+        ::Game.s.camera.clamp_to_level_bounds = true
 
         # Set velocity friction for platformer feel
         entity.v_base.set_fricts(0.84, 0.94)

@@ -23,8 +23,21 @@ module Hoard
     end
 
     def add_default_scripts!
-      scripts = self.class.instance_variable_get(:@scripts) || []
-      scripts.each do |script|
+      scripts = []
+
+      # Walk up the inheritance chain to collect all scripts
+      klass = self.class
+      while klass.respond_to?(:instance_variable_get)
+        class_scripts = klass.instance_variable_get(:@scripts)
+        scripts.concat(class_scripts) if class_scripts
+
+        # Stop when we reach Scriptable module or a class that doesn't have included Scriptable
+        break unless klass.superclass && klass.superclass.included_modules.include?(Scriptable)
+        klass = klass.superclass
+      end
+
+      # Add scripts in reverse order so parent scripts come first
+      scripts.reverse.each do |script|
         add_script(script.dup)
       end
     end

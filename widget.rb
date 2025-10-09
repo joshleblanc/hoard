@@ -2,7 +2,7 @@ module Hoard
   class Widget
     attr_gtk
 
-    attr_accessor :entity, :visible
+    attr_accessor :entity, :visible, :init_once_done
 
     attr :rows, :cols, :row, :col, :offset_x, :offset_y
     attr_reader :uuid
@@ -108,16 +108,16 @@ module Hoard
     # end
 
     def screen_x(from)
-      Game.s.camera.level_to_global_x(from)
+      ::Game.s.camera.level_to_global_x(from)
     end
 
     def screen_y(from)
-      Game.s.camera.level_to_global_y(from)
+      ::Game.s.camera.level_to_global_y(from)
       #Game.s.camera.level_to_global_y(from)
     end
 
     def screen_w(from)
-      from / Hoard::Const.scale
+      from / ::Game::SCALE
     end
 
     def grid_x(from)

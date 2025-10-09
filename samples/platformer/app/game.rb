@@ -11,8 +11,10 @@ class Game < Hoard::Game
         map_path = "samples/platformer/data/map.ldtk"
         if $gtk.stat_file(map_path)
           @root = Hoard::Ldtk::Root.import($gtk.parse_json_file(map_path))
-          Array.each(@root.levels[0].layer_instances.reverse) do |layer|
-            layer.tileset_rel_path = layer.tileset_rel_path&.gsub("../", "samples/platformer/")
+          Array.each(@root.levels) do |level|
+            Array.each(level.layer_instances.reverse) do |layer|
+              layer.tileset_rel_path = layer.tileset_rel_path&.gsub("../", "samples/platformer/")
+            end
           end
           auto_start_first_level if @root
         end

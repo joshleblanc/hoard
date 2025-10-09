@@ -21,6 +21,7 @@ module Hoard
         entity.add_script JumpScript.new(jumps: @jumps, power: @jump_power)
         entity.add_script HealthScript.new(health: @health)
         entity.add_script NotificationsScript.new
+        entity.add_script MoveToNeighbourScript.new
 
         # Auto-track camera on player with vertical offset for better visibility
         ::Game.s.camera.track_entity(entity, true)

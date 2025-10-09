@@ -165,6 +165,7 @@ module Hoard
     ##
     # Spawn the player entity from LDTK entity instance
     def spawn_player_from_ldtk(player, ldtk_entity)
+      return if player.spawned?
       player.set_pos_case(ldtk_entity.grid[0], ldtk_entity.grid[1])
       player.send_to_scripts(:ldtk_entity=, ldtk_entity)
       apply_ldtk_fields(player, ldtk_entity)

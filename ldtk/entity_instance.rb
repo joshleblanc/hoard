@@ -6,7 +6,7 @@ module Hoard
                         :iid, :px, :width, field_instances: [FieldInstance]
 
             def field(id)
-                field_instances.select { |i| i.identifier == id }.map { |i| i.value }.flatten
+                field_instances.select { |i| i.iid == id }.map { |i| i.value }.flatten
             end
 
             def definition

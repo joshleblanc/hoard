@@ -35,14 +35,14 @@ module Hoard
       end
 
       def entity(id)
-        entity_instances.find { |i| i.identifier == id }
+        entity_instances.find { |i| i.iid == id }
       end
 
       def entities(id = nil)
         if id.nil?
           entity_instances
         else
-          entity_instances.select { |i| i.identifier == id }
+          entity_instances.select { |i| i.iid == id }
         end
       end
 

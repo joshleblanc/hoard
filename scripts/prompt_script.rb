@@ -23,9 +23,11 @@ module Hoard
       def on_collision(player)
         return unless active?
 
+        outputs.debug << "Trying to show prompt at #{entity.gx}, #{entity.gy}"
+
         outputs[:ui].labels << {
-          x: Hoard.config.game_class.s.camera.level_to_global_x(entity.x),
-          y: entity.y,
+          x: entity.gx,
+          y: entity.gy,
           text: prompt,
           font_size: 1,
           alignment_enum: 1,

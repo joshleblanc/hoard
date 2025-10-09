@@ -26,6 +26,10 @@ module Hoard
                 defs.enums.find { |i| i.identifier == id }
             end
 
+            def world(id)
+                defs.worlds.find { |i| i.identifier == id }
+            end
+
             def tileset(uid)
                 defs.tilesets.find { |i| i.uid == uid }
             end

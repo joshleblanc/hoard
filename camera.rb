@@ -97,11 +97,9 @@ module Hoard
     end
 
     def track_entity(entity, immediate, speed = 1.0)
-      p "track_entity called: entity=#{entity.class}, immediate=#{immediate}, current_focus=#{raw_focus.level_x},#{raw_focus.level_y}"
       self.target = entity
       self.tracking_speed = speed
       if immediate || self.raw_focus.level_x.zero? && self.raw_focus.level_y.zero?
-        p "Calling center_on_target"
         self.center_on_target
       else
         p "NOT calling center_on_target (immediate=#{immediate}, focus=#{raw_focus.level_x},#{raw_focus.level_y})"
@@ -124,11 +122,19 @@ module Hoard
     end
 
     def level_to_global_x(v)
-      v * Hoard.config.game_class::SCALE + Hoard.config.game_class.s.scroller.x
+      scroller = Hoard.config.game_class.s.scroller
+      scale = Hoard.config.game_class::SCALE * zoom
+      # scroller.x is already scaled, so divide it back, then add level position
+      (v + scroller.x / scale) * scale
     end
 
     def level_to_global_y(v)
-      v * Hoard.config.game_class::SCALE + Hoard.config.game_class.s.scroller.y
+      level = Hoard.config.game_class.s.current_level
+      scroller = Hoard.config.game_class.s.scroller
+      scale = Hoard.config.game_class::SCALE * zoom
+      # Convert level coords (bottom-up) to flipped coords, then apply scroller
+      flipped_y = level.px_hei - v
+      (flipped_y + scroller.y / scale) * scale
     end
 
     def shake_s(t, pow = 1.0)

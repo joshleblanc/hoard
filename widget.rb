@@ -108,16 +108,16 @@ module Hoard
     # end
 
     def screen_x(from)
-      ::Game.s.camera.level_to_global_x(from)
+      Hoard.config.game_class.s.camera.level_to_global_x(from)
     end
 
     def screen_y(from)
-      ::Game.s.camera.level_to_global_y(from)
+      Hoard.config.game_class.s.camera.level_to_global_y(from)
       #Game.s.camera.level_to_global_y(from)
     end
 
     def screen_w(from)
-      from / ::Game::SCALE
+      from / Hoard.config.game_class::SCALE
     end
 
     def grid_x(from)

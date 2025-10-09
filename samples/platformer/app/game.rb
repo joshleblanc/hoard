@@ -1,4 +1,4 @@
-class Game < Hoard::Game 
+class Game < Hoard::Game
     GRID = 64
     SCALE = Hoard::Scaler.best_fit_f(400, 400)
 

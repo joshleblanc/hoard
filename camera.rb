@@ -73,11 +73,11 @@ module Hoard
     end
 
     def px_wid
-      (Scaler.viewport_width / ::Game::SCALE / zoom).ceil
+      (Scaler.viewport_width / Hoard.config.game_class::SCALE / zoom).ceil
     end
 
     def px_hei
-      (Scaler.viewport_height / ::Game::SCALE / zoom).ceil
+      (Scaler.viewport_height / Hoard.config.game_class::SCALE / zoom).ceil
     end
 
     def on_screen?(level_x, level_y, padding = 0.0)
@@ -92,8 +92,8 @@ module Hoard
     end
 
     def on_screen_case?(cx, cy, padding = 32)
-      cx * ::Game::GRID >= px_left - padding && (cx + 1) * ::Game::GRID <= px_right + padding &&
-      cy * ::Game::GRID >= px_top - padding && (cy + 1) * ::Game::GRID <= px_bottom + padding
+      cx * Hoard.config.game_class::GRID >= px_left - padding && (cx + 1) * Hoard.config.game_class::GRID <= px_right + padding &&
+      cy * Hoard.config.game_class::GRID >= px_top - padding && (cy + 1) * Hoard.config.game_class::GRID <= px_bottom + padding
     end
 
     def track_entity(entity, immediate, speed = 1.0)
@@ -125,11 +125,11 @@ module Hoard
     end
 
     def level_to_global_x(v)
-      v * ::Game::SCALE + ::Game.s.scroller.x
+      v * Hoard.config.game_class::SCALE + Hoard.config.game_class.s.scroller.x
     end
 
     def level_to_global_y(v)
-      v * ::Game::SCALE + ::Game.s.scroller.y
+      v * Hoard.config.game_class::SCALE + Hoard.config.game_class.s.scroller.y
     end
 
     def shake_s(t, pow = 1.0)
@@ -152,8 +152,8 @@ module Hoard
     end
 
     def apply
-      level = ::Game.s.current_level
-      scroller = ::Game.s.scroller
+      level = Hoard.config.game_class.s.current_level
+      scroller = Hoard.config.game_class.s.scroller
 
       # Update scroller dimensions to match level
       if level
@@ -178,17 +178,17 @@ module Hoard
       end
 
       #scaling
-      scroller.x *= ::Game::SCALE * zoom
-      scroller.y *= ::Game::SCALE * zoom
+      scroller.x *= Hoard.config.game_class::SCALE * zoom
+      scroller.y *= Hoard.config.game_class::SCALE * zoom
 
       scroller.x = scroller.x.round
       scroller.y = scroller.y.round
 
-      scroller.scale = ::Game::SCALE * zoom
+      scroller.scale = Hoard.config.game_class::SCALE * zoom
     end
 
     def update
-      level = ::Game.s.current_level
+      level = Hoard.config.game_class.s.current_level
 
       tz = target_zoom
       if tz != base_zoom
@@ -293,11 +293,11 @@ module Hoard
     end
 
     def c_wid
-      (px_wid / ::Game::GRID).ceil
+      (px_wid / Hoard.config.game_class::GRID).ceil
     end
 
     def c_hei
-      (px_hei / ::Game::GRID).ceil
+      (px_hei / Hoard.config.game_class::GRID).ceil
     end
 
     def px_left
@@ -325,19 +325,19 @@ module Hoard
     end
 
     def c_left
-      (px_left / ::Game::GRID).to_i
+      (px_left / Hoard.config.game_class::GRID).to_i
     end
 
     def c_right
-      (px_right / ::Game::GRID).to_i
+      (px_right / Hoard.config.game_class::GRID).to_i
     end
 
     def c_top
-      (px_top / ::Game::GRID).to_i
+      (px_top / Hoard.config.game_class::GRID).to_i
     end
 
     def c_bottom
-      (px_bottom / ::Game::GRID).to_i
+      (px_bottom / Hoard.config.game_class::GRID).to_i
     end
   end
 end

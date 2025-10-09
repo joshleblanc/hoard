@@ -56,10 +56,10 @@ module Hoard
       super(opts[:parent])
 
       @dir = 1
-      @w = opts[:w] || ::Game::GRID
-      @h = opts[:h] || ::Game::GRID
-      @tile_w = opts[:tile_w] || ::Game::GRID
-      @tile_h = opts[:tile_h] || ::Game::GRID
+      @w = opts[:w] || Hoard.config.game_class::GRID
+      @h = opts[:h] || Hoard.config.game_class::GRID
+      @tile_w = opts[:tile_w] || Hoard.config.game_class::GRID
+      @tile_h = opts[:tile_h] || Hoard.config.game_class::GRID
 
       @anchor_x = opts[:anchor_x] || 0.5
       @anchor_y = opts[:anchor_y] || 0.5
@@ -130,35 +130,35 @@ module Hoard
     end
 
     def update_world_pos
-      level = ::Game.s.current_level
+      level = Hoard.config.game_class.s.current_level
       self.wx = self.x + level.world_x
       self.wy = self.y + level.world_y
     end
 
     def x
-      (xx * ::Game::GRID)
+      (xx * Hoard.config.game_class::GRID)
     end
 
     def x=(new_x)
-      self.cx = (new_x / ::Game::GRID).to_i
-      self.xr = (new_x % ::Game::GRID) / ::Game::GRID
+      self.cx = (new_x / Hoard.config.game_class::GRID).to_i
+      self.xr = (new_x % Hoard.config.game_class::GRID) / Hoard.config.game_class::GRID
     end
 
     def y=(new_y)
-      self.cy = (new_y / ::Game::GRID).to_i
-      self.yr = (new_y % ::Game::GRID) / ::Game::GRID
+      self.cy = (new_y / Hoard.config.game_class::GRID).to_i
+      self.yr = (new_y % Hoard.config.game_class::GRID) / Hoard.config.game_class::GRID
     end
 
     def wcx
-      (wx / ::Game::GRID).to_i
+      (wx / Hoard.config.game_class::GRID).to_i
     end
 
     def wcy
-      (wy / ::Game::GRID).to_i - 1
+      (wy / Hoard.config.game_class::GRID).to_i - 1
     end
 
     def y
-      (yy * ::Game::GRID)
+      (yy * Hoard.config.game_class::GRID)
     end
 
     def xx
@@ -188,8 +188,8 @@ module Hoard
     def check_collision(entity, cx, cy)
       return if entity == self
 
-      if entity.collidable && entity.intersect_rect?({ x: cx * ::Game::GRID, y: cy * ::Game::GRID, w: ::Game::GRID, h: ::Game::GRID })
-        if self == ::Game.s.player
+      if entity.collidable && entity.intersect_rect?({ x: cx * Hoard.config.game_class::GRID, y: cy * Hoard.config.game_class::GRID, w: Hoard.config.game_class::GRID, h: Hoard.config.game_class::GRID })
+        if self == Hoard.config.game_class.s.player
           # If we're checking one unit below (for ground detection)
           if cy > self.cy
             return true # Always allow ground collision checks
@@ -210,17 +210,17 @@ module Hoard
     end
 
     def has_collision(cx, cy)
-      return true if ::Game.s.current_level&.has_collision(cx, cy)
+      return true if Hoard.config.game_class.s.current_level&.has_collision(cx, cy)
 
       if @collidable
-        return ::Game.s.children.any? { |entity| check_collision(entity, cx, cy) }
+        return Hoard.config.game_class.s.children.any? { |entity| check_collision(entity, cx, cy) }
       end
 
       false
     end
 
     def has_exit?(x, y)
-      ::Game.s.current_level&.outside?(x, y)
+      Hoard.config.game_class.s.current_level&.outside?(x, y)
     end
 
     def destroyed?
@@ -254,16 +254,16 @@ module Hoard
       return if destroyed?
 
       # call on_collision on the player
-      return if ::Game.s.player == self
-      return unless Geometry.intersect_rect?(::Game.s.player, self)
+      return if Hoard.config.game_class.s.player == self
+      return unless Geometry.intersect_rect?(Hoard.config.game_class.s.player, self)
 
-      ::Game.s.player.send_to_scripts(:on_collision, self)
-      send_to_scripts(:on_collision, ::Game.s.player)
-      send_to_widgets(:on_collision, ::Game.s.player)
+      Hoard.config.game_class.s.player.send_to_scripts(:on_collision, self)
+      send_to_scripts(:on_collision, Hoard.config.game_class.s.player)
+      send_to_widgets(:on_collision, Hoard.config.game_class.s.player)
 
-      if ::Game.s.inputs.keyboard.key_down.e
-        send_to_scripts(:on_interact, ::Game.s.player)
-        send_to_widgets(:on_interact, ::Game.s.player)
+      if Hoard.config.game_class.s.inputs.keyboard.key_down.e
+        send_to_scripts(:on_interact, Hoard.config.game_class.s.player)
+        send_to_widgets(:on_interact, Hoard.config.game_class.s.player)
       end
     end
 
@@ -292,11 +292,11 @@ module Hoard
     end
 
     def gx
-      ::Game.s.camera.level_to_global_x(x)
+      Hoard.config.game_class.s.camera.level_to_global_x(x)
     end
 
     def gy
-      ::Game.s.camera.level_to_global_y((y - h))
+      Hoard.config.game_class.s.camera.level_to_global_y((y - h))
     end
 
     def dt

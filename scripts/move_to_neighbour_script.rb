@@ -34,16 +34,16 @@ module Hoard
       #
       # Move an entity to a new level, given their current world coords
       def move_to_neighbour(wx, wy)
-        level = ::Game.s.current_level
+        level = Hoard.config.game_class.s.current_level
         neighbour = level.find_neighbour(wx, wy)
 
         return unless neighbour
 
-        wcx = (neighbour.world_x / ::Game::GRID)
-        wcy = (neighbour.world_y / ::Game::GRID)
+        wcx = (neighbour.world_x / Hoard.config.game_class::GRID)
+        wcy = (neighbour.world_y / Hoard.config.game_class::GRID)
 
         entity.set_pos_case(wx - wcx, wy - wcy)
-        ::Game.s.start_level(neighbour)
+        Hoard.config.game_class.s.start_level(neighbour)
       end
     end
   end

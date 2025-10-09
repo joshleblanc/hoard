@@ -5,6 +5,10 @@ require_relative "entities/user"
 require_relative "entities/coin"
 require_relative "entities/player"
 
+Hoard.configure do |config|
+    config.game_class = Game
+end
+
 def tick(args)
     Game.s.args = args 
     Game.s.tick

@@ -29,13 +29,13 @@ module Hoard
       end
 
       def find_neighbour(cx, cy)
-        x = cx * ::Game::GRID
-        y = cy * ::Game::GRID
+        x = cx * Hoard.config.game_class::GRID
+        y = cy * Hoard.config.game_class::GRID
 
         neighbour = neighbours.each do |n|
           level = root.level(iid: n.levelIid)
           inside = Geometry.intersect_rect?(
-            [x, y, ::Game::GRID, ::Game::GRID],
+            [x, y, Hoard.config.game_class::GRID, Hoard.config.game_class::GRID],
             [level.world_x, level.world_y, level.px_wid, level.px_hei]
           )
 

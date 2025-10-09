@@ -17,7 +17,7 @@ module Hoard
           entity.cd.set_s("recentlyOnGround", 0.1)
         end
 
-        if can_jump? && ::Game.s.inputs.keyboard.key_down.space
+        if can_jump? && Hoard.config.game_class.s.inputs.keyboard.key_down.space
           entity.v_base.dy = -@power
           entity.squash_x = 0.6
           entity.cd.unset("recentlyOnGround")

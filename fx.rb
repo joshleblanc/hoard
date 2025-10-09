@@ -68,8 +68,8 @@ module Hoard
     def anim(data)
       data.anchor_x = 0.5
       data.anchor_y = 0.5
-      data.w = data.w || ::Game::GRID
-      data.h = data.h || ::Game::GRID
+      data.w = data.w || Hoard.config.game_class::GRID
+      data.h = data.h || Hoard.config.game_class::GRID
       data.start_tick = $args.state.tick_count
       data.flip_vertically = true
       @anims.push(data)

@@ -55,3 +55,18 @@ require_relative "game"
 require_relative "stat"
 require_relative "scheduler"
 require_relative "user"
+
+module Hoard 
+    class << self 
+        attr_reader :config
+
+        def configure(&blk)
+            @config ||= {}
+            blk.call(@config) if blk
+        end
+    end
+end
+
+Hoard.configure do |config|
+    config.game_class = Hoard::Game
+end

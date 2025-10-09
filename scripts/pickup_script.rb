@@ -11,7 +11,11 @@ module Hoard
       def client_init
         save_data = user.save_data_script.init
 
-        hide! if save_data.picked_up && @persistant
+        hide! if save_data[save_data_id] && @persistant
+      end
+
+      def save_data_id 
+        "#{entity.ldtk_entity_script.id}_picked_up"
       end
 
       def show!
@@ -29,7 +33,7 @@ module Hoard
 
         hide!
 
-        entity.send_to_scripts(:save, { picked_up: true }) if @persistant
+        player.user.send_to_scripts(:save_data, save_data_id, true) if @persistant
       end
     end
   end

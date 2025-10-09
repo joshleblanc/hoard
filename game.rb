@@ -175,6 +175,7 @@ module Hoard
     # Spawn a generic entity from LDTK entity instance
     def spawn_entity_from_ldtk(entity_class, ldtk_entity)
       entity = entity_class.new(parent: self, cx: ldtk_entity.grid[0], cy: ldtk_entity.grid[1])
+      p "Setting entity to #{ldtk_entity}"
       entity.send_to_scripts(:ldtk_entity=, ldtk_entity)
       apply_ldtk_fields(entity, ldtk_entity)
       entity.args = args

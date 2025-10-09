@@ -24,7 +24,7 @@ module Hoard
       raise StandardError.new("get_save_data must be called on the server") unless server?
       raise StandardError.new("get_save_data can only be called on entities owned by a user. Called on #{self.entity.class.name}") unless local?
       #json = args.gtk.read_file("saves/#{self.class.name}.dat") || "{}"
-      GTK.deserialize_state("saves/#{self.class.name}.dat") || {}
+      GTK.deserialize_state("saves/#{Utils.underscore(self.class.name)}.dat") || {}
       #Argonaut::JSON.parse(json, symbolize_keys: true)
     end
 
@@ -32,7 +32,7 @@ module Hoard
       raise StandardError.new("set_save_data must be called on the server") unless server?
       raise StandardError.new("set_save_data can only be called on entities owned by a user. Called on #{self.class.name}") unless local?
 
-      GTK.serialize_state("saves/#{self.class.name}.dat", data)
+      GTK.serialize_state("saves/#{Utils.underscore(self.class.name)}.dat", data)
       #args.gtk.write_file "saves/#{self.class.name}.dat", data.to_json
     end
 

@@ -121,7 +121,6 @@ module Hoard
 
       self.raw_focus.level_x = target.center_x + target_off_x
       self.raw_focus.level_y = target.center_y + target_off_y
-      p "center_on_target: target.center=#{target.center_x},#{target.center_y}, raw_focus=#{raw_focus.level_x},#{raw_focus.level_y}"
     end
 
     def level_to_global_x(v)
@@ -220,7 +219,6 @@ module Hoard
         spd_y = 0.023 * tracking_speed * zoom
         tx = target.center_x + target_off_x
         ty = target.center_y + target_off_y
-        p "Target: y=#{target.y}, h=#{target.h}, center_y=#{target.center_y}, ty=#{ty}" if $args.state.tick_count % 60 == 0
 
         a = raw_focus.ang_to(tx, ty)
         dist_x = (tx - raw_focus.level_x).abs

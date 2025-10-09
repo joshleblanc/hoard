@@ -41,7 +41,7 @@ class Player < Hoard::Entity
         ]
     })
 
-    script Hoard::Scripts::DebugRenderScript.new
+    #script Hoard::Scripts::DebugRenderScript.new
 
     def initialize(opts)
         opts[:tile_w] = 128

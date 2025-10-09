@@ -12,6 +12,10 @@ module Hoard
       end
     end
 
+    def schedule(&blk) 
+      Scheduler.schedule(&blk)
+    end
+
     def serialize
       to_h
     end

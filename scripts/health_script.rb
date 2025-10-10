@@ -16,7 +16,7 @@ module Hoard
       def flash!
         delay = 0.25 * 60
 
-        Scheduler.schedule do |s, blk|
+        schedule do |s, blk|
           if entity.cd.has("invulnerability")
             entity.visible = !entity.visible
             s.wait(delay, &blk)
@@ -41,7 +41,7 @@ module Hoard
 
         return if entity.cd.has("invulnerability")
 
-        entity.cd.set_s("invulnerability", 3)
+        entity.cd.set_s("invulnerability", 5)
 
         flash!
         ricochet!(from)

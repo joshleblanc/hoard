@@ -15,3 +15,8 @@ def tick(args)
     Game.s.args = args 
     Game.s.tick
 end
+
+def reset(args)
+    Game.s.auto_start_first_level(true)
+    GTK.reset_sprites directory: "samples/platformer/sprites"
+end

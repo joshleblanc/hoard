@@ -26,11 +26,11 @@ module Hoard
       auto_start_first_level if @root
     end
 
-    def start_level(level)
+    def start_level(level, force = false)
       destroy_all_children!
       @current_level = level
       @camera.center_on_target
-      spawn_ldtk_entities(level)
+      spawn_ldtk_entities(level, force)
     end
 
     ##
@@ -145,14 +145,14 @@ module Hoard
 
     ##
     # Start the first level in the loaded map
-    def auto_start_first_level
+    def auto_start_first_level(force = false)
       first_level = @root&.levels&.first
-      start_level(first_level) if first_level
+      start_level(first_level, force) if first_level
     end
 
     ##
     # Spawn all entities from LDTK level's Entities layer
-    def spawn_ldtk_entities(level)
+    def spawn_ldtk_entities(level, force = false)
       return unless level&.layer("Entities")
 
       level.layer("Entities").entity_instances.each do |ldtk_entity|
@@ -162,7 +162,7 @@ module Hoard
 
         # Special case: position player if it exists
         if ldtk_entity.identifier == "Player" && player
-          spawn_player_from_ldtk(player, ldtk_entity)
+          spawn_player_from_ldtk(player, ldtk_entity, force)
         else
           spawn_entity_from_ldtk(entity_class, ldtk_entity)
         end
@@ -171,8 +171,8 @@ module Hoard
 
     ##
     # Spawn the player entity from LDTK entity instance
-    def spawn_player_from_ldtk(player, ldtk_entity)
-      return if player.spawned?
+    def spawn_player_from_ldtk(player, ldtk_entity, force = false)
+      return if player.spawned? && !force
       player.set_pos_case(ldtk_entity.grid[0], ldtk_entity.grid[1])
       player.send_to_scripts(:ldtk_entity=, ldtk_entity)
       apply_ldtk_fields(player, ldtk_entity)

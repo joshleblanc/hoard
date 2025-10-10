@@ -30,8 +30,10 @@ module Hoard
             entity.send_to_scripts(:play_animation, :moving_jump)
           end
 
+        elsif entity.on_ground? && !entity.cd.has("landing")
+          entity.send_to_scripts(:play_animation, :idle)
         else
-          entity.send_to_scripts(:play_animation, :idle) if entity.on_ground? && !entity.cd.has("landing")
+          entity.send_to_scripts(:play_animation, :standing_jump)
         end
 
         if Hoard.config.game_class.s.inputs.keyboard.key_held.up && !entity.cd.has("controls_disabled")

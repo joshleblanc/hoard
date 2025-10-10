@@ -12,9 +12,9 @@ class CoinsWidget < Hoard::Widget
                     image(path: "samples/platformer/sprites/spritesheet-tiles-default.png", w: 64, h: 64, tile_w: 64, tile_h: 64, tile_x: 13 * 64, tile_y: 1 * 64)
                 end
                 col do 
-                    image(path: "samples/platformer/sprites/spritesheet-tiles-default.png", w: 64, h: 64, tile_w: 64, tile_h: 64, tile_x: 13 * 64, tile_y: 3 * 64, offset_x: 16)
+                    image(path: "samples/platformer/sprites/spritesheet-tiles-default.png", w: 64, h: 64, tile_w: 64, tile_h: 64, tile_x: 13 * 64, tile_y: 3 * 64, offset_x: 32)
                     coins.to_s.each_char.with_index do |char, i|
-                        image(path: "samples/platformer/sprites/spritesheet-tiles-default.png", w: 64, h: 64, tile_w: 64, tile_h: 64, tile_x: 13 * 64, tile_y: (13 - char.to_i) * 64, offset_x: i > 0 ? -64 : -24)
+                        image(path: "samples/platformer/sprites/spritesheet-tiles-default.png", w: 64, h: 64, tile_w: 64, tile_h: 64, tile_x: 13 * 64, tile_y: (13 - char.to_i) * 64, offset_x: i * -42)
                     end
                 end
             end

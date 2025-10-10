@@ -13,6 +13,11 @@ module Hoard
 
         @offset_x = opts[:offset_x] || 0
         @offset_y = opts[:offset_y] || 0
+        @horizontal_frames = if opts.has_key? :horizontal_frames
+          opts[:horizontal_frames]
+        else
+          true
+        end
 
         @overlap = opts[:overlap] || false
       end
@@ -54,7 +59,13 @@ module Hoard
       end
 
       def tile_x
-        files ? 0 : @opts.x + (tile_w * frame)
+        if files 
+          0 
+        elsif @horizontal_frames
+          @opts.x + (tile_w * frame)
+        else
+          @opts.x
+        end
       end
 
       def tile_w
@@ -70,7 +81,13 @@ module Hoard
       end
 
       def tile_y
-        files ? 0 : @opts.y
+        if files 
+          0 
+        elsif @horizontal_frames
+          @opts.y
+        else
+          @opts.y + (tile_h * frame)
+        end
       end
 
       def starting_frame

@@ -11,7 +11,12 @@ module Hoard
       def client_init
         save_data = user.save_data_script.init
 
-        hide! if save_data[save_data_id] && @persistant
+        if save_data[save_data_id] && @persistant
+          hide! 
+        else
+          show!
+          
+        end
       end
 
       def save_data_id 

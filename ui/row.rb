@@ -10,9 +10,13 @@ module Hoard
                 parent.w
             end
 
-            def h 
+            def h
+                return 0 if @children.empty?
+
                 max_height = (@children.max_by(&:h)&.h || 0)
-                num_rows = (@children.sum(&:span) / Col::COLS).ceil
+                # Only sum span for Col elements that respond to span
+                total_span = @children.select { |c| c.respond_to?(:span) }.sum(&:span)
+                num_rows = total_span > 0 ? (total_span / Col::COLS).ceil : 1
 
                 max_height * num_rows
             end

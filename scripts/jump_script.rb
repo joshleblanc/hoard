@@ -29,6 +29,8 @@ module Hoard
             y: entity.ry + (entity.rh * entity.anchor_y),
           })
 
+          entity.send_to_scripts(:play_audio, :jump)
+
           if entity.v_base.dx == 0
             entity.send_to_scripts(:play_animation, :standing_jump, true)
           else

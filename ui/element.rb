@@ -158,8 +158,15 @@ module Hoard
         @parent&.children&.index(self) || 0
       end
 
-      def x() = parent&.x || 0
-      def y() = parent&.y || 0
+      def x
+        return @options[:x] if @options[:x]
+        parent&.x || 0
+      end
+
+      def y
+        return @options[:y] if @options[:y]
+        parent&.y || 0
+      end
 
       def w(max_w = nil)
         if @options[:w]
@@ -194,8 +201,37 @@ module Hoard
         end
       end
 
-      def rx() = x + (parent&.padding || 0)
-      def ry() = y + (parent&.padding || 0)
+      def rx
+        base = if @options[:x]
+          x
+        else
+          base_x = (parent&.rx || 0) + (parent&.padding || 0)
+
+          # Add offset based on previous siblings' widths (horizontal flow)
+          if parent && child_index > 0
+            gap = parent.options[:gap] || 0
+            offset = (0...child_index).to_a.sum { |i| parent.children[i].w + gap }
+            base_x + offset
+          else
+            base_x
+          end
+        end
+
+        # Apply element's own offset
+        base + (@options[:offset_x] || 0)
+      end
+
+      def ry
+        base = if @options[:y]
+          y
+        else
+          (parent&.ry || 0) + (parent&.padding || 0)
+        end
+
+        # Apply element's own offset
+        base + (@options[:offset_y] || 0)
+      end
+
       def rw() = w - ((parent&.padding || 0) * 2)
       def rh() = h - ((@options[:padding] || 0) * 2)
     end

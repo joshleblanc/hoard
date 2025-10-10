@@ -48,6 +48,12 @@ class Player < Hoard::Entity
         ]
     })
 
+    script Hoard::Scripts::AudioScript.new(:jump, {
+        files: [
+            "samples/platformer/sounds/effects/sfx_jump.ogg"
+        ]
+    })
+
     #script Hoard::Scripts::DebugRenderScript.new
 
     def initialize(opts)

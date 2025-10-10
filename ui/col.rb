@@ -3,18 +3,18 @@ module Hoard
         class Col < Element
             COLS = 12 
 
-            def x
+            def rx
                 range = (0...child_index)
                 span_sum = range.to_a.sum { @parent.children[_1].span }
                 index = (span_sum % COLS) / span
-                @parent.x + (index * w)
+                @parent.rx + (index * w)
             end 
 
-            def y 
+            def ry 
                 range = (0...child_index)
                 span_sum = range.to_a.sum { @parent.children[_1].span }
                 row_index = (span_sum / COLS).floor
-                parent.y - (h * row_index)
+                parent.ry - (h * row_index)
             end
 
             def span 

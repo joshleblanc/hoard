@@ -68,7 +68,10 @@ module Hoard
 
     def post_update
       element_lifecycle(:post_update)
-      render if visible?
+      if visible?
+        Ui::ElementPool.instance.reset_counters
+        render
+      end
     end
 
     def to_h

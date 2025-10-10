@@ -232,8 +232,13 @@ module Hoard
         base + (@options[:offset_y] || 0)
       end
 
-      def rw() = w - ((parent&.padding || 0) * 2)
-      def rh() = h - ((@options[:padding] || 0) * 2)
+      def rw
+        w
+      end
+
+      def rh
+        h
+      end
     end
   end
 end

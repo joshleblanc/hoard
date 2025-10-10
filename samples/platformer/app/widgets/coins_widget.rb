@@ -1,13 +1,6 @@
 class CoinsWidget < Hoard::Widget
     attr_accessor :coins 
 
-    MAP = {
-        "0" => {
-            tile_x: 13 * 64,
-            tile_y: 13 * 64,
-        }
-    }
-
     def init 
         @coins = 0
     end

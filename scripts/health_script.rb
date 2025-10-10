@@ -61,14 +61,6 @@ module Hoard
         @last_hit_dir_to_source = Geometry.vec2_normalize({ x: source.x - entity.x, y: source.y - entity.y })
         @life.v -= amount
         ricochet!(source)
-
-        if @life.v <= 0
-          if entity.is_a?(Entities::Player)
-            Hoard.config.game_class.s.player_died
-          elsif entity.is_a?(Entities::Boss)
-            Hoard.config.game_class.s.boss_died
-          end
-        end
       end
 
       def alive?

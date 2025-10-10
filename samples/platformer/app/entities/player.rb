@@ -1,5 +1,7 @@
 class Player < Hoard::Entity 
-    script Hoard::Scripts::PlatformerPlayerScript.new
+    script Hoard::Scripts::PlatformerPlayerScript.new(
+        health: 6
+    )
 
     script Hoard::Scripts::AnimationScript.new(:idle, {
         files: [
@@ -53,6 +55,8 @@ class Player < Hoard::Entity
             "samples/platformer/sounds/effects/sfx_jump.ogg"
         ]
     })
+
+    widget HealthWidget.new
 
     #script Hoard::Scripts::DebugRenderScript.new
 

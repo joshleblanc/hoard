@@ -43,6 +43,28 @@ module Hoard
         end
       end
 
+      def on_pre_step_x
+        e = entity
+        # Handle wall collisions
+        if e.xr > 0.8
+          e.xr = 0.8 if e.has_collision(e.cx + 1, e.cy)
+        end
+
+        if e.xr < 0.2
+          e.xr = 0.2 if e.has_collision(e.cx - 1, e.cy)
+        end
+      end
+
+      def on_pre_step_y
+        e = entity
+        # Handle floor collisions
+        if e.yr < 0.2
+          if e.has_collision(e.cx, e.cy - 1)
+            e.yr = 0.2
+          end
+        end
+      end
+
       def update
         if @current_speed == 0 && @previous_speed != 0
           entity.send_to_scripts(:play_effect, :skid, {

@@ -4,12 +4,10 @@ module Hoard
       def on_pre_step_x
         e = entity
         if e.xr > 0.8
-          e.xr = 0.8 if e.has_collision(e.cx + 1, e.cy)
           move_to_neighbour(e.wcx + 1, e.wcy) if e.has_exit?(e.cx + 1, e.cy)
         end
 
         if e.xr < 0.2
-          e.xr = 0.2 if e.has_collision(e.cx - 1, e.cy)
           move_to_neighbour(e.wcx - 1, e.wcy) if e.has_exit?(e.cx - 1, e.cy)
         end
       end
@@ -22,12 +20,6 @@ module Hoard
 
         if e.yr < 0.2
           move_to_neighbour(e.wcx, e.wcy - 1) if e.has_exit?(e.cx, e.cy - 1)
-        end
-
-        if e.yr < 0.2
-          if e.has_collision(e.cx, e.cy - 1)
-            e.yr = 0.2
-          end
         end
       end
 

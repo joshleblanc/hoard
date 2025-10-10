@@ -16,6 +16,8 @@ module Hoard
           if entity.on_ground?
             entity.send_to_scripts(:play_animation, :walk)
             entity.send_to_scripts(:play_audio, :footsteps)
+          else
+            entity.send_to_scripts(:play_animation, :moving_jump)
           end 
         elsif Hoard.config.game_class.s.inputs.keyboard.key_held.right && !entity.cd.has("controls_disabled")
           @current_speed = @move_speed
@@ -24,6 +26,8 @@ module Hoard
           if entity.on_ground?
             entity.send_to_scripts(:play_animation, :walk)
             entity.send_to_scripts(:play_audio, :footsteps)
+          else
+            entity.send_to_scripts(:play_animation, :moving_jump)
           end
 
         else

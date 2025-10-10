@@ -7,6 +7,7 @@ require_relative "entities/user"
 require_relative "entities/coin"
 require_relative "entities/player"
 require_relative "entities/teleport"
+require_relative "entities/worm"
 
 Hoard.configure do |config|
     config.game_class = Game

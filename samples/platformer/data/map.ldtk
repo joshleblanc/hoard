@@ -11,7 +11,7 @@
 	"iid": "0ddf0bc0-8560-11f0-8dbf-2da8824f1bb0",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 87,
+	"nextUid": 91,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -876,6 +876,116 @@
 					"tilesetUid": null
 				}
 			]
+		},
+		{
+			"identifier": "Worm",
+			"uid": 87,
+			"tags": [],
+			"exportToToc": false,
+			"allowOutOfBounds": false,
+			"doc": null,
+			"width": 64,
+			"height": 64,
+			"resizableX": false,
+			"resizableY": false,
+			"minWidth": null,
+			"maxWidth": null,
+			"minHeight": null,
+			"maxHeight": null,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 0.08,
+			"lineOpacity": 0,
+			"hollow": false,
+			"color": "#E4A672",
+			"renderMode": "Tile",
+			"showName": true,
+			"tilesetId": 88,
+			"tileRenderMode": "FitInside",
+			"tileRect": { "tilesetUid": 88, "x": 0, "y": 192, "w": 64, "h": 64 },
+			"uiTileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": [
+				{
+					"identifier": "destination",
+					"doc": null,
+					"__type": "Point",
+					"uid": 89,
+					"type": "F_Point",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "PointPath",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				},
+				{
+					"identifier": "loop",
+					"doc": null,
+					"__type": "Bool",
+					"uid": 90,
+					"type": "F_Bool",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		}
 	], "tilesets": [
 		{
@@ -898,6 +1008,28 @@
 			"cachedPixelData": {
 				"opaqueTiles": "000000011000000000000001100000000100011000000000000000000100001100000100000111000000000000101100100000000000001100111000000000010001100100000000000001100100000000000110001100000000100000001100000000010000110000000000011100000001000000110010000100000000110011100000000000000110010000000000000110011000010000011000110000000000",
 				"averageColors": "f48cd899f899bbbcbd97fc75ba8cfc95fd85bb987b89848b43965c9a385ad8883999fb64d889d899fbccfccdfc97fd75faac43b6fc75bb9959aa2a55437a5cb933a7f7783999f3a7b9aaf999fabbfccddc97fc87ba8bb9a6fc75bb9878ba2a659eb83bcc4b93db983a65fda579cef899fabbfccddc97fa9cfbacfa95fd75fbaa59abfd939bbd3ccc4b44fb883a65fc75eacec8897ccdfbbcfd97fabbfbacea96fa85ba9878abfb449eab4cdd43a7f8889deefb64f7bec889fbccfbbcfc97fabbfbacea96fbaafbaa4b83f3a79ca94ddd448a28889445fb647c97c889fbccfbccbc977b9cfbbcfa96fabbfbaab68af48b9bac4ccdbc93499afda3fda57c97f99a4ccdfabbbd97fbbcfbbcfa95fabbfcaa969b6a889cab4cddbc932973fc84bc995988c888bccdfabbbc97fbbcfbccb9967c98fbbc69aa6a8899ba4ccdbb444b73fa640000f899f99afbccfbbcfd974a7cfabbb996fbbcfbbc3eff6a889baa4ccdbb442965fc840000fabbf99adbccfbbcbc97bbacfabbb996fcbbfbccab757d7399cb4ccd4a644a65fa640000faabf99adbccfc97fd97fa9cfbbcfa954c75fabbab74ee839cbb4ccdb6968899fc8500007889fabbfbccfc75fd97da9cfa9bb895fb75fabbcb76fe724cba3ccdb696a3a7fa640000fabbfabbfbccfc75fd97da9cfa95fa96fba9fbbccb748a644caa4cddb68a73a7fc840000fabbfbbcbbcc7da8fd75fa9cfc75fa96eb99fb99a9aaeb6449bad3a7b68a5a64fa6400004666fabbbbcdfd85fd75fa9cfc75fb96eb995aaa4a658a644abcd3a73b638b75c99a0000b899fabbbbccfd86fd85ba8c78a6fd75fbaa7ba959774b835babf2b7aa64faabfc440000f899fbbbfbcc4ca8fc75ba9cfd85fd75fba95a9a8abb4a345bbb3a44ab64fc75fb640000"
+			}
+		},
+		{
+			"__cWid": 8,
+			"__cHei": 8,
+			"identifier": "Spritesheet_enemies_default",
+			"uid": 88,
+			"relPath": "../sprites/spritesheet-enemies-default.png",
+			"embedAtlas": null,
+			"pxWid": 512,
+			"pxHei": 512,
+			"tileGridSize": 64,
+			"spacing": 0,
+			"padding": 0,
+			"tags": [],
+			"tagsSourceEnumUid": null,
+			"enumTags": [],
+			"customData": [],
+			"savedSelections": [],
+			"cachedPixelData": {
+				"opaqueTiles": "0000000000000000000000000000000000000000000000000000000000000000",
+				"averageColors": "797b547a45975b64799ab7a8785bf9969a7bab7a7a6bb6b8799ab7a9895b9ba99a7bab7a7a6bb6b8799a8999885b8ba95b836a6c796cb5a899457999758ba8995b83ab7a386ab5b898458999848b00005b8385a89c649ba999457c93848b0000547a85a89c64a899c8458b93f9850000547a84a89c54a899b7a98c93f9850000"
 			}
 		}
 	], "enums": [
@@ -1240,6 +1372,31 @@
 							"fieldInstances": [],
 							"__worldX": 1728,
 							"__worldY": 512
+						},
+						{
+							"__identifier": "Worm",
+							"__grid": [30,4],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 88, "x": 0, "y": 192, "w": 64, "h": 64 },
+							"__smartColor": "#E4A672",
+							"iid": "62d23a00-8560-11f0-94e4-8fb2b0ca21d8",
+							"width": 64,
+							"height": 64,
+							"defUid": 87,
+							"px": [1920,256],
+							"fieldInstances": [
+								{ "__identifier": "destination", "__type": "Point", "__value": { "cx": 26, "cy": 4 }, "__tile": null, "defUid": 89, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["26,4"]
+								}] },
+								{ "__identifier": "loop", "__type": "Bool", "__value": true, "__tile": null, "defUid": 90, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] }
+							],
+							"__worldX": 2944,
+							"__worldY": 256
 						}
 					]
 				},

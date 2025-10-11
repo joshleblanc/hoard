@@ -3,11 +3,13 @@ require_relative "widgets/health_widget"
 require_relative "widgets/coins_widget"
 require_relative "scripts/coins_script"
 require_relative "scripts/teleport_script"
+require_relative "scripts/buyable_script"
 require_relative "entities/user"
 require_relative "entities/coin"
 require_relative "entities/player"
 require_relative "entities/teleport"
 require_relative "entities/worm"
+require_relative "entities/buyable"
 
 Hoard.configure do |config|
     config.game_class = Game

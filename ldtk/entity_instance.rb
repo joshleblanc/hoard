@@ -1,9 +1,9 @@
 module Hoard
     module Ldtk
         class EntityInstance < Base
-            imports :grid, :identifier, :pivot, :smart_color, :tags, :tile, 
+            imports :grid, :identifier, :pivot, :smart_color, :tags, 
                         :world_x, :world_y, :def_uid, :height, 
-                        :iid, :px, :width, field_instances: [FieldInstance]
+                        :iid, :px, :width, field_instances: [FieldInstance], tile: TilesetRect
 
             def field(id)
                 field_instances.select { |i| i.iid == id }.map { |i| i.value }.flatten

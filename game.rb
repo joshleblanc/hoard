@@ -193,6 +193,7 @@ module Hoard
     # Apply LDTK field instances to entity scripts
     def apply_ldtk_fields(entity, ldtk_entity)
       ldtk_entity.field_instances.each do |field|
+        p "Setting field #{field.identifier} = #{field.value}"
         entity.send_to_scripts("#{field.identifier}=", field.value)
       end
     end

@@ -48,6 +48,10 @@ module Hoard
       args.outputs.debug.push(*any)
     end
 
+    def state 
+      args.state
+    end
+
     def update; end
     def post_update; end
     def pre_update; end

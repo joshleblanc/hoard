@@ -8,8 +8,11 @@ module Hoard
         @notifications = []
         @queue = []
         @cd = Hoard::Cooldown.new
+      end
 
+      def init
         notify_slowly
+
       end
 
       def add_notification(icon, title)

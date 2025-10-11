@@ -9,4 +9,6 @@ class User < Hoard::User
         ],
         overlap: true
     })
+
+    script Hoard::Scripts::NotificationsScript.new
 end

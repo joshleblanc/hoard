@@ -1,0 +1,1027 @@
+<html>
+
+<head>
+	<!-- Required includes -->
+	<script type="text/javascript" src="coui://uiresources/js/crayta.js"></script>
+
+	<!-- Set default values to be applied to this widget when it's added to a new entity in the world
+    The name/value fields should match the names displayed in the property editor for this widget -->
+	<default-asset-properties>
+		<default-asset-property name="type" value="Screen"></default-asset-property>
+		<default-asset-property name="visible" value="true"></default-asset-property>
+	</default-asset-properties>
+
+	<!-- Set some custom properties on this widget, which will appear in the property editor for this widget
+	     Custom properties can be used in data bindings using the format {{properties.<<property name>>}} -->
+	<properties>
+		<property name="title" type="text"></property>
+		<property name="backgroundColor" type="color"></property>
+		<property name="borderColor" type="color"></property>
+		<property name="titleColor" type="color"></property>
+		<property name="font" type="string" default="Montserrat"></property>
+	</properties>
+
+	<style type="text/css">
+		
+		/* Font reference: https://developer.crayta.com/using-fonts-in-crayta/ */
+		@font-face {
+			font-family: Montserrat;
+			src: url('https://content.crayta.com/fonts/Montserrat-Regular.ttf');
+			font-weight: 400;
+			/* 400 = Regular, 500 = Medium, 600 = Semi-bold, 700 = bold */
+		}
+		
+		@font-face {
+			font-family: PressStart2P;
+			src: url(https://content.crayta.com/fonts/PressStart2P-Regular.ttf);
+			font-weight: 400; 
+			font-style: normal
+		}
+		
+		
+		@font-face {
+		   font-family: 'Font Awesome';
+		   src: url('https://content.crayta.com/fonts/FontAwesome5-Regular.ttf');
+		}
+		.fa {
+		   font-family: 'Font Awesome';
+		}
+
+		body {
+			width: 100vw;
+			height: 100vh;
+		}
+
+		.container {
+			width: 50vw;
+			left: 40vw;
+			top: 25vh;
+			position: absolute;
+			background-color: var(--background-color);
+			border: 4px solid #717198;
+		}
+		
+		.title {
+			display: flex;
+			justify-content: center;
+			font-size: 2rem;
+			padding: 1rem;
+			border-bottom: 4px solid black;
+			color: white;
+		}
+		
+		.centered {
+			justify-content: center;
+		}
+		
+		.quest-details {
+			flex: 1;
+		}
+		
+		.quest-container {
+			display: flex;
+			margin: 1rem;
+			flex: 1;
+		}
+		
+		.quest-header {
+			width: 25%;
+			border-right: 4px solid black;
+		}
+		
+		.quest-name {
+			font-size: 1rem;
+			display: flex;
+			padding: 0.25rem;
+			border-bottom: 2px solid black;
+			border-left: 2px solid black;
+			background-color: rgba(255, 255, 255, 0.25);
+			flex: 1;
+		}
+		
+		.quest {
+			flex: 1;
+			margin-left: 0.5rem;
+			padding-left: 0.5rem;
+		}
+		
+		.quest-name:hover {
+			background-color: rgba(255, 255, 255, 1);
+		}
+		
+		#quest {
+			visibility: hidden;
+		}
+		
+		.selected-parent {
+			background-color: rgba(0, 0, 0, 0.1);
+			width: 100%;
+			font-size: 1.5rem;
+			padding: 0.25rem;
+			padding-left: 0.5rem;
+			border-bottom: 1px solid black;
+		}
+		
+		.selected-parent:hover {
+			background-color: rgba(0, 0, 0, 0.5);
+		}
+		
+		.quest-item > div {
+			display: flex;
+			font-size: 1.2rem;
+		}
+		
+		.quest-item.wide {
+			width: 100%;
+		}
+		
+		.quest-item > div {
+			position: relative;
+			margin-left: 1rem;
+			margin-top: 0.5rem;
+		}
+		
+		.quest-list {
+			margin: 1rem;
+			display: flex;
+			flex-wrap: wrap;
+			flex: 1;
+		}
+		
+		.step-image {
+			width: 3.5rem;
+			height: 3.5rem;
+			background-position: center;
+			background-size: cover;
+			border: 2px solid black;
+			background-color: var(--title-color);
+			filter: grayscale(100%);
+			opacity: 0.5;
+		}
+		
+		.step-image.done {
+			filter: grayscale(0%);
+			opacity: 1;
+			background-color: rgba(0,0,0,0);
+		}
+		
+		.step-image:hover {
+			border-color: white;
+		}
+		
+		.items {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+		
+		.item {
+			margin: 1rem;
+			width: 3rem;
+			height: 3rem;
+			border: 2px solid black;
+			position: relative;
+		}
+		
+		.item-icon {
+			width: 100%;
+			height: 100%;
+			background-position: center;
+			background-size: cover;
+		}
+		
+		.item-cnt {
+			bottom: 0;
+			right: 0;
+			font-size: 0.75rem;
+			position: absolute;
+			color: white;
+			text-shadow: 0 0 10px black;
+		}
+		
+		.item-popover {
+			position: absolute;
+			border-width: 4px;
+			border-style: solid;
+			border-radius: 20px;
+			color: white;
+			width: 500px;
+		}
+		
+		.item-popover-name {
+			font-size: 2rem;
+			display: flex;
+			justify-content: center;
+			padding: 0.5rem;
+			border-radius: 16px 16px 0 0;
+			border-bottom: 2px solid black;
+		}
+		
+		.item-popover-desc {
+			margin: 1rem;
+			font-size: 1.25rem;
+			text-shadow: 0 0 5px black;
+		}
+		
+		.selected-quest-name {
+			font-size: 1rem;
+			display: flex;
+			padding: 0.25rem;
+			border-bottom: 2px solid black;
+			background-color: var(--title-color);
+			color: white;
+			margin: 1rem;
+			justify-content: center;
+			display: flex;
+		}
+		
+		.selected-quest-description {
+			margin-left: 2.5rem;
+		}
+		
+		.locked-step-image {
+			position: absolute;
+			font-size: 2.5rem;
+			height: 3.5rem;
+			width: 3.5rem;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		
+		.list-lock {
+			margin-right: 0.25rem;
+		}
+		
+		.quest-text {
+			width: 100%;
+		}
+		
+		.recently-completed-quest {
+			border: 2px solid black;
+			padding: 0.5rem;
+			margin: 0.5rem;
+			display: flex;
+		}
+		
+		.recently-completed-score {
+			flex: 0;
+			font-size: 2rem;
+			padding: 1rem;
+			padding-right: 2rem;
+			border-right: 1px solid black;
+		}
+		
+		.recently-completed-details {
+			flex: 1;
+			display: flex;
+			padding-left: 0.5rem;
+			flex-direction: column;
+			justify-content: space-between;
+		}
+		
+		.completion-time {
+			font-size: 0.75rem;
+			opacity: 0.75;
+		}
+		
+		.close-button {
+			border-radius: 100%;
+			width: 3rem;
+			height: 3rem;
+			position: absolute;
+			left: 0.25rem;
+			top: 0.25rem;
+			background-color: red;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 2rem;
+			border: 1px solid black;
+		}
+		
+		.close-button:hover {
+			background-color: white;
+		}
+		
+		.quest-actions {
+			margin-left: 1rem;
+			margin-right: 1rem;
+			display: flex;
+			justify-content: space-between;
+		}
+		
+		.button {
+			padding: 0.5rem;
+			border-width: 2px;
+			border-style: solid;
+			border-color: black;
+		}
+		
+		.button:hover {
+			color: white;
+			background-color: var(--title-color);
+			border-color: white;
+		}
+		
+		.quest-details-container {
+			display: flex;
+		}
+		
+		.score-reward-container {
+			margin-left: 1rem;
+			padding-left: 2rem;
+			padding-right: 2rem;
+			border-bottom: 2px solid black;
+		}
+		
+		.score-reward {
+			font-size: 3rem;
+		}
+		
+		.quest-details-rewards {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+		
+		.items-container {
+			margin-left: 1rem;
+		}
+		
+		.inner-quest-list {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+		}
+		
+		.quest-preview {
+			display: flex;
+			margin: 0.25rem;
+		}
+		
+		.quest-preview:hover {
+			background-color: rgba(255, 255, 255, 1);
+		}
+		
+		.quest-score {
+			font-size: 3rem;
+			background-color: rgba(255, 255, 255, 0.25);
+			border-bottom: 2px solid black;
+			padding: 0.25rem;
+			flex-grow: 0;
+		}
+		
+		.quest-grid-item {
+			width: 50%;
+		}
+		
+		.quest-details-details {
+			flex: 1;
+		}
+		
+		.score {
+			margin-left: 0.25rem;
+		}
+		
+		.recently-completed-title {
+			margin-left: 0.25rem;
+		}
+
+	</style>
+</head>
+
+<body data-bind-style-font-family="{{properties}}.font" data-bind-mousemove="onMouseMove(event)" data-bind-click="onBodyClick()">
+
+	<div 
+		class="container" 
+		data-bind-style-left="{{data}}.windowLeft" 
+		data-bind-style-top="{{data}}.windowTop" 
+		data-bind-style-background-color="{{properties}}.backgroundColor"
+		data-bind-style-border-color="{{properties}}.borderColor"
+	>
+		<div 
+			class="title" 
+			data-bind-mouseenter="onMouseEnterTitle(event)" 
+			data-bind-mouseleave="onMouseLeaveTitle(event)"
+			data-bind-style-background-color="{{properties}}.titleColor"
+		>Achievements</div>
+		
+		<div class="quest-container">
+			<div class="quest-header">
+				<div class="selected-parent">
+					<span data-bind-if="!!!{{data}}.selectedParent">&nbsp;</span>
+					<span data-bind-if="!!{{data}}.selectedParent" data-bind-value="'<' + {{data}}.selectedParent.name" data-bind-click="handleParentClick({{data}}.selectedParent.id)"></span>
+				</div>
+				<div class="quest-sidebar">
+					<div class="quest" data-bind-for="entry:Object.entries({{data}}.structureRoot).sort(sortStructure)" data-bind-click="handleQuestClick({{entry}})">
+						<div class="quest-name">
+							<div data-bind-if="!{{data}}.quests[{{entry[0]}}].active" class="fa list-lock">&#xf023;</div>
+							<div data-bind-value="{{data}}.quests[{{entry[0]}}].name"></div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+			<div class="quest-details">
+				<div data-bind-if="!{{data}}.selectedQuest && !{{data}}.selectedParent">
+					<div class="score" data-bind-value="'Score: ' + {{data}}.score"></div>
+					<div class="recently-completed-title">Recently Completed</div>
+					<div data-bind-for="quest:{{data}}.recentlyCompleted">
+						<div class="recently-completed-quest">
+							<div data-bind-value="{{quest}}.score" class="recently-completed-score"></div>
+							<div class="recently-completed-details">
+								<div data-bind-value="{{quest}}.name"></div>
+								<div class="completion-time" data-bind-value="new Date({{quest}}.completedAt * 1000).toLocaleDateString()"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div data-bind-if="!{{data}}.selectedQuest && !!{{data}}.selectedParent">
+					<div class="inner-quest-list">
+						<div class="quest-grid-item" data-bind-for="entry:Object.entries({{data}}.structureRoot).sort(sortStructure)" data-bind-click="handleQuestClick({{entry}})">
+							<div class="quest-preview">
+								<div class="quest-score" data-bind-value="{{data}}.quests[{{entry[0]}}].score"></div>
+								<div class="quest-name">
+									<div data-bind-if="!{{data}}.quests[{{entry[0]}}].active" class="fa list-lock">&#xf023;</div>
+									<div data-bind-value="{{data}}.quests[{{entry[0]}}].name"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				<div data-bind-if="!!{{data}}.selectedQuest">
+					<div class="quest-actions">
+						<div class="button" data-bind-click="backButtonClicked()">
+							< Back
+						</div>
+						<div class="button" data-bind-click="handleTrackClick({{data}}.selectedQuest)">
+							<span data-bind-if="!!{{data}}.selectedQuest.tracking">Untrack</span>
+							<span data-bind-if="!{{data}}.selectedQuest.tracking">Track</span>
+						</div>
+					</div>
+					<div class="selected-quest-name" data-bind-value="{{data}}.selectedQuest.name"></div>
+					<div class="quest-details-container">
+						<div class="quest-details-rewards">
+							<div class="score-reward-container">
+								<div class="score-reward" data-bind-value="{{data}}.selectedQuest.score"></div>
+							</div>
+							<div class="items-container">
+								<div class="items">
+									<div class="item" data-bind-for="item:{{data}}.selectedQuest.rewards" data-bind-mouseenter="onMouseEnterItem(event, {{item}})" data-bind-mouseleave="onMouseLeaveItem(event)">
+										<div class="item-icon" data-bind-style-background-image-url="{{item}}.icon"></div>
+										<div class="item-cnt" data-bind-value="{{item}}.count" data-bind-if="{{item}}.count > 0"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="quest-details-details">
+							<div class="selected-quest-description" data-bind-value="{{data}}.selectedQuest.description"></div>
+							<div class="quest-list">
+								<div class="quest-item" data-bind-for="step:{{data}}.selectedQuestSteps" data-bind-class-toggle="wide:!!!{{step}}.imageUrl">
+									<div data-bind-if="!!{{step}}.imageUrl" data-bind-mouseenter="onMouseEnterItem(event, {{step}})" data-bind-mouseleave="onMouseLeaveItem(event)">
+										<div data-bind-style-background-image-url="{{step}}.imageUrl" class="step-image" data-bind-class-toggle="done:{{step}}.done"></div>
+										<div data-bind-if="!{{step}}.active" class="fa locked-step-image">
+											<div class="fa">&#xf023;</div>
+										</div>
+									</div>
+									<div class="quest-text" data-bind-if="!!!{{step}}.imageUrl">
+										<div data-bind-if="!{{step}}.done && {{step}}.active" class="fa">&#xf0c8;</div>
+										<div data-bind-if="{{step}}.done && {{step}}.active" class="fa">&#xf14a;</div>
+										<div data-bind-if="!{{step}}.active" class="fa">&#xf023;</div>
+										<div data-bind-value="{{step}}.name" data-bind-if="{{step}}.requiredCompletions === 1"></div>
+										<div data-bind-value="{{step}}.name + ' (' + {{step}}.numCompletions + '/' + {{step}}.requiredCompletions + ')'" data-bind-if="{{step}}.requiredCompletions > 1"></div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					
+				</div>
+			</div>
+		</div>
+		<div class="close-button fa" data-bind-click="handleClose()">&#xf00d;</div>
+	</div>
+	
+	<div 
+		class="item-popover" 
+		data-bind-if="{{data}}.popoverVisible && (!!{{data}}.focusedItem.name || !!{{data}}.focusedItem.description)" 
+		data-bind-style-left="{{data}}.popoverLeft" 
+		data-bind-style-top="{{data}}.popoverTop"
+		data-bind-style-border-color="{{properties}}.borderColor"
+		data-bind-style-background-color="{{properties}}.backgroundColor"
+	>
+		<div class="item-popover-name" data-bind-value="{{data}}.focusedItem.name" data-bind-style-background-color="{{properties}}.titleColor"></div>
+		<div class="item-popover-desc" data-bind-value="{{data}}.focusedItem.description"></div>
+	</div>
+	
+	<script>
+		class StyleBorderColorHandler {
+			update(element, value) {
+				element.style.borderColor = value;
+			}
+		}
+	
+		engine.registerBindingAttribute("style-border-color", StyleBorderColorHandler);
+		
+		function backButtonClicked() {
+			data.selectedQuest = null;
+		}
+		
+		function handleTrackClick(quest) {
+			Crayta.callLua("CMenuToggleQuestTracking", quest.id)
+		}
+		
+		function sortStructure([ a, ], [ b, ]) {
+			return sortQuests(data.quests[a], data.quests[b])
+		}
+		
+		function handleParentClick(id) {
+			console.log("parent clicked", id);
+			const quest = data.quests[id];
+			data.selectedParent = data.quests[quest.parentId];
+			data.selectedQuest = null;
+			console.log("pre")
+			const root = data.structureRootHistory.pop();
+			
+			data.structureRoot = root;
+		}
+		
+		function handleClose() {
+			Crayta.callLua("CloseMenuOption", "Quests")
+		}
+		
+		function sortQuests(a,b) {
+			let sumA = 0;
+			let sumB = 0;
+			if(a.active) {
+				sumA++;
+			}
+			//if(a.done) {
+			//	sumA++;
+			//}
+			if(b.active) {
+				sumB++;
+			}
+			//if(b.done) {
+			//	sumB++;
+			//}
+			sumB -= b.index;
+			sumA -= a.index;
+			return sumB - sumA;
+		}
+		
+		
+		function handleQuestClick([ id, children ]) {
+			const quest = data.quests[id];
+			if(!quest.active) {
+				return;
+			}
+			
+			console.log("Clicked on", id)
+			if(quest.isEnd) {
+				console.log("Need to focus quest", data.quests.filter)
+				const questKeys = Object.keys(data.quests);
+				const steps = Object.keys(children).map(c => data.quests[c]);
+				console.log("steps", steps[0]);
+				data.selectedQuest = quest;
+				data.selectedQuestSteps = steps.sort(sortQuests);
+			} else {
+				console.log("Need to progress to children")
+				data.selectedQuest = null;
+				data.selectedParent = quest;
+				data.structureRootHistory.push(data.structureRoot);
+				data.structureRoot = children;
+				
+			}
+		}
+		
+		class QuestsHandle {
+			init() {
+				this.questTemplate = document.getElementById("quest");
+				this.questTemplate.id = undefined;
+				console.log(this.questTemplate);
+			}
+		
+			update(element, structure) {
+				const parent = element;
+				element.innerHTML = "";
+				Object.entries(structure).forEach(([ id, children ]) => {
+					this.createTree(id, children, parent);
+				})
+			}
+			
+			createTree(id, children, root) {
+				const el = this.questTemplate.cloneNode(true);
+				const quest = data.quests[id];
+				el.querySelector(".quest-name").textContent = quest.name;
+				
+				el.addEventListener("click", () => {
+					console.log("click")
+					quest.expanded = !quest.expanded;
+				});
+				
+				if(quest.expanded || !quest.parentId) {
+					root.appendChild(el);
+				}
+				
+				Object.entries(children).forEach(([ iid, cchildren ]) => {
+					this.createTree(iid, cchildren, el);
+				})
+			}
+		}
+		
+		engine.registerBindingAttribute("quests", QuestsHandle);
+	
+		engine.createJSModel("data", {
+			score: 0,
+			
+			popoverLeft: 0,
+			popoverTop: 0,
+			popoverVisible: false,
+			popoverName: "",
+			popoverDesc: "",
+			
+			overTitle: false,
+			windowLeft: "25vw",
+			windowTop: "20vh",
+			
+			/**
+			focusedItem: {
+				name: "test", usable: true, droppable: true, examinable: true
+			},
+			**/
+		
+			
+			secondaryMenuOpen: false,
+			secondaryLeft: null,
+			secondaryTop: null,
+			
+			mouseDown: false,
+			mouseDownX: null,
+			mouseDownY: null,
+			origWinX: null,
+			origWinY: null,
+			
+			
+			mouseX: 0,
+			mouseY: 0,
+			
+			movingWindow: false,
+			
+			selectedQuest: null,
+			selectedQuestSteps: null,
+			selectedParent: null,
+			structureRootHistory: [],
+			structureRoot: {
+				foo: {
+					bar: {
+						zoo: {},
+						goo: {},
+						goo2: {},
+						goo3: {},
+						goo4: {},
+						goo5: {},
+						goo6: {},
+						goo7: {},
+						goo8: {},
+						goo9: {},
+						goo10: {},
+					},
+					abc: {
+						efg: {}
+					},
+				}
+			},
+			quests: {
+				abc: {
+					id: "abc",
+					name: "abc",
+					isEnd: false,
+					active: true,
+					score: 10,
+				},
+				foo: {
+					id: "foo",
+					name: "Foo",
+					isEnd: false,
+					active: true,
+				},
+				bar: {
+					id: "bar",
+					name: "Find sunken treasure",
+					parentId: "foo",
+					isEnd: true,
+					active: true,
+					score: 10,
+					tracking: true,
+					description: "Rumour is there's a treasure under the waves of the Lurten Docks",
+					rewards: [
+						{ name: "Test", description: "lorem ipsum", count: 10, icon: "https://live.content.crayta.com/ui_image/530abf53-b349-44ad-8457-002dda5abb20_ui_image"},
+					]
+				},
+				zoo: {
+					id: "zoo",
+					name: "Do the thing",
+					isEnd: false,
+					parentId: "bar",
+					done: false,
+					active: false,
+					//imageUrl: "https://live.content.crayta.com/ui_image/4669005c-b7d1-487d-9766-b12f32d58b7c_ui_image",
+				},
+				goo: {
+					id: "goo",
+					name: "TESTLONGER",
+					isEnd: false,
+					parentId: "bar",
+					done: false,
+					active: true,
+					description: "test",
+					imageUrl: "https://live.content.crayta.com/ui_image/4669005c-b7d1-487d-9766-b12f32d58b7c_ui_image",
+				},
+				goo2: {
+					id: "goo2",
+					name: "Do the thing 2",
+					isEnd: false,
+					parentId: "bar",
+					done: false,
+					active: true,
+					description: "TestTestTestTes tTestTestTestTestTestTestTestTestT estTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest",
+					imageUrl: "https://live.content.crayta.com/ui_image/4669005c-b7d1-487d-9766-b12f32d58b7c_ui_image",
+				},
+				goo3: {
+					id: "goo2",
+					name: "Do the thing 2",
+					isEnd: false,
+					parentId: "bar",
+					done: false,
+					active: true,
+					description: "TestTestTestTes tTestTestTestTestTestTestTestTestT estTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest",
+					imageUrl: "https://live.content.crayta.com/ui_image/4669005c-b7d1-487d-9766-b12f32d58b7c_ui_image",
+				},
+				goo4: {
+					id: "goo2",
+					name: "Do the thing 2",
+					isEnd: false,
+					parentId: "bar",
+					done: false,
+					active: true,
+					description: "TestTestTestTes tTestTestTestTestTestTestTestTestT estTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest",
+					imageUrl: "https://live.content.crayta.com/ui_image/4669005c-b7d1-487d-9766-b12f32d58b7c_ui_image",
+				},
+				goo5: {
+					id: "goo2",
+					name: "Do the thing 2",
+					isEnd: false,
+					parentId: "bar",
+					done: false,
+					active: true,
+					description: "TestTestTestTes tTestTestTestTestTestTestTestTestT estTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest",
+					imageUrl: "https://live.content.crayta.com/ui_image/4669005c-b7d1-487d-9766-b12f32d58b7c_ui_image",
+				},
+				goo6: {
+					id: "goo2",
+					name: "Do the thing 2",
+					isEnd: false,
+					parentId: "bar",
+					done: false,
+					active: true,
+					description: "TestTestTestTes tTestTestTestTestTestTestTestTestT estTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest",
+					imageUrl: "https://live.content.crayta.com/ui_image/4669005c-b7d1-487d-9766-b12f32d58b7c_ui_image",
+				},
+				goo7: {
+					id: "goo2",
+					name: "Do the thing 2",
+					isEnd: false,
+					parentId: "bar",
+					done: false,
+					active: true,
+					description: "TestTestTestTes tTestTestTestTestTestTestTestTestT estTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest",
+					imageUrl: "https://live.content.crayta.com/ui_image/4669005c-b7d1-487d-9766-b12f32d58b7c_ui_image",
+				},
+				goo8: {
+					id: "goo2",
+					name: "Do the thing 2",
+					isEnd: false,
+					parentId: "bar",
+					done: false,
+					active: true,
+					description: "TestTestTestTes tTestTestTestTestTestTestTestTestT estTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest",
+					imageUrl: "https://live.content.crayta.com/ui_image/4669005c-b7d1-487d-9766-b12f32d58b7c_ui_image",
+				},
+				goo9: {
+					id: "goo2",
+					name: "Do the thing 2",
+					isEnd: false,
+					parentId: "bar",
+					done: false,
+					active: true,
+					description: "TestTestTestTes tTestTestTestTestTestTestTestTestT estTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest",
+					imageUrl: "https://live.content.crayta.com/ui_image/4669005c-b7d1-487d-9766-b12f32d58b7c_ui_image",
+				},
+				goo10: {
+					id: "goo2",
+					name: "Do the thing 2",
+					isEnd: false,
+					parentId: "bar",
+					done: false,
+					active: true,
+					description: "TestTestTestTes tTestTestTestTestTestTestTestTestT estTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest",
+					imageUrl: "https://live.content.crayta.com/ui_image/4669005c-b7d1-487d-9766-b12f32d58b7c_ui_image",
+				},
+				efg: {
+					id: "zoo",
+					name: "Do the thing",
+					isEnd: false,
+					parentId: "bar",
+					done: false,
+					active: false,
+					imageUrl: "https://live.content.crayta.com/ui_image/4669005c-b7d1-487d-9766-b12f32d58b7c_ui_image",
+				}
+			
+			},
+			structure: {
+				foo: {
+					bar: {
+						zoo: {},
+						goo: {},
+						goo2: {}
+					}
+				}
+			},
+			recentlyCompleted: [
+				{
+					id: "bar",
+					name: "Find sunken treasure",
+					parentId: "foo",
+					isEnd: true,
+					active: true,
+					score: 1,
+					description: "Rumour is there's a treasure under the waves of the Lurten Docks"
+				},
+			]
+		})	
+		
+		
+		function onMouseMove(e) {
+			data.popoverLeft = e.clientX + 25;
+			data.popoverTop = e.clientY + 25;
+			
+			data.mouseX = e.clientX;
+			data.mouseY = e.clientY;
+			
+			if(data.overTitle && data.mouseDown || data.movingWindow) {
+				const rect = e.target.getBoundingClientRect();
+				if(data.mouseDownX === null) {
+					data.mouseDownX = e.clientX;
+					data.mouseDownY = e.clientY;
+					data.origWinX = rect.left;
+					data.origWinY = rect.top;
+					data.movingWindow = true;
+				}
+						
+				const offsetX = data.mouseDownX - e.clientX;
+				const offsetY = data.mouseDownY - e.clientY;
+				
+				data.windowLeft = data.origWinX - offsetX;
+				data.windowTop = data.origWinY - offsetY;
+			}
+		
+			engine.synchronizeModels();
+			engine.updateWholeModel(data);
+		}
+		
+		function onBodyClick() {
+			Crayta.callLua("FocusMenuOption", "Quests")
+			data.secondaryMenuOpen = false;
+			engine.synchronizeModels();
+			engine.updateWholeModel(data);
+		}
+		
+		function onMouseEnterTitle(e) {
+			data.overTitle = true;
+		}
+		
+		function onMouseLeaveTitle(e) {
+			data.overTitle = false;
+		}
+		
+		function onMouseEnterItem(e, item) {
+			data.popoverVisible = true;
+			
+			data.focusedItem = item;
+			
+			engine.synchronizeModels();
+			engine.updateWholeModel(data);
+		}
+		
+		function onMouseLeaveItem(e) {
+			data.popoverVisible = false;
+			
+			engine.synchronizeModels();
+			engine.updateWholeModel(data);
+		}
+		
+		function selectQuestById(id) {
+			data.structureRoot = data.structure;
+			data.selectedParent = null;
+			Object.entries(data.structure).find(([ key, value ]) => {
+				if(key === id) {
+					handleQuestClick([key, value])
+					return true
+				}
+			});
+		}
+		
+		engine.on("ActivateSpecificQuest", id => {
+			selectQuestById(id)
+			
+			engine.synchronizeModels();
+			engine.updateWholeModel(data);
+		});
+		
+		engine.on("LocalOnButtonPressed", btn => {	
+			if(btn === "primary") {
+				data.mouseDown = true;
+				
+				engine.synchronizeModels();
+				engine.updateWholeModel(data);
+			}
+			if(btn === "secondary" && data.popoverVisible) {
+				data.secondaryMenuOpen = true;
+				data.secondaryLeft = data.mouseX;
+				data.secondaryTop = data.mouseY;
+				data.secondaryItem = data.focusedItem;
+				
+				engine.synchronizeModels();
+				engine.updateWholeModel(data);
+			}
+		})
+		
+		engine.on("LocalOnButtonReleased", btn => {
+			if(btn === "primary") {
+				data.mouseDown = false;
+				data.mouseDownX = null;
+				data.mouseDownY = null;
+				data.movingWindow = false;
+				engine.synchronizeModels();
+				engine.updateWholeModel(data);
+			}
+		})
+		
+		engine.on("InitQuestsTransfer", () => {
+			data.quests = {};
+		})
+		
+		engine.on("AddQuest", quest => {
+			data.quests[quest.id] = quest;
+		})
+		
+		engine.on("FinishQuestsTransfer", () => {
+			//data.structureRoot = data.structure;
+			
+			//data.selectedQuest = null;
+			//data.selectedQuestSteps = null;
+			//data.selectedParent = null;
+			//data.structureRootHistory = [];
+			
+			if(data.selectedQuest) {
+				selectQuestById(data.selectedQuest.id)
+			}
+			
+			engine.synchronizeModels();
+			engine.updateWholeModel(data);
+		})
+		
+		engine.on("UpdateStructure", structure => {
+			data.structure = structure;
+			data.structureRoot = data.structure;
+		})
+		/*
+		* You can manipulate widget properties from Lua either through a Coherent function:
+		* e.g. self:GetEntity().exampleWidget:CallFunction("exampleCoherentFunction", "Some new text")
+		* 
+		* or directly, via:
+		* self:GetEntity().exampleWidget.properties.text = "Some new text";
+		*/
+		engine.on("exampleCoherentFunction", function (text) {
+			properties.signText = text;
+		});
+		
+		/*
+		* You can also trigger Lua functions in game scripts on this entity by using `callLua`
+		* You can bind an element to trigger a function like:
+		* <button onclick="window.exampleTriggerLuaFunction(event, 'Some Data')">
+		*/
+		function exampleTriggerLuaFunction(event, data) {
+			// You can pass any data to the Lua function by adding it to the end
+			Crayta.callLua("myLuaFunction", data);
+		}
+	</script>
+</body>
+
+</html>

@@ -124,11 +124,18 @@ module Hoard
           private
       
           def []=(key, value)
-            instance_variable_set("@#{key}", value)
+            sanitized_key = sanitize_key(key)
+            instance_variable_set("@#{sanitized_key}", value)
           end
-      
+
           def [](key)
-            instance_variable_get("@#{key}")
+            sanitized_key = sanitize_key(key)
+            instance_variable_get("@#{sanitized_key}")
+          end
+
+          def sanitize_key(key)
+            # Convert hyphens to underscores for valid instance variable names
+            key.to_s.tr('-', '_')
           end
       
           def proxy_method(method, *args)

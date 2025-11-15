@@ -70,4 +70,11 @@ class Player < Hoard::Entity
     def init
         send_to_scripts(:play_animation, :idle, true)
     end
+
+    def post_update
+      super
+      if args.inputs.keyboard.key_down.q
+        user.quests_widget.toggle!
+      end
+    end
 end

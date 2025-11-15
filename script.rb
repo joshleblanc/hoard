@@ -1,6 +1,7 @@
 module Hoard
   class Script
     attr_gtk
+    include Eventable
 
     attr_accessor :entity, :init_once_done
 

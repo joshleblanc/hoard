@@ -6,6 +6,7 @@ module Hoard
     script Scripts::DocumentStoresScript.new
     script Scripts::DocumentStoreScript.new(id: "default")
     script Scripts::SaveDataScript.new
+    script Scripts::UserQuestsScript.new
 
     def initialize(username, player_card_icon = nil)
       @username = username

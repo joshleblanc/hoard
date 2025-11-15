@@ -4,6 +4,7 @@ module Hoard
   class Entity < Process
     include Scriptable
     include Widgetable
+    include Eventable
 
     attr_sprite
 
@@ -91,6 +92,7 @@ module Hoard
 
       add_default_scripts!
       add_default_widgets!
+      add_default_events!
 
       # add_script Scripts::DebugRenderScript.new
     end

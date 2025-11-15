@@ -67,8 +67,14 @@ module Hoard
       end
 
       def w(max_w = nil)
-        max_w = string_box(text, size_enum)[0]
-        request_w(max_w)
+        return @options[:w] if @options[:w]
+        text_width = string_box(text, size_enum)[0]
+        # Use parent's explicit width if available to avoid recursion
+        if parent && parent.options[:w]
+          [text_width, parent.options[:w]].min
+        else
+          text_width
+        end
       end
 
       def h
@@ -94,7 +100,9 @@ module Hoard
           parent.ry - parent.rh + (h / 2)
         else
           # Center vertically
-          parent.ry - (parent.rh / 2) #- (h / 2)
+          # With vertical_alignment_enum: 0 (center), y-coordinate is the vertical CENTER of text
+          # Parent center is at: parent.ry - (parent.rh / 2)
+          parent.ry - (parent.rh / 2) + h
         end
       end
     end

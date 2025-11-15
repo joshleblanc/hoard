@@ -38,7 +38,15 @@ module Hoard
             end
 
             def w(requester = nil)
-                @parent.w / COLS * span
+                return @options[:w] if @options[:w]
+                # Use parent's explicit width to avoid recursion
+                # Traverse up to find an ancestor with explicit width
+                ancestor = @parent
+                while ancestor && !ancestor.options[:w]
+                    ancestor = ancestor.parent
+                end
+                parent_width = ancestor&.options&.[](:w) || 1280 # fallback to screen width
+                parent_width / COLS * span
             end
 
             def h 

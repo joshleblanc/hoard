@@ -130,27 +130,51 @@ module Hoard
 
       def render
         if @options[:border]
-          border(
-            x: rx, y: ry, w: rw, h: rh,
-            r: @options[:border][:r] || 255,
-            g: @options[:border][:g] || 255,
-            b: @options[:border][:b] || 255,
-            a: @options[:border][:a] || 255,
-            anchor_x: 0,
-            anchor_y: 1
-          )
+          if @options[:border].is_a?(Array)
+            border(
+              x: rx, y: ry, w: rw, h: rh,
+              r: @options[:border][0],
+              g: @options[:border][1],
+              b: @options[:border][2],
+              a: @options[:border][3],
+              anchor_x: 0,
+              anchor_y: 1
+            )
+          else
+            border(
+              x: rx, y: ry, w: rw, h: rh,
+              r: @options[:border][:r] || 255,
+              g: @options[:border][:g] || 255,
+              b: @options[:border][:b] || 255,
+              a: @options[:border][:a] || 255,
+              anchor_x: 0,
+              anchor_y: 1
+            )
+          end
         end
 
         if @options[:background]
-          sprite(
-            x: rx, y: ry, w: rw, h: rh,
-            r: @options[:background][:r] || 0,
-            g: @options[:background][:g] || 0,
-            b: @options[:background][:b] || 0,
-            a: @options[:background][:a] || 255,
-            anchor_x: 0,
-            anchor_y: 1
-          )
+          if @options[:background].is_a?(Array)
+            sprite(
+              x: rx, y: ry, w: rw, h: rh,
+              r: @options[:background][0],
+              g: @options[:background][1],
+              b: @options[:background][2],
+              a: @options[:background][3],
+              anchor_x: 0,
+              anchor_y: 1
+            )
+          else
+            sprite(
+              x: rx, y: ry, w: rw, h: rh,
+              r: @options[:background][:r] || 0,
+              g: @options[:background][:g] || 0,
+              b: @options[:background][:b] || 0,
+              a: @options[:background][:a] || 255,
+              anchor_x: 0,
+              anchor_y: 1
+            )
+          end
         end
       end
 
@@ -185,7 +209,8 @@ module Hoard
       end
 
       def request_w(max_w = Float::INFINITY)
-        [max_w, parent.w(max_w)].min
+        parent_width = parent ? (parent.options[:w] || max_w) : max_w
+        [max_w, parent_width].min
       end
 
       def h
@@ -225,7 +250,8 @@ module Hoard
         base = if @options[:y]
           y
         else
-          (parent&.ry || 0) + (parent&.padding || 0)
+          # In DragonRuby, y goes bottom-to-top, so subtract padding to go "down" visually
+          (parent&.ry || 0) - (parent&.padding || 0)
         end
 
         # Apply element's own offset

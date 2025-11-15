@@ -35,6 +35,7 @@ module Hoard
 
       def on_collision(player)
         player.user.send_to_scripts(:add_to_inventory, entity.inventory_spec_script, @quantity)
+        player.user.user_quests_script&.complete_quest(entity.ldtk_entity_script.id)
 
         hide!
 

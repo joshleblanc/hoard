@@ -14,7 +14,7 @@ module Hoard
     end
 
     def wait(frames, &blk)
-      GTK.on_tick_count(Kernel.tick_count + frames)
+      GTK.on_tick_count(Kernel.tick_count + frames) do
         blk.call
       end
     end

@@ -90,7 +90,7 @@ module Hoard
     end
 
     def tick
-      if GTK.reload_if_needed(map_path) 
+      if GTK.reload_if_needed(map_path)
         auto_load_map
         start_level @root.level(identifier: @current_level.identifier)
       end
@@ -157,7 +157,6 @@ module Hoard
 
       level.layer("Entities").entity_instances.each do |ldtk_entity|
         entity_class = Hoard::Entity.resolve(ldtk_entity.identifier)
-        p "Resolved entity #{ldtk_entity.identifier} = #{entity_class}"
         next unless entity_class
 
         # Special case: position player if it exists
@@ -182,7 +181,6 @@ module Hoard
     # Spawn a generic entity from LDTK entity instance
     def spawn_entity_from_ldtk(entity_class, ldtk_entity)
       entity = entity_class.new(parent: self, cx: ldtk_entity.grid[0], cy: ldtk_entity.grid[1])
-      p "Setting entity to #{ldtk_entity}"
       entity.send_to_scripts(:ldtk_entity=, ldtk_entity)
       apply_ldtk_fields(entity, ldtk_entity)
       entity.args = args
@@ -193,12 +191,11 @@ module Hoard
     # Apply LDTK field instances to entity scripts
     def apply_ldtk_fields(entity, ldtk_entity)
       ldtk_entity.field_instances.each do |field|
-        p "Setting field #{field.identifier} = #{field.value}"
         entity.send_to_scripts("#{field.identifier}=", field.value)
       end
     end
 
-    def user 
+    def user
       @user ||= User.new("Local")
     end
 

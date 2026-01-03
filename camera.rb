@@ -280,13 +280,8 @@ module Hoard
         if level.px_hei < px_hei
           clamped_focus.level_y = level.px_hei * 0.5
         else
-          # Y-axis: lower bound is px_hei * 0.5 (bottom of level), upper bound is level.px_hei - px_hei * 0.5 (top of level)
-          # But we want to show from 0 at bottom to level.px_hei at top
-          # Clamp should be: min = px_hei * 0.5, max = level.px_hei - px_hei * 0.5
-          # Wait, for non-flipped: 0 is bottom, higher Y is higher up
-          # Camera at px_hei/2 shows 0 to px_hei (bottom of level)
-          # Camera at level.px_hei - px_hei/2 shows level.px_hei - px_hei to level.px_hei (top of level)
-          clamped_focus.level_y = raw_focus.level_y.clamp(px_hei * 0.5, level.px_hei - px_hei * 0.5)
+          # changed the ned of this from px_hei * 0.5 to * 0.35 to see a little bit more of the ground at the bottom of the level
+          clamped_focus.level_y = raw_focus.level_y.clamp(px_hei * 0.5, level.px_hei - (px_hei * 0.35))
         end
       else
         clamped_focus.level_x = raw_focus.level_x

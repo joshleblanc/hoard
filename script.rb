@@ -13,7 +13,13 @@ module Hoard
       end
     end
 
-    def schedule(&blk) 
+    def wait(frames, &blk)
+      GTK.on_tick_count(Kernel.tick_count + frames)
+        blk.call
+      end
+    end
+
+    def schedule(&blk)
       Scheduler.schedule(&blk)
     end
 
@@ -41,7 +47,7 @@ module Hoard
       #args.gtk.write_file "saves/#{self.class.name}.dat", data.to_json
     end
 
-    def user 
+    def user
       entity&.user
     end
 
@@ -49,7 +55,7 @@ module Hoard
       args.outputs.debug.push(*any)
     end
 
-    def state 
+    def state
       args.state
     end
 
@@ -61,10 +67,10 @@ module Hoard
     def init; end
     def on_collision(entity); end
 
-    def client_update; end 
+    def client_update; end
     def local_update; end
 
-    def client_post_update; end 
+    def client_post_update; end
     def client_pre_update; end
     def local_post_update; end
     def local_pre_update; end
@@ -73,7 +79,7 @@ module Hoard
     def client_init; end
     def local_init; end
     def send_to_local(method_name, *args)
-      if server? && client? 
+      if server? && client?
         send(method_name, *args)
       end
     end
@@ -85,6 +91,5 @@ module Hoard
     def server?() = entity&.server?
     def client?() = entity&.client?
     def local?() = entity&.local?
-    def wait; end
   end
 end

@@ -280,7 +280,6 @@ module Hoard
         if level.px_hei < px_hei
           clamped_focus.level_y = level.px_hei * 0.5
         else
-          tmp = px_hei / Hoard.config.game_class::GRID
           clamped_focus.level_y = raw_focus.level_y.clamp(px_hei * 0.5, level.px_hei + px_hei * 0.5)
         end
       else

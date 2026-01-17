@@ -26,10 +26,10 @@ module Hoard
       end
 
       def int(cx, cy)
-        return if cy < 0
-        return if cx < 0
-        return if cx >= c_wid
-        return if cy >= c_hei
+        return 1 if cy < 0
+        return 1 if cx < 0
+        return 1 if cx >= c_wid
+        return 1 if cy >= c_hei
         pos = cx + (cy * c_wid)
         int_grid_csv[pos]
       end

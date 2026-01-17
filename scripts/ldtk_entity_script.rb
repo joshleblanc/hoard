@@ -4,11 +4,10 @@ module Hoard
       attr :ldtk_entity, :ldtk_id
 
       def init
-        return unless definition 
-        return unless rect 
-        return unless tileset 
+        return unless definition
+        return unless rect
+        return unless tileset
 
-        p "good?"
         entity.add_script Hoard::Scripts::AnimationScript.new(
           :ldtk_default_visual,
           path: tileset.rel_path&.gsub("../", "") || "",
@@ -20,15 +19,15 @@ module Hoard
         entity.send_to_scripts :play_animation, :ldtk_default_visual, true
       end
 
-      def definition 
+      def definition
         ldtk_entity&.definition
       end
 
-      def rect 
+      def rect
         definition&.tile_rect || ldtk_entity&.tile
       end
 
-      def tileset 
+      def tileset
         definition&.tileset || ldtk_entity&.tile&.tileset
       end
 

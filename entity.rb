@@ -308,8 +308,6 @@ module Hoard
     def post_update
       super
 
-      self.flip_horizontally = dir < 0
-
       @squash_x += (1 - @squash_x) * [1, 0.2 * tmod].min
       @squash_y += (1 - @squash_y) * [1, 0.2 * tmod].min
 

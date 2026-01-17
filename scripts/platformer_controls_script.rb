@@ -18,7 +18,7 @@ module Hoard
             entity.send_to_scripts(:play_audio, :footsteps)
           else
             entity.send_to_scripts(:play_animation, :moving_jump)
-          end 
+          end
         elsif Hoard.config.game_class.s.inputs.keyboard.key_held.right && !entity.cd.has("controls_disabled")
           @current_speed = @move_speed
           entity.dir = 1
@@ -77,6 +77,10 @@ module Hoard
           })
         end
         entity.v_base.dx = (entity.v_base.dx + @current_speed) * 0.085 if @current_speed != 0
+      end
+
+      def post_update
+        entity.flip_horizontally = entity.dir < 0
       end
     end
   end

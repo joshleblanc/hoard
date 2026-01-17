@@ -169,7 +169,7 @@ module Hoard
       scroller.x = -clamped_focus.level_x + px_wid * 0.5
       # For flipped coordinate system: convert level Y to flipped Y based on actual level height
       scroller.y = -(level.px_hei - clamped_focus.level_y) + px_hei * 0.5
-      scroller.y -= target.h
+      scroller.y -= target.h if target
 
       self.bump_off_x = bump_off_x * (bump_frict ** tmod)
       self.bump_off_y = bump_off_y * (bump_frict ** tmod)

@@ -13,6 +13,8 @@ require_relative "ui/image"
 require_relative "widget"
 require_relative "scriptable"
 require_relative "script"
+require_relative "scripts/top_down_player_script"
+require_relative "scripts/top_down_controls_script"
 require_relative "scripts/label_script"
 require_relative "scripts/collision_damage_script"
 require_relative "scripts/move_to_destination_script"
@@ -59,8 +61,8 @@ require_relative "stat"
 require_relative "scheduler"
 require_relative "user"
 
-module Hoard 
-    class << self 
+module Hoard
+    class << self
         attr_reader :config
 
         def configure(&blk)

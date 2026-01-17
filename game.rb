@@ -15,7 +15,6 @@ module Hoard
 
       @slow_mos = {}
       @cur_game_speed = 1
-
       @scroller = Layer.new(:scene)
       @camera = Camera.new
 
@@ -90,7 +89,7 @@ module Hoard
     end
 
     def tick
-      if GTK.reload_if_needed(map_path) 
+      if GTK.reload_if_needed(map_path)
         auto_load_map
         start_level @root.level(identifier: @current_level.identifier)
       end
@@ -198,7 +197,7 @@ module Hoard
       end
     end
 
-    def user 
+    def user
       @user ||= User.new("Local")
     end
 
@@ -213,7 +212,6 @@ module Hoard
       # Check if player already exists as a child
       existing = children.find { |c| c.is_a?(player_class) }
       return existing if existing
-
       # Create new player instance
       user.spawn_player(player_class)
     end

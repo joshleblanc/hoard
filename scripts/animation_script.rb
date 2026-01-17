@@ -59,8 +59,8 @@ module Hoard
       end
 
       def tile_x
-        if files 
-          0 
+        if files
+          0
         elsif @horizontal_frames
           @opts.x + (tile_w * frame)
         else
@@ -81,8 +81,8 @@ module Hoard
       end
 
       def tile_y
-        if files 
-          0 
+        if files
+          0
         elsif @horizontal_frames
           @opts.y
         else

@@ -98,6 +98,7 @@ module Hoard
     end
 
     def pre_update
+      args.outputs.background_color = [0, 0, 0]
       args.outputs[:ui].transient!
       if @current_level
         args.outputs[:scene].w = @current_level.px_wid

@@ -22,6 +22,7 @@ module Hoard
       def initialize
         super
         @notifications = []
+        @z_index = 9999  # Always render on top of everything
       end
 
       # Push a notification. This is the public API -- call from anywhere.

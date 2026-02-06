@@ -47,7 +47,14 @@ module Hoard
     end
 
     def send_to_widgets(met, *args, &blk)
-      widgets.each do |widget|
+      # Sort by z_index then z_order for post_update so higher values draw on top
+      ordered = if met == :post_update
+                  widgets.sort_by { |w| [(w.z_index || 0), (w.z_order || 0)] }
+                else
+                  widgets
+                end
+
+      ordered.each do |widget|
         if widget.respond_to?(met)
           unless widget.init_once_done || met.to_s.include?("=")
             widget.args = $args unless widget.args

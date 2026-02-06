@@ -2,18 +2,21 @@ module Hoard
   class Widget
     attr_gtk
 
-    attr_accessor :entity, :visible, :init_once_done
+    attr_accessor :entity, :visible, :init_once_done, :z_index, :z_order
 
     attr :offset_x, :offset_y
     attr_reader :uuid
 
     PADDING = 18
+    @@_z_counter = 0
 
     def initialize
       @visible = true
       @offset_x = 0
       @offset_y = 0
       @uuid = $gtk.create_uuid
+      @z_index = 0   # Fixed layer. Set manually. Higher = always on top.
+      @z_order = 0   # Dynamic order within a layer. Bumped by show!.
 
       # New UI system
       @_ui_ctx = nil
@@ -218,6 +221,8 @@ module Hoard
 
     def show!
       @visible = true
+      @@_z_counter += 1
+      @z_order = @@_z_counter
     end
 
     def hide!
@@ -225,7 +230,11 @@ module Hoard
     end
 
     def toggle!
-      @visible = !@visible
+      if @visible
+        hide!
+      else
+        show!
+      end
     end
 
     # ------------------------------------------------------------------

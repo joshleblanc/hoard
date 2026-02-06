@@ -32,6 +32,9 @@ class ShowcaseWidget < Hoard::Widget
     if $args.inputs.keyboard.key_down.i
       entity.inventory_widget.toggle!
     end
+    if $args.inputs.keyboard.key_down.s
+      entity.shop_widget.toggle!
+    end
   end
 
   def render
@@ -255,11 +258,26 @@ class ShowcaseWidget < Hoard::Widget
                @status = "Mined ore! (#{qm.quest(:craft_sword).find_step(:ore).completions}/5)"
              }
 
+      button :btn_feather, text: "Find Feather", w: 190, size: :sm, style: :primary,
+             on_click: ->(b) {
+               qm = entity.quest_script.manager
+               f = [:feather_2, :feather_3].find { |id| !qm.quest(id).complete? }
+               if f
+                 qm.progress(f, :find)
+                 @status = "Found #{qm.quest(f).name}!"
+               else
+                 @status = "All feathers found!"
+               end
+             }
+
       button :btn_quest_log, text: "Quest Log [J]", w: 190, size: :sm,
              on_click: ->(b) { entity.quest_log_widget.toggle! }
 
       button :btn_inventory, text: "Inventory [I]", w: 190, size: :sm,
              on_click: ->(b) { entity.inventory_widget.toggle! }
+
+      button :btn_shop, text: "Shop [S]", w: 190, size: :sm, style: :success,
+             on_click: ->(b) { entity.shop_widget.toggle! }
     end
   end
 
@@ -291,7 +309,7 @@ class ShowcaseWidget < Hoard::Widget
 
     hint_c = t.colors[:text_disabled]
     $args.outputs[:ui].primitives << {
-      x: 640, y: 24, text: "Tab: focus | J: quests | I: inventory | Click: interact | Toggle dark mode for themes",
+      x: 640, y: 24, text: "Tab: focus | J: quests | I: inventory | S: shop | Click: interact",
       size_px: 14, anchor_x: 0.5, anchor_y: 0.5,
       r: hint_c[:r], g: hint_c[:g], b: hint_c[:b]
     }

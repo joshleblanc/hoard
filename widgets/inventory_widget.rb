@@ -2,7 +2,7 @@
 #
 # Works with Hoard::Scripts::InventoryScript / InventorySpecScript.
 # Shows items in a grid with hover tooltips and a click context menu
-# (Use / Examine / Drop). Renders on the :ui_overlay layer as a modal.
+# (Use / Examine / Drop). Renders as a modal on the :ui render target.
 #
 # Usage:
 #   class Player < Hoard::Entity
@@ -33,14 +33,6 @@ module Hoard
         @context_open = false
       end
 
-      # Render to overlay so it draws above all other UI
-      def _ui_context
-        @_ui_ctx ||= Hoard::Ui::Context.new(
-          theme: $hoard_ui_theme || Hoard::Ui::Theme.new,
-          render_target: :ui_overlay
-        )
-      end
-
       def update
         return unless @visible
         handle_input
@@ -48,7 +40,7 @@ module Hoard
 
       def render
         t = $hoard_ui_theme || Hoard::Ui::Theme.new
-        out = $args.outputs[:ui_overlay]
+        out = $args.outputs[:ui]
 
         # Dim overlay
         out.primitives << { x: 0, y: 0, w: 1280, h: 720, path: :solid, r: 0, g: 0, b: 0, a: 180 }

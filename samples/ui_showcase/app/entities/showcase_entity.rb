@@ -4,11 +4,13 @@ class ShowcaseEntity < Hoard::Entity
   widget Hoard::Widgets::QuestTrackerWidget.new
   widget Hoard::Widgets::QuestLogWidget.new
   widget Hoard::Widgets::NotificationWidget.new
+  widget Hoard::Widgets::InventoryWidget.new
 
   def initialize(**opts)
     super(**opts)
     self.visible = false  # No sprite to render -- purely a widget host
     define_sample_quests
+    define_sample_inventory
   end
 
   # No level loaded, skip world position and collision logic
@@ -100,5 +102,21 @@ class ShowcaseEntity < Hoard::Entity
     qm.progress(:find_treasure, :dive)
     qm.progress(:slay_slimes, :kill, 3)
     qm.progress(:craft_sword, :ore, 2)
+  end
+
+  def define_sample_inventory
+    items = [
+      { name: "Health Potion",  description: "Restores 50 HP",        quantity: 5   },
+      { name: "Iron Sword",     description: "A sturdy blade",        quantity: 1   },
+      { name: "Wooden Shield",  description: "Basic protection",      quantity: 1   },
+      { name: "Iron Ore",       description: "Raw crafting material", quantity: 12  },
+      { name: "Lumber",         description: "Processed wood planks", quantity: 8   },
+      { name: "Gold Coin",      description: "Currency",              quantity: 347 },
+      { name: "Slime Gel",      description: "Dropped by slimes",     quantity: 3   },
+      { name: "Map Fragment",   description: "Part of a treasure map",quantity: 2   },
+    ]
+
+    inventory_widget.slots = items
+    inventory_widget.size = 20
   end
 end

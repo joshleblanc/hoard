@@ -25,9 +25,12 @@ class ShowcaseWidget < Hoard::Widget
     # Animate the progress bar
     @progress_val = (@progress_val + 0.3) % 101
 
-    # J key toggles quest log
+    # J key toggles quest log, I key toggles inventory
     if $args.inputs.keyboard.key_down.j
       entity.quest_log_widget.toggle!
+    end
+    if $args.inputs.keyboard.key_down.i
+      entity.inventory_widget.toggle!
     end
   end
 
@@ -254,6 +257,9 @@ class ShowcaseWidget < Hoard::Widget
 
       button :btn_quest_log, text: "Quest Log [J]", w: 190, size: :sm,
              on_click: ->(b) { entity.quest_log_widget.toggle! }
+
+      button :btn_inventory, text: "Inventory [I]", w: 190, size: :sm,
+             on_click: ->(b) { entity.inventory_widget.toggle! }
     end
   end
 
@@ -285,7 +291,7 @@ class ShowcaseWidget < Hoard::Widget
 
     hint_c = t.colors[:text_disabled]
     $args.outputs[:ui].primitives << {
-      x: 640, y: 24, text: "Tab: cycle focus | J: quest log | Click: interact | Toggle dark mode to switch themes",
+      x: 640, y: 24, text: "Tab: focus | J: quests | I: inventory | Click: interact | Toggle dark mode for themes",
       size_px: 14, anchor_x: 0.5, anchor_y: 0.5,
       r: hint_c[:r], g: hint_c[:g], b: hint_c[:b]
     }

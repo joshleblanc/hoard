@@ -24,6 +24,11 @@ class ShowcaseWidget < Hoard::Widget
   def update
     # Animate the progress bar
     @progress_val = (@progress_val + 0.3) % 101
+
+    # J key toggles quest log
+    if $args.inputs.keyboard.key_down.j
+      entity.quest_log_widget.toggle!
+    end
   end
 
   def render
@@ -219,13 +224,36 @@ class ShowcaseWidget < Hoard::Widget
   # -------------------------------------------------------------------
 
   def render_radio_section
-    panel :radio_panel, x: 1040, y: 175, w: 220, h: 230, title: "Radio Group" do
-      label :diff_label, text: "Difficulty:", size_key: :size_sm, color_key: :text_secondary
+    panel :quest_panel, x: 1040, y: 175, w: 220, h: 230, title: "Quests Demo" do
+      button :btn_slay, text: "Kill Slime", w: 190, size: :sm, style: :danger,
+             on_click: ->(b) {
+               qm = entity.quest_script.manager
+               qm.progress(:slay_slimes, :kill)
+               @status = "Slime killed! (#{qm.quest(:slay_slimes).progress_percent}%)"
+             }
 
-      radio_group :rg_difficulty,
-        options: ["Easy", "Normal", "Hard", "Nightmare"],
-        selected_index: @difficulty,
-        on_change: ->(rg) { @difficulty = rg.selected_index; @status = "Difficulty: #{rg.selected_value}" }
+      button :btn_dive, text: "Progress Treasure", w: 190, size: :sm, style: :primary,
+             on_click: ->(b) {
+               qm = entity.quest_script.manager
+               q = qm.quest(:find_treasure)
+               step = q.steps.find { |s| !s.complete? }
+               if step
+                 qm.progress(:find_treasure, step.id)
+                 @status = "#{step.name} done!"
+               else
+                 @status = "Treasure quest already complete"
+               end
+             }
+
+      button :btn_mine, text: "Mine Ore", w: 190, size: :sm, style: :warning,
+             on_click: ->(b) {
+               qm = entity.quest_script.manager
+               qm.progress(:craft_sword, :ore)
+               @status = "Mined ore! (#{qm.quest(:craft_sword).find_step(:ore).completions}/5)"
+             }
+
+      button :btn_quest_log, text: "Quest Log [J]", w: 190, size: :sm,
+             on_click: ->(b) { entity.quest_log_widget.toggle! }
     end
   end
 
@@ -257,7 +285,7 @@ class ShowcaseWidget < Hoard::Widget
 
     hint_c = t.colors[:text_disabled]
     $args.outputs[:ui].primitives << {
-      x: 640, y: 24, text: "Tab: cycle focus | Click: interact | Toggle dark mode to switch themes",
+      x: 640, y: 24, text: "Tab: cycle focus | J: quest log | Click: interact | Toggle dark mode to switch themes",
       size_px: 14, anchor_x: 0.5, anchor_y: 0.5,
       r: hint_c[:r], g: hint_c[:g], b: hint_c[:b]
     }

@@ -8,7 +8,8 @@ module Hoard
     attr :camera, :fx, :current_level, :hud, :slow_mos, :root
     attr :cur_game_speed, :scroller
 
-    UI = { x: 0, y: 0, h: 720, w: 1280, path: :ui }
+    UI         = { x: 0, y: 0, h: 720, w: 1280, path: :ui }
+    UI_OVERLAY = { x: 0, y: 0, h: 720, w: 1280, path: :ui_overlay }
 
     def initialize
       super
@@ -103,6 +104,7 @@ module Hoard
     def pre_update
       args.outputs.background_color = [0, 0, 0]
       args.outputs[:ui].transient!
+      args.outputs[:ui_overlay].transient!
       if @current_level
         args.outputs[:scene].w = @current_level.px_wid
         args.outputs[:scene].h = @current_level.px_hei
@@ -117,6 +119,7 @@ module Hoard
 
       args.outputs.sprites << @scroller
       args.outputs.sprites << UI
+      args.outputs.sprites << UI_OVERLAY
     end
 
     def shutdown

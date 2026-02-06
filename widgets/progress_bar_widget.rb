@@ -13,7 +13,7 @@ module Hoard
       end
 
       def progress
-        @curr / @limit
+        @curr.to_f / @limit
       end
 
       def reset!
@@ -42,7 +42,6 @@ module Hoard
 
       def update
         return unless @active
-
         @curr += 1 unless done?
       end
 
@@ -51,11 +50,15 @@ module Hoard
       end
 
       def render
-        window(w: max_w * progress, h: 25, x: entity.gx - (max_w / 2), y: entity.gy, background: Ui::Colors::BLUE) do 
-          if done? 
-            text(key: "result") { "Done!" }
-          end
-        end
+        progress_bar :progress,
+          x: entity_x(-max_w / 2),
+          y: entity_y,
+          w: max_w,
+          value: @curr,
+          max: @limit,
+          color_key: :accent,
+          label_text: done? ? "Done!" : "",
+          show_percentage: false
       end
     end
   end

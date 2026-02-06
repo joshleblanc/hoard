@@ -13,6 +13,9 @@ module Hoard
     def initialize
       super
 
+      # Initialize UI theme (available globally for all widgets)
+      $hoard_ui_theme ||= Hoard::Ui::Theme.new
+
       @slow_mos = {}
       @cur_game_speed = 1
       @scroller = Layer.new(:scene)

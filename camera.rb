@@ -158,6 +158,7 @@ module Hoard
 
     def apply
       level = Hoard.config.game_class.s.current_level
+      return unless level
       scroller = Hoard.config.game_class.s.scroller
 
       # Update scroller dimensions to match level

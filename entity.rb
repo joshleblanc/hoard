@@ -131,6 +131,7 @@ module Hoard
 
     def update_world_pos
       level = Hoard.config.game_class.s.current_level
+      return unless level
       self.wx = self.x + level.world_x
       self.wy = self.y + level.world_y
     end
@@ -255,6 +256,7 @@ module Hoard
 
       # call on_collision on the player
       return if Hoard.config.game_class.s.player == self
+      return if Hoard.config.game_class.s.player.nil?
       return unless Geometry.intersect_rect?(Hoard.config.game_class.s.player, self)
 
       Hoard.config.game_class.s.player.send_to_scripts(:on_collision, self)
